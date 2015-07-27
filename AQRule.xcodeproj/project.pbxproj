@@ -27,6 +27,7 @@
 		30FEDA5F1B61DC7B008D6FAD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30FEDA5E1B61DC7B008D6FAD /* Security.framework */; };
 		30FEDA611B61DCB2008D6FAD /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 30FEDA601B61DCB2008D6FAD /* mapapi.bundle */; };
 		30FEDA641B61E2F0008D6FAD /* CustomerInfoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30FEDA631B61E2F0008D6FAD /* CustomerInfoListViewController.m */; };
+		9F3FF5571B6605B500AEE5D8 /* AddSpaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3FF5561B6605B500AEE5D8 /* AddSpaceViewController.m */; };
 		9F7781961B6328E000174524 /* JSGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781951B6328E000174524 /* JSGridViewCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9F7781991B63292300174524 /* JSGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781981B63292300174524 /* JSGridView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9F7781A51B632C9400174524 /* 0.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F77819A1B632C9400174524 /* 0.jpeg */; };
@@ -92,6 +93,8 @@
 		30FEDA601B61DCB2008D6FAD /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = mapapi.bundle; path = ../baiduMapSDK/BaiduMapAPI.framework/Resources/mapapi.bundle; sourceTree = "<group>"; };
 		30FEDA621B61E2F0008D6FAD /* CustomerInfoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerInfoListViewController.h; sourceTree = "<group>"; };
 		30FEDA631B61E2F0008D6FAD /* CustomerInfoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerInfoListViewController.m; sourceTree = "<group>"; };
+		9F3FF5551B6605B500AEE5D8 /* AddSpaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSpaceViewController.h; sourceTree = "<group>"; };
+		9F3FF5561B6605B500AEE5D8 /* AddSpaceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSpaceViewController.m; sourceTree = "<group>"; };
 		9F7781941B6328E000174524 /* JSGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSGridViewCell.h; sourceTree = "<group>"; };
 		9F7781951B6328E000174524 /* JSGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSGridViewCell.m; sourceTree = "<group>"; };
 		9F7781971B63292300174524 /* JSGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSGridView.h; sourceTree = "<group>"; };
@@ -187,6 +190,8 @@
 				9F7781F61B6371C900174524 /* RuleInfoViewController.m */,
 				9F7781F81B637FFE00174524 /* EditSpaceViewController.h */,
 				9F7781F91B637FFE00174524 /* EditSpaceViewController.m */,
+				9F3FF5551B6605B500AEE5D8 /* AddSpaceViewController.h */,
+				9F3FF5561B6605B500AEE5D8 /* AddSpaceViewController.m */,
 				3092C3991B60BEC800BDF274 /* GalleryViewController.h */,
 				3092C39A1B60BEC800BDF274 /* GalleryViewController.m */,
 				3092C39C1B60BF2800BDF274 /* UserinfoViewController.h */,
@@ -386,6 +391,7 @@
 				9F7781F71B6371C900174524 /* RuleInfoViewController.m in Sources */,
 				30FEDA511B61DBA5008D6FAD /* CustomerLocationViewController.mm in Sources */,
 				9F7781961B6328E000174524 /* JSGridViewCell.m in Sources */,
+				9F3FF5571B6605B500AEE5D8 /* AddSpaceViewController.m in Sources */,
 				3092C3A71B60EB6D00BDF274 /* CustomerInfoViewController.m in Sources */,
 				9F7781991B63292300174524 /* JSGridView.m in Sources */,
 				9F7781FA1B637FFE00174524 /* EditSpaceViewController.m in Sources */,

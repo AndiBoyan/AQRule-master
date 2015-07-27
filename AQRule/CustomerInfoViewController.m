@@ -10,6 +10,7 @@
 #import "CustomerLocationViewController.h"
 #import "CustomerInfoListViewController.h"
 #import "RuleInfoViewController.h"
+#import "AddSpaceViewController.h"
 
 @interface CustomerInfoViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -65,7 +66,8 @@
 }
 -(void)addRoom
 {
-    
+    AddSpaceViewController *VC = [[AddSpaceViewController alloc]init];
+    [self presentViewController:VC animated:YES completion:nil];
 }
 #pragma mark uitabledelegate
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -95,7 +97,7 @@
                     [cell.contentView addSubview:lab];
                     
                     UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                    btn.frame = CGRectMake(305-i*40, 35, 40, 30);
+                    btn.frame = CGRectMake(self.view.frame.size.width-55-i*40, 35, 40, 30);
                     btn.tag = 2000+i;
                     [btn setTitle:(i == 0)?@"电话":@"短信" forState:UIControlStateNormal];
                     [btn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
@@ -155,7 +157,9 @@
     {
         //短信
         NSLog(@"短信");
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"sms://800888"]];
+        //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"sms://800888"]];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"请选择短信模板" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"发送", nil];
+        [alert show];
     }
 }
 @end

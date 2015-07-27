@@ -12,7 +12,6 @@
 
 @interface CustomerLocationViewController ()<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>
 {
-    BMKLocationService* _locService;
     BMKGeoCodeSearch* _geocodesearch;
     BMKMapView* mapView;
     BOOL updataState;
@@ -25,12 +24,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     mapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     mapView.delegate = self;
     [self.view addSubview:mapView];
     [mapView setZoomLevel:14];
-    
+    [self initNavigation];
+
+}
+-(void)viewDidAppear:(BOOL)animated
+{
+    // Do any additional setup after loading the view.
+
     _geocodesearch = [[BMKGeoCodeSearch alloc]init];
     _geocodesearch.delegate = self;
     BMKGeoCodeSearchOption *geocodeSearchOption = [[BMKGeoCodeSearchOption alloc]init];
@@ -45,31 +49,19 @@
     {
         NSLog(@"geo检索发送失败");
     }
-    
-
-    [self initNavigation];
-
 }
 - (void)onGetGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
 {
-    NSArray* array = [NSArray arrayWithArray:mapView.annotations];
-    [mapView removeAnnotations:array];
-    array = [NSArray arrayWithArray:mapView.overlays];
-    [mapView removeOverlays:array];
+   // NSArray* array = [NSArray arrayWithArray:mapView.annotations];
+    //[mapView removeAnnotations:array];
+   // array = [NSArray arrayWithArray:mapView.overlays];
+    //[mapView removeOverlays:array];
     if (error == 0) {
         BMKPointAnnotation* item = [[BMKPointAnnotation alloc]init];
         item.coordinate = result.location;
         item.title = result.address;
         [mapView addAnnotation:item];
         mapView.centerCoordinate = result.location;
-        //NSString* titleStr;
-        //NSString* showmeg;
-        
-        //titleStr = @"正向地理编码";
-        /*showmeg = [NSString stringWithFormat:@"经度:%f,纬度:%f",item.coordinate.latitude,item.coordinate.longitude];
-        
-        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:titleStr message:showmeg delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",nil];
-        [myAlertView show];*/
     }
 }
 
@@ -95,16 +87,9 @@
     
     //创建一个导航栏集合
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
-    //[navigationItem setTitle:@"新增客户"];
     navigationItem.title = self.navTitle;
-    /*UITextField *locationField = [[UITextField alloc]initWithFrame:CGRectMake(-125+self.view.frame.size.width/2, 10, 250, 30)];
-    locationField.borderStyle = UITextBorderStyleRoundedRect;
-    navigationItem.titleView = locationField;*/
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    //UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"定位" style:UIBarButtonItemStylePlain target:self action:@selector(updataLocation)];
-    //把导航栏集合添加入导航栏中，设置动画关闭
     navigationItem.leftBarButtonItem = leftButton;
-    //navigationItem.rightBarButtonItem = rightButton;
     [navigationBar pushNavigationItem:navigationItem animated:NO];
     [self.view addSubview:navigationBar];
 
