@@ -51,42 +51,67 @@
 }
 -(void)initView
 {
-    NSArray *tagAry1 = [[NSArray alloc]initWithObjects:@"量尺类型",@"量尺时间",@"预计完成时间",@"空间",@"风格",@"面积(m²)",@"预购产品线", nil];
-    NSArray *tagAry2 = [[NSArray alloc]initWithObjects:@"地砖颜色",@"墙砖颜色",@"购买意向",@"备注", nil];
-    UIScrollView *scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, 700)];
-    [scrView setContentSize:CGSizeMake(self.view.frame.size.width, 800)];
-    [self.view addSubview:scrView];
+    NSArray *tagAry1 = [[NSArray alloc]initWithObjects:@"量尺类型 :",@"量尺时间:",@"预计完成时间:",@"空间:",@"风格:",@"面积(m²):",@"预购产品线:", nil];
+    NSArray *tagAry2 = [[NSArray alloc]initWithObjects:@"地砖颜色 :",@"墙砖颜色 : ",@"购买意向 : ",@"备注 : ", nil];
     
+    NSArray *tagAry3 = [[NSArray alloc]initWithObjects:@"复尺",@"6月24日 (周三) 12:00",@"6月24日 (周三) 12:00",@"客餐厅",@"地中海",@"9-12",@"寝室/家具/衣柜/鞋柜", nil];
+    NSArray *tagAry4 = [[NSArray alloc]initWithObjects:@"无 (毛坯)",@"无 (毛坯)",@"冰箱/灶台/净水器/净化器",@"家里有两条狗，希望东西耐用，防止被狗抓咬", nil];
     for (int i = 0 ; i < 7; i++) {
-        UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 25+40*i, 150, 30)];
+        UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 35+40*i, 300, 30)];
         lab.font = [UIFont systemFontOfSize:14.0f];
-        lab.text = [tagAry1 objectAtIndex:i];
-        [scrView addSubview:lab];
+        lab.text = [NSString stringWithFormat:@"%@ %@",[tagAry1 objectAtIndex:i],[tagAry3 objectAtIndex:i]];//[tagAry1 objectAtIndex:i];
+        [self.view addSubview:lab];
     }
-    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(15, 320, self.view.frame.size.width-30, 1)];
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(15, 315, self.view.frame.size.width-30, 1)];
     lineView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    [scrView addSubview:lineView];
+    [self.view addSubview:lineView];
     
-    UILabel *imageLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 350, 40, 30)];
+    UILabel *imageLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 320, 40, 30)];
     imageLab.text = @"附件:";
     imageLab.font = [UIFont systemFontOfSize:14.0f];
-    [scrView addSubview:imageLab];
-    for (int i=0; i<imageCount; i++) {
-        int row = i/3;//行
-        int col = i%3;//列
-        UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(70+col*85, 350+row*85, 75, 75)];
-        img.backgroundColor = [UIColor redColor];
-        [scrView addSubview:img];
-        point_h = 435+row*85;
-    }
+    [self.view addSubview:imageLab];
+    UIScrollView *scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 340, 2*self.view.frame.size.width, 80)];
+    NSArray *_images = [[NSArray alloc] initWithObjects:
+                        [UIImage imageNamed:@"0.jpeg"],
+                        [UIImage imageNamed:@"1.jpeg"],
+                        [UIImage imageNamed:@"2.jpeg"],
+                        [UIImage imageNamed:@"3.jpeg"],
+                        [UIImage imageNamed:@"4.jpeg"],
+                        [UIImage imageNamed:@"5.jpeg"],
+                        [UIImage imageNamed:@"6.jpeg"],
+                        [UIImage imageNamed:@"7.jpeg"],
+                        [UIImage imageNamed:@"8.jpeg"],
+                        [UIImage imageNamed:@"9.jpeg"],
+                        [UIImage imageNamed:@"10.jpeg"], nil];
+    [self imageShow:_images inView:scrView];
+    [self.view addSubview:scrView];
     for(int i = 0;i < 4; i++)
     {
-        UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, point_h+i*40, 100, 40)];
-        lab.text = [tagAry2 objectAtIndex:i];
+        UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 420+i*40, 400, 40)];
+        lab.text = [NSString stringWithFormat:@"%@ %@",[tagAry2 objectAtIndex:i],[tagAry4 objectAtIndex:i]];//[tagAry2 objectAtIndex:i];
         lab.font = [UIFont systemFontOfSize:14.0f];
-        [scrView addSubview:lab];
+        [self.view addSubview:lab];
     }
 }
+-(void)imageShow:(NSArray*)imageAry inView:(UIScrollView*)scrView
+{
+    int contentSize = 300;
+    for (int i = 0; i < imageAry.count+1; i++) {
+        contentSize += 90;
+        [scrView setContentSize:CGSizeMake(contentSize, -200)];
+        if (i == imageAry.count) {
+            UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
+            img.backgroundColor = [UIColor redColor];
+            [scrView addSubview:img];
+            return;
+        }
+        UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
+        img.image = [imageAry objectAtIndex:i];
+        [scrView addSubview:img];
+        
+    }
+}
+
 -(void)back
 {
     [self dismissViewControllerAnimated:YES completion:nil];
