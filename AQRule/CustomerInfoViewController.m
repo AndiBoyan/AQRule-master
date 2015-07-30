@@ -87,17 +87,24 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell1"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         if(indexPath.section == 0)
         {
+            
             if (indexPath.row == 0) {
+                UILabel *nameLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 15, 100, 20)];
+                nameLab.textAlignment = NSTextAlignmentLeft;
+                nameLab.font = [UIFont systemFontOfSize:15.0f];
+                nameLab.text = self.name;
+                [cell.contentView addSubview:nameLab];
+                UILabel *phoneLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 40, 150, 20)];
+                phoneLab.textAlignment = NSTextAlignmentLeft;
+                phoneLab.font = [UIFont systemFontOfSize:12.0f];
+                phoneLab.text = self.phone;
+                [cell.contentView addSubview:phoneLab];
                 for (int i = 0; i < 2; i++) {
-                    //15, 20+i*20, 150, 20
-                    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 20+i*20, 150, 20)];
-                    lab.text = (i == 0)?self.name:self.phone;
-                    [cell.contentView addSubview:lab];
-                    
                     UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                    btn.frame = CGRectMake(self.view.frame.size.width-55-i*40, 35, 40, 30);
+                    btn.frame = CGRectMake(self.view.frame.size.width-55-i*40, 20, 40, 30);
                     btn.tag = 2000+i;
                     [btn setTitle:(i == 0)?@"电话":@"短信" forState:UIControlStateNormal];
                     [btn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
@@ -106,11 +113,30 @@
             }
            else
            {
-                cell.textLabel.text = [self.customerAry1 objectAtIndex:indexPath.row-1];
+               cell.textLabel.text = [self.customerAry1 objectAtIndex:indexPath.row-1];
+               cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
            }
         }
         else
-            cell.textLabel.text = [self.customerAry2 objectAtIndex:indexPath.row];
+        {
+            UILabel *timeLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 5, 200, 15)];
+            timeLab.text = @"6月24日(周三)  12:00";
+            timeLab.textAlignment = NSTextAlignmentLeft;
+            timeLab.font = [UIFont systemFontOfSize:12.0f];
+            [cell.contentView addSubview:timeLab];
+            
+            UILabel *typeLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 30, 200, 20)];
+            typeLab.text = @"厨房 - 复尺";
+            typeLab.font = [UIFont systemFontOfSize:15.0f];
+            typeLab.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:typeLab];
+            
+            UILabel *stateLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-60, 15, 50, 30)];
+            stateLab.text = @"未上传";
+            stateLab.font = [UIFont systemFontOfSize:14.0f];
+            stateLab.textAlignment = NSTextAlignmentCenter;
+            [cell.contentView addSubview:stateLab];
+        }
     }
     return cell;
 }
@@ -118,7 +144,7 @@
 {
    if((indexPath.section == 0)&&(indexPath.row == 0))
    {
-       return 100;
+       return 80;
    }
     if (indexPath.section == 1) {
         return 60;
@@ -128,13 +154,16 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == 0)&&(indexPath.row == 1)) {
+    if ((indexPath.section == 0)&&(indexPath.row == 0)) {
+        
+    }
+    else if ((indexPath.section == 0)&&(indexPath.row == 1)) {
         //地图
         CustomerLocationViewController *vc = [[CustomerLocationViewController alloc]init];
         vc.navTitle = [self.customerAry1 objectAtIndex:0];
         [self presentViewController:vc animated:YES completion:nil];
     }
-    if ((indexPath.section == 0)&&(indexPath.row == 2)) {
+    else if ((indexPath.section == 0)&&(indexPath.row == 2)) {
         //详情
         CustomerInfoListViewController *vc = [[CustomerInfoListViewController alloc]init];
         [self presentViewController:vc animated:YES completion:nil];

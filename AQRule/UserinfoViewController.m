@@ -7,6 +7,7 @@
 //
 
 #import "UserinfoViewController.h"
+#import "LoginViewController.h"
 
 @interface UserinfoViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -51,6 +52,9 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell1"];
+        //cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
         if (indexPath.section == 0) {
             cell.textLabel.text = [self.userInfoAry1 objectAtIndex:indexPath.row];
             cell.detailTextLabel.text = [self.userInfoAry2 objectAtIndex:indexPath.row];
@@ -67,8 +71,11 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == 2)&&(indexPath.section == 0)) {
+    if ((indexPath.section == 2)&&(indexPath.row == 0)) {
         //退出登录
+   
+        LoginViewController *VC = [[LoginViewController alloc]init];
+        [self presentViewController:VC animated:YES completion:nil];
     }
 }
 @end

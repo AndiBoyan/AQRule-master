@@ -20,6 +20,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:view];
     // Do any additional setup after loading the view.
     imageCount = 6;
     [self initView];
@@ -56,6 +59,7 @@
     
     for (int i = 0 ; i < 7; i++) {
         UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 25+40*i, 150, 30)];
+        lab.font = [UIFont systemFontOfSize:14.0f];
         lab.text = [tagAry1 objectAtIndex:i];
         [scrView addSubview:lab];
     }
@@ -65,6 +69,7 @@
     
     UILabel *imageLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 350, 40, 30)];
     imageLab.text = @"附件:";
+    imageLab.font = [UIFont systemFontOfSize:14.0f];
     [scrView addSubview:imageLab];
     for (int i=0; i<imageCount; i++) {
         int row = i/3;//行
@@ -78,6 +83,7 @@
     {
         UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, point_h+i*40, 100, 40)];
         lab.text = [tagAry2 objectAtIndex:i];
+        lab.font = [UIFont systemFontOfSize:14.0f];
         [scrView addSubview:lab];
     }
 }

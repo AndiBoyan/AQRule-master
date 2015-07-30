@@ -28,6 +28,7 @@
 		30FEDA611B61DCB2008D6FAD /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 30FEDA601B61DCB2008D6FAD /* mapapi.bundle */; };
 		30FEDA641B61E2F0008D6FAD /* CustomerInfoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30FEDA631B61E2F0008D6FAD /* CustomerInfoListViewController.m */; };
 		9F3FF5571B6605B500AEE5D8 /* AddSpaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3FF5561B6605B500AEE5D8 /* AddSpaceViewController.m */; };
+		9F70B1291B69B536001FC86D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F70B1281B69B536001FC86D /* LoginViewController.m */; };
 		9F7781961B6328E000174524 /* JSGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781951B6328E000174524 /* JSGridViewCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9F7781991B63292300174524 /* JSGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781981B63292300174524 /* JSGridView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9F7781A51B632C9400174524 /* 0.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F77819A1B632C9400174524 /* 0.jpeg */; };
@@ -48,6 +49,11 @@
 		9F7781F41B636F4E00174524 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F7781F31B636F4E00174524 /* MessageUI.framework */; };
 		9F7781F71B6371C900174524 /* RuleInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781F61B6371C900174524 /* RuleInfoViewController.m */; };
 		9F7781FA1B637FFE00174524 /* EditSpaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781F91B637FFE00174524 /* EditSpaceViewController.m */; };
+		9F806FF01B68BBA7001AB039 /* QRadioButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F806FEB1B68BBA7001AB039 /* QRadioButton.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9F806FF11B68BBA7001AB039 /* radio_checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F806FEC1B68BBA7001AB039 /* radio_checked.png */; };
+		9F806FF21B68BBA7001AB039 /* radio_checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F806FED1B68BBA7001AB039 /* radio_checked@2x.png */; };
+		9F806FF31B68BBA7001AB039 /* radio_unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F806FEE1B68BBA7001AB039 /* radio_unchecked.png */; };
+		9F806FF41B68BBA7001AB039 /* radio_unchecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F806FEF1B68BBA7001AB039 /* radio_unchecked@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +101,8 @@
 		30FEDA631B61E2F0008D6FAD /* CustomerInfoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerInfoListViewController.m; sourceTree = "<group>"; };
 		9F3FF5551B6605B500AEE5D8 /* AddSpaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSpaceViewController.h; sourceTree = "<group>"; };
 		9F3FF5561B6605B500AEE5D8 /* AddSpaceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSpaceViewController.m; sourceTree = "<group>"; };
+		9F70B1271B69B536001FC86D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		9F70B1281B69B536001FC86D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		9F7781941B6328E000174524 /* JSGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSGridViewCell.h; sourceTree = "<group>"; };
 		9F7781951B6328E000174524 /* JSGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSGridViewCell.m; sourceTree = "<group>"; };
 		9F7781971B63292300174524 /* JSGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSGridView.h; sourceTree = "<group>"; };
@@ -121,6 +129,12 @@
 		9F7781F61B6371C900174524 /* RuleInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuleInfoViewController.m; sourceTree = "<group>"; };
 		9F7781F81B637FFE00174524 /* EditSpaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditSpaceViewController.h; sourceTree = "<group>"; };
 		9F7781F91B637FFE00174524 /* EditSpaceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditSpaceViewController.m; sourceTree = "<group>"; };
+		9F806FEA1B68BBA7001AB039 /* QRadioButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRadioButton.h; sourceTree = "<group>"; };
+		9F806FEB1B68BBA7001AB039 /* QRadioButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRadioButton.m; sourceTree = "<group>"; };
+		9F806FEC1B68BBA7001AB039 /* radio_checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = radio_checked.png; sourceTree = "<group>"; };
+		9F806FED1B68BBA7001AB039 /* radio_checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radio_checked@2x.png"; sourceTree = "<group>"; };
+		9F806FEE1B68BBA7001AB039 /* radio_unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = radio_unchecked.png; sourceTree = "<group>"; };
+		9F806FEF1B68BBA7001AB039 /* radio_unchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radio_unchecked@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,7 +166,7 @@
 		3092C3641B60BDBF00BDF274 = {
 			isa = PBXGroup;
 			children = (
-				9F7781F31B636F4E00174524 /* MessageUI.framework */,
+				9F806FE91B68BBA7001AB039 /* QRadioButton */,
 				9F7781EA1B6366DC00174524 /* areaPicker */,
 				9F7781E81B63669A00174524 /* area.plist */,
 				9F7781931B6328BE00174524 /* GallerySDK */,
@@ -196,6 +210,8 @@
 				3092C39A1B60BEC800BDF274 /* GalleryViewController.m */,
 				3092C39C1B60BF2800BDF274 /* UserinfoViewController.h */,
 				3092C39D1B60BF2800BDF274 /* UserinfoViewController.m */,
+				9F70B1271B69B536001FC86D /* LoginViewController.h */,
+				9F70B1281B69B536001FC86D /* LoginViewController.m */,
 				3092C37D1B60BDC000BDF274 /* Images.xcassets */,
 				3092C37F1B60BDC000BDF274 /* LaunchScreen.xib */,
 				3092C3701B60BDBF00BDF274 /* Supporting Files */,
@@ -206,6 +222,7 @@
 		3092C3701B60BDBF00BDF274 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9F7781F31B636F4E00174524 /* MessageUI.framework */,
 				30FEDA601B61DCB2008D6FAD /* mapapi.bundle */,
 				30FEDA5E1B61DC7B008D6FAD /* Security.framework */,
 				30FEDA5C1B61DC73008D6FAD /* CoreGraphics.framework */,
@@ -271,6 +288,19 @@
 			path = areaPicker;
 			sourceTree = "<group>";
 		};
+		9F806FE91B68BBA7001AB039 /* QRadioButton */ = {
+			isa = PBXGroup;
+			children = (
+				9F806FEA1B68BBA7001AB039 /* QRadioButton.h */,
+				9F806FEB1B68BBA7001AB039 /* QRadioButton.m */,
+				9F806FEC1B68BBA7001AB039 /* radio_checked.png */,
+				9F806FED1B68BBA7001AB039 /* radio_checked@2x.png */,
+				9F806FEE1B68BBA7001AB039 /* radio_unchecked.png */,
+				9F806FEF1B68BBA7001AB039 /* radio_unchecked@2x.png */,
+			);
+			path = QRadioButton;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -320,6 +350,7 @@
 				TargetAttributes = {
 					3092C36C1B60BDBF00BDF274 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = 2C48MM2W96;
 					};
 					3092C3851B60BDC000BDF274 = {
 						CreatedOnToolsVersion = 6.4;
@@ -354,18 +385,22 @@
 				9F7781AE1B632C9400174524 /* 9.jpeg in Resources */,
 				9F7781AB1B632C9400174524 /* 6.jpeg in Resources */,
 				9F7781AF1B632C9400174524 /* 10.jpeg in Resources */,
+				9F806FF41B68BBA7001AB039 /* radio_unchecked@2x.png in Resources */,
 				9F7781A61B632C9400174524 /* 1.jpeg in Resources */,
 				9F7781AD1B632C9400174524 /* 8.jpeg in Resources */,
 				30FEDA611B61DCB2008D6FAD /* mapapi.bundle in Resources */,
 				9F7781AA1B632C9400174524 /* 5.jpeg in Resources */,
 				9F7781A71B632C9400174524 /* 2.jpeg in Resources */,
 				9F7781AC1B632C9400174524 /* 7.jpeg in Resources */,
+				9F806FF11B68BBA7001AB039 /* radio_checked.png in Resources */,
+				9F806FF31B68BBA7001AB039 /* radio_unchecked.png in Resources */,
 				9F7781F11B6366DC00174524 /* HZAreaPickerView.xib in Resources */,
 				3092C3811B60BDC000BDF274 /* LaunchScreen.xib in Resources */,
 				9F7781A51B632C9400174524 /* 0.jpeg in Resources */,
 				9F7781E91B63669A00174524 /* area.plist in Resources */,
 				9F7781A81B632C9400174524 /* 3.jpeg in Resources */,
 				9F7781A91B632C9400174524 /* 4.jpeg in Resources */,
+				9F806FF21B68BBA7001AB039 /* radio_checked@2x.png in Resources */,
 				3092C37E1B60BDC000BDF274 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -386,6 +421,7 @@
 			files = (
 				3092C3761B60BDC000BDF274 /* AppDelegate.m in Sources */,
 				9F7781F01B6366DC00174524 /* HZAreaPickerView.m in Sources */,
+				9F806FF01B68BBA7001AB039 /* QRadioButton.m in Sources */,
 				9F7781F21B6366DC00174524 /* HZLocation.m in Sources */,
 				3092C3A41B60CA2A00BDF274 /* AddNewCustomerViewController.m in Sources */,
 				9F7781F71B6371C900174524 /* RuleInfoViewController.m in Sources */,
@@ -397,6 +433,7 @@
 				9F7781FA1B637FFE00174524 /* EditSpaceViewController.m in Sources */,
 				3092C39E1B60BF2800BDF274 /* UserinfoViewController.m in Sources */,
 				3092C39B1B60BEC800BDF274 /* GalleryViewController.m in Sources */,
+				9F70B1291B69B536001FC86D /* LoginViewController.m in Sources */,
 				30FEDA641B61E2F0008D6FAD /* CustomerInfoListViewController.m in Sources */,
 				3092C3981B60BE8800BDF274 /* CustomerViewController.m in Sources */,
 				3092C3731B60BDBF00BDF274 /* main.m in Sources */,
@@ -519,15 +556,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/baiduMapSDK",
 				);
 				INFOPLIST_FILE = AQRule/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -535,15 +576,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/baiduMapSDK",
 				);
 				INFOPLIST_FILE = AQRule/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

@@ -22,7 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.customerInfoListTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
+    self.customerInfoListTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 40, self.view.frame.size.width, self.view.frame.size.height-40) style:UITableViewStyleGrouped];
     self.customerInfoListTable.delegate = self;
     self.customerInfoListTable.dataSource = self;
     [self.view addSubview:self.customerInfoListTable];
@@ -73,6 +73,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell1"];
+        cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         if (indexPath.section == 0) {
             cell.textLabel.text = [self.customerBaseAry objectAtIndex:indexPath.row];
         }

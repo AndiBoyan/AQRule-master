@@ -8,11 +8,11 @@
 
 #import "GalleryViewController.h"
 
-#define  kOneCellImageWidth 150//图片宽度
 #define  kOnceLoadingCount 40
 
 @interface GalleryViewController ()<JSGridViewDataSource, JSGridViewDelegate> {
     NSArray *_images;
+    float cellImageWidth;
 }
 @end
 //"00000028"
@@ -21,15 +21,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    cellImageWidth = (self.view.frame.size.width/2)-10;
     self.gridView = [[JSGridView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-65)];
     self.gridView.delegate = self;
     self.gridView.dataSource = self;
     [self.view addSubview:self.gridView];
-    // Do any additional setup after loading the view.
-    // Do any additional setup after loading the view, typically from a nib.
     _leftArray = [[NSMutableArray alloc] init];
     _rightArray = [[NSMutableArray alloc] init];
-    _loadCount = 10;
+    _loadCount = 11;
     _isLoading = NO;
     _images = [[NSArray alloc] initWithObjects:
                [UIImage imageNamed:@"0.jpeg"],
@@ -46,8 +45,6 @@
     [self addTableViewData];
     
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -66,10 +63,10 @@
 
 - (void)addTableViewData {
    // _loadCount += kOnceLoadingCount;
-    for (int i=0; i<_loadCount; i++) {
-        UIImage *img = [_images objectAtIndex:i%10];
+    NSLog(@"%ld",_images.count);
+    for (int i = 0; i<_images.count; i++) {
+        UIImage *img = [_images objectAtIndex:i];
         float height = img.size.height/(img.size.width/150);//(float)(arc4random()%225);
-        if (height<50) height += 50;
         double mininum = MIN(_lefeHeight, _rightHeight);
         // data info
         NSDictionary *info = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%f", height]
@@ -82,6 +79,7 @@
             [_rightArray addObject:info];
         }
     }
+    NSLog(@"l = %@r = %@",_leftArray,_rightArray);
     [_gridView reloadData];
 }
 
@@ -96,7 +94,7 @@
 }
 
 - (CGFloat)gridView:(JSGridView *)gridView widthForCellAtColumnIndex:(NSInteger)column {
-    return kOneCellImageWidth+5;
+    return cellImageWidth+5;
 }
 
 - (NSInteger)numberOfRowsInGridView:(JSGridView *)gridView forConstColumnWithIndex:(NSInteger)column {
@@ -110,10 +108,9 @@
 - (void)gridView:(JSGridView *)gridView scrolledToEdge:(JSGridViewEdge)edge {
     if (edge == JSGridViewEdgeBottom) {
         //        _isLoading = YES;
-        [self addTableViewData];
+        //[self addTableViewData];
     }
 }
-
 - (JSGridViewCell *)gridView:(JSGridView *)gridView viewForRow:(NSInteger)row column:(NSInteger)column {
     NSArray *array = [self arrayValueByTableKey:column];
     NSString *identifier = @"testCell";
@@ -124,10 +121,12 @@
         imageView.tag = 50;
         //        [imageView setDelegate:self];
         //        imageView.backgroundColor = HHColor(110.0, 110.0, 110.0, 0.4);
+        imageView.layer.cornerRadius = 5;
+        imageView.layer.masksToBounds = YES;
         [cell addSubview:imageView];
         
         UILabel *lab = [[UILabel alloc]init];
-        lab.backgroundColor = [UIColor redColor];
+        lab.backgroundColor = [UIColor groupTableViewBackgroundColor];
         lab.tag = 60;
         [cell addSubview:lab];
         
@@ -138,18 +137,26 @@
     NSDictionary *oneDic = [array objectAtIndex:row];
     UIImageView *imageView = (UIImageView *)[cell viewWithTag:50];
     float height = [[oneDic objectForKey:@"usingHeight"] floatValue];
-    imageView.frame = CGRectMake(5, 5, kOneCellImageWidth, height);
-    int i = (row*column+row+column)%[_images count];
+    imageView.frame = CGRectMake(5, 5, cellImageWidth, height);
+    NSInteger i = (row*2+column)%[_images count];
+    if (row*2+column == _images.count) {
+        i = _images.count-1;
+    }
     imageView.image = [_images objectAtIndex:i];
     
     UILabel *lab = (UILabel*)[cell viewWithTag:60];
-    lab.frame = CGRectMake(5, height-20, kOneCellImageWidth, 20);
+    lab.frame = CGRectMake(5, height-15, cellImageWidth, 20);
+    lab.textAlignment = NSTextAlignmentCenter ;
+    lab.text = [NSString stringWithFormat:@"%ld",i];
+    lab.layer.cornerRadius = 5;
+    lab.layer.masksToBounds = YES;
+
     
     return cell;
 }
 
 - (void)gridViewCellWasTouched:(JSGridViewCell *)gridViewCell {
-    NSLog(@"row : %d, column : %d", gridViewCell.row, gridViewCell.column);
+    NSLog(@"row : %ld, column : %ld", gridViewCell.row, gridViewCell.column);
 }
 
 
