@@ -13,6 +13,9 @@
     float viewWidth;
     float viewHeight;
 }
+@property UITextField *nameField;
+@property UITextField *pwdField;
+
 @property NSString *name;
 @property NSString *password;
 @end
@@ -86,19 +89,69 @@
     [button addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
 }
+ //@"Params={\"authCode\":\"login\",\"username\":\"oppeinadmin\",\"pwd\":\"hegii@2014\"}&Command=Login/Login";
 -(void)login
 {
+    self.name = self.nameField.text;
+    self.password = self.pwdField.text;
+    
+    if ((self.name.length <= 0)&&(self.password <= 0)) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示"
+                                                       message:@"用户名或者密码为空"
+                                                      delegate:self
+                                             cancelButtonTitle:@"确定"
+                                             otherButtonTitles:nil,nil];
+        [alert show];
+        return;
+    }
+    
+
     NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
     request.HTTPMethod = @"POST";
-    NSString *test = @"Params={\"authCode\":\"login\",\"username\":\"oppeinadmin\",\"pwd\":\"hegii@2014\"}&Command=Login/Login";
-    NSData *data1 = [test dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:data1];
-    NSLog(@"%@",request);
-         // 4.发送请求
+    
+    NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"login\",\"username\":\"%@\",\"pwd\":\"%@\"}&Command=Login/Login",self.name,self.password];
+    NSData *loginData = [loginStr dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:loginData];
+    
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
     {
-        NSLog(@"%@", [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding]);
+        NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+        str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+        NSData *newData = [[self newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
+        NSString *InfoMessage = [dic objectForKey:@"InfoMessage"];
+        
+        if (InfoMessage.length > 0) {
+            //登陆成功
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
+        else
+        {
+            //登录失败
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"用户名或密码错误" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            return;
+        }
     }];
+}
+-(NSString*)newJsonStr:(NSString*)string
+{
+    int start = 0;
+    int end = 0;
+    for (int i = 0; i < string.length-20; i++) {
+        if ([[string substringWithRange:NSMakeRange(i , 7)]isEqualToString:@"\"JSON\":"]) {
+            start = i + 6;
+        }
+        else if([[string substringWithRange:NSMakeRange(i, 15)]isEqualToString:@",\"ErrorMessage\""])
+        {
+            end = i - 1;
+        }
+    }
+    NSString *str1 = [string substringToIndex:start+1];
+    NSString *str2 = [string substringWithRange:NSMakeRange(start+2, end-start-2)];
+    NSString *str3 = [string substringFromIndex:end+1];
+    return [NSString stringWithFormat:@"%@%@%@",str1,str2,str3];
 }
  @end

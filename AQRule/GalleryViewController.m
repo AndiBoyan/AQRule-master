@@ -119,8 +119,6 @@
         cell = [[JSGridViewCell alloc] initWithReuseIdentifier:identifier];
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         imageView.tag = 50;
-        //        [imageView setDelegate:self];
-        //        imageView.backgroundColor = HHColor(110.0, 110.0, 110.0, 0.4);
         imageView.layer.cornerRadius = 5;
         imageView.layer.masksToBounds = YES;
         [cell addSubview:imageView];

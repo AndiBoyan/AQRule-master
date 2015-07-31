@@ -136,6 +136,7 @@
             stateLab.font = [UIFont systemFontOfSize:14.0f];
             stateLab.textAlignment = NSTextAlignmentCenter;
             [cell.contentView addSubview:stateLab];
+            
         }
     }
     return cell;
@@ -179,16 +180,29 @@
     UIButton *button = (UIButton*)sender;
     if (button.tag == 2000) {
         //电话
-        NSLog(@"电话");
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tel://8008808888"]];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"确定拨打电话" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alert.tag = 1000;
+        [alert show];
     }
     else
     {
         //短信
-        NSLog(@"短信");
-        //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"sms://800888"]];
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"请选择短信模板" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"发送", nil];
+        alert.tag = 1001;
         [alert show];
+    }
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if((alertView.tag == 1000)&&(buttonIndex == 1))
+    {
+        //拨打电话
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tel://8008808888"]];
+    }
+    else if ((alertView.tag == 1001)&&(buttonIndex == 1))
+    {
+        //发送短信
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"sms://800888"]];
     }
 }
 @end
