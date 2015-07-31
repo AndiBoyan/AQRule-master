@@ -88,54 +88,17 @@
 }
 -(void)login
 {
-    //http://oppein.3weijia.com/oppein.axds?Params={"authCode":"login","username":"oppeinadmin","pwd":"hegii@2014"}&Command=Login/Login
-    /*NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
-    
-    //第二步，创建请求
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-    
-    [request setHTTPMethod:@"POST"];//设置请求方式为POST，默认为GET
-    //Params={"authCode":"login","username":"oppeinadmin","pwd":"hegii@2014"}
-    NSString *str0 = @"Params={\"authCode\":\"login\",\"username\":\"oppeinadmin\",\"pwd\":\"hegii@2014\"}";//设置参数
-    
-    NSData *data0 = [str0 dataUsingEncoding:NSUTF8StringEncoding];
-    
-    [request setHTTPBody:data0];
-
-    NSString *str = @"&Command=Login/Login";//设置参数
-    
-    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
-    
-    [request setHTTPBody:data];
-    
-    //第三步，连接服务器
-    
-    NSLog(@"%@",request);
-    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    NSString *str1 = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
-    
-    
-    NSLog(@"%@",str1);*/
-    /* NSString *loginString = @"http://oppein.3weijia.com/oppein.axds?Params={\"authCode\":\"login\",\"username\":\"oppeinadmin\",\"pwd\":\"hegii@2014\"}&Command=Login/Login";
-    NSURL *loginUrl = [NSURL URLWithString:loginString];
-    NSString *loginJson = [NSString stringWithContentsOfURL:loginUrl encoding:NSUTF8StringEncoding error:nil];
-    NSData *loginData = [loginJson dataUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"%@",loginData);
-    //NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:loginData options:NSJSONReadingMutableContainers error:nil];*/
-    // 1.创建请求
-         NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
-         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-         request.HTTPMethod = @"POST";
+    NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"POST";
     NSString *test = @"Params={\"authCode\":\"login\",\"username\":\"oppeinadmin\",\"pwd\":\"hegii@2014\"}&Command=Login/Login";
-        NSData *data1 = [test dataUsingEncoding:NSUTF8StringEncoding];
-
- 
+    NSData *data1 = [test dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:data1];
-        NSLog(@"%@",request);
+    NSLog(@"%@",request);
          // 4.发送请求
-        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                 NSLog(@"%@", [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding] );
-        }];
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+    {
+        NSLog(@"%@", [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding]);
+    }];
 }
  @end
