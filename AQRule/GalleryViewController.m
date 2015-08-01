@@ -149,7 +149,6 @@
     lab.layer.cornerRadius = 5;
     lab.layer.masksToBounds = YES;
 
-    
     return cell;
 }
 
