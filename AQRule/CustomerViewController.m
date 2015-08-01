@@ -46,6 +46,7 @@
         button.tag = 1000+i;
         [button setTitle:[ary objectAtIndex:i] forState:UIControlStateNormal];
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        //[button setTitleColor:[UIColor greenColor] forState:UIControlStateHighlighted];
         [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
         [scrView addSubview:button];
     }
@@ -58,7 +59,7 @@
 -(void)buttonAction:(id)sender
 {
     UIButton *btn = (UIButton*)sender;
-    //[btn setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
     NSLog(@"%ld",btn.tag);
     if (btn.tag == 1000) {
         

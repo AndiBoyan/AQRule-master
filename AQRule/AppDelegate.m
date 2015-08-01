@@ -7,9 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "CustomerViewController.h"
-#import "GalleryViewController.h"
-#import "UserinfoViewController.h"
+#import "MainViewController.h"
 #import <BaiduMapAPI/BMapKit.h>
 
 @interface AppDelegate ()<BMKGeneralDelegate>
@@ -32,22 +30,8 @@
     }
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    CustomerViewController *customerVC = [[CustomerViewController alloc]init];
-    GalleryViewController *galleryVC = [[GalleryViewController alloc]init];
-    UserinfoViewController *userinfoVC = [[UserinfoViewController alloc]init];
-    
-    customerVC.title = @"我的客户";
-    galleryVC.title = @"图库";
-    userinfoVC.title = @"我";
-    
-    UINavigationController *customerNav = [[UINavigationController alloc]initWithRootViewController:customerVC];
-    UINavigationController *galleryNav = [[UINavigationController alloc]initWithRootViewController:galleryVC];
-    UINavigationController *userinfoNav = [[UINavigationController alloc]initWithRootViewController:userinfoVC];
-    
-    UITabBarController *mainTabController = [[UITabBarController alloc]init];
-    mainTabController.viewControllers = [NSArray arrayWithObjects:customerNav,galleryNav,userinfoNav,nil];
-    
-    self.window.rootViewController = mainTabController;
+    MainViewController *mainVc = [[MainViewController alloc]init];
+    self.window.rootViewController = mainVc;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     

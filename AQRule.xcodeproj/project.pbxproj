@@ -28,6 +28,7 @@
 		30FEDA611B61DCB2008D6FAD /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 30FEDA601B61DCB2008D6FAD /* mapapi.bundle */; };
 		30FEDA641B61E2F0008D6FAD /* CustomerInfoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30FEDA631B61E2F0008D6FAD /* CustomerInfoListViewController.m */; };
 		9F3FF5571B6605B500AEE5D8 /* AddSpaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3FF5561B6605B500AEE5D8 /* AddSpaceViewController.m */; };
+		9F5543ED1B6C9D880002ACD4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F5543EC1B6C9D880002ACD4 /* MainViewController.m */; };
 		9F70B1291B69B536001FC86D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F70B1281B69B536001FC86D /* LoginViewController.m */; };
 		9F7781961B6328E000174524 /* JSGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781951B6328E000174524 /* JSGridViewCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9F7781991B63292300174524 /* JSGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781981B63292300174524 /* JSGridView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -101,6 +102,8 @@
 		30FEDA631B61E2F0008D6FAD /* CustomerInfoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerInfoListViewController.m; sourceTree = "<group>"; };
 		9F3FF5551B6605B500AEE5D8 /* AddSpaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSpaceViewController.h; sourceTree = "<group>"; };
 		9F3FF5561B6605B500AEE5D8 /* AddSpaceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSpaceViewController.m; sourceTree = "<group>"; };
+		9F5543EB1B6C9D880002ACD4 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		9F5543EC1B6C9D880002ACD4 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		9F70B1271B69B536001FC86D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		9F70B1281B69B536001FC86D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		9F7781941B6328E000174524 /* JSGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSGridViewCell.h; sourceTree = "<group>"; };
@@ -190,6 +193,8 @@
 			children = (
 				3092C3741B60BDBF00BDF274 /* AppDelegate.h */,
 				3092C3751B60BDC000BDF274 /* AppDelegate.m */,
+				9F5543EB1B6C9D880002ACD4 /* MainViewController.h */,
+				9F5543EC1B6C9D880002ACD4 /* MainViewController.m */,
 				3092C3961B60BE8800BDF274 /* CustomerViewController.h */,
 				3092C3971B60BE8800BDF274 /* CustomerViewController.m */,
 				3092C3A51B60EB6D00BDF274 /* CustomerInfoViewController.h */,
@@ -425,6 +430,7 @@
 				9F7781F21B6366DC00174524 /* HZLocation.m in Sources */,
 				3092C3A41B60CA2A00BDF274 /* AddNewCustomerViewController.m in Sources */,
 				9F7781F71B6371C900174524 /* RuleInfoViewController.m in Sources */,
+				9F5543ED1B6C9D880002ACD4 /* MainViewController.m in Sources */,
 				30FEDA511B61DBA5008D6FAD /* CustomerLocationViewController.mm in Sources */,
 				9F7781961B6328E000174524 /* JSGridViewCell.m in Sources */,
 				9F3FF5571B6605B500AEE5D8 /* AddSpaceViewController.m in Sources */,

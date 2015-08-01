@@ -7,6 +7,7 @@
 //
 
 #import "LoginViewController.h"
+#import "MainViewController.h"
 
 @interface LoginViewController ()
 {
@@ -92,8 +93,8 @@
  //@"Params={\"authCode\":\"login\",\"username\":\"oppeinadmin\",\"pwd\":\"hegii@2014\"}&Command=Login/Login";
 -(void)login
 {
-    self.name = self.nameField.text;
-    self.password = self.pwdField.text;
+    self.name = @"oppeinadmin";//self.nameField.text;
+    self.password = @"hegii@2014";//self.pwdField.text;
     
     if ((self.name.length <= 0)&&(self.password <= 0)) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示"
@@ -125,7 +126,10 @@
         
         if (InfoMessage.length > 0) {
             //登陆成功
-            [self dismissViewControllerAnimated:YES completion:nil];
+            //[self dismissViewControllerAnimated:YES completion:nil];
+            MainViewController *vc = [[MainViewController alloc]init];
+            vc.selectedIndex = 0;
+            [self presentViewController:vc animated:YES completion:nil];
         }
         else
         {
