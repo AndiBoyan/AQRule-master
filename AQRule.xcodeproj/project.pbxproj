@@ -27,6 +27,9 @@
 		30FEDA5F1B61DC7B008D6FAD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30FEDA5E1B61DC7B008D6FAD /* Security.framework */; };
 		30FEDA611B61DCB2008D6FAD /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 30FEDA601B61DCB2008D6FAD /* mapapi.bundle */; };
 		30FEDA641B61E2F0008D6FAD /* CustomerInfoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30FEDA631B61E2F0008D6FAD /* CustomerInfoListViewController.m */; };
+		9F3BC37C1B704F2200E972F8 /* down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3BC3771B704F2200E972F8 /* down@2x.png */; };
+		9F3BC37D1B704F2200E972F8 /* YiRefreshFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3BC3791B704F2200E972F8 /* YiRefreshFooter.m */; };
+		9F3BC37E1B704F2200E972F8 /* YiRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3BC37B1B704F2200E972F8 /* YiRefreshHeader.m */; };
 		9F3FF5571B6605B500AEE5D8 /* AddSpaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3FF5561B6605B500AEE5D8 /* AddSpaceViewController.m */; };
 		9F5543ED1B6C9D880002ACD4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F5543EC1B6C9D880002ACD4 /* MainViewController.m */; };
 		9F70B1291B69B536001FC86D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F70B1281B69B536001FC86D /* LoginViewController.m */; };
@@ -100,6 +103,11 @@
 		30FEDA601B61DCB2008D6FAD /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = mapapi.bundle; path = ../baiduMapSDK/BaiduMapAPI.framework/Resources/mapapi.bundle; sourceTree = "<group>"; };
 		30FEDA621B61E2F0008D6FAD /* CustomerInfoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerInfoListViewController.h; sourceTree = "<group>"; };
 		30FEDA631B61E2F0008D6FAD /* CustomerInfoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerInfoListViewController.m; sourceTree = "<group>"; };
+		9F3BC3771B704F2200E972F8 /* down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "down@2x.png"; sourceTree = "<group>"; };
+		9F3BC3781B704F2200E972F8 /* YiRefreshFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YiRefreshFooter.h; sourceTree = "<group>"; };
+		9F3BC3791B704F2200E972F8 /* YiRefreshFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YiRefreshFooter.m; sourceTree = "<group>"; };
+		9F3BC37A1B704F2200E972F8 /* YiRefreshHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YiRefreshHeader.h; sourceTree = "<group>"; };
+		9F3BC37B1B704F2200E972F8 /* YiRefreshHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YiRefreshHeader.m; sourceTree = "<group>"; };
 		9F3FF5551B6605B500AEE5D8 /* AddSpaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSpaceViewController.h; sourceTree = "<group>"; };
 		9F3FF5561B6605B500AEE5D8 /* AddSpaceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSpaceViewController.m; sourceTree = "<group>"; };
 		9F5543EB1B6C9D880002ACD4 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
@@ -169,6 +177,7 @@
 		3092C3641B60BDBF00BDF274 = {
 			isa = PBXGroup;
 			children = (
+				9F3BC3761B704F2200E972F8 /* YiRefresh */,
 				9F806FE91B68BBA7001AB039 /* QRadioButton */,
 				9F7781EA1B6366DC00174524 /* areaPicker */,
 				9F7781E81B63669A00174524 /* area.plist */,
@@ -257,6 +266,18 @@
 				3092C38B1B60BDC000BDF274 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9F3BC3761B704F2200E972F8 /* YiRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				9F3BC3771B704F2200E972F8 /* down@2x.png */,
+				9F3BC3781B704F2200E972F8 /* YiRefreshFooter.h */,
+				9F3BC3791B704F2200E972F8 /* YiRefreshFooter.m */,
+				9F3BC37A1B704F2200E972F8 /* YiRefreshHeader.h */,
+				9F3BC37B1B704F2200E972F8 /* YiRefreshHeader.m */,
+			);
+			path = YiRefresh;
 			sourceTree = "<group>";
 		};
 		9F7781931B6328BE00174524 /* GallerySDK */ = {
@@ -398,6 +419,7 @@
 				9F7781A71B632C9400174524 /* 2.jpeg in Resources */,
 				9F7781AC1B632C9400174524 /* 7.jpeg in Resources */,
 				9F806FF11B68BBA7001AB039 /* radio_checked.png in Resources */,
+				9F3BC37C1B704F2200E972F8 /* down@2x.png in Resources */,
 				9F806FF31B68BBA7001AB039 /* radio_unchecked.png in Resources */,
 				9F7781F11B6366DC00174524 /* HZAreaPickerView.xib in Resources */,
 				3092C3811B60BDC000BDF274 /* LaunchScreen.xib in Resources */,
@@ -432,10 +454,12 @@
 				9F7781F71B6371C900174524 /* RuleInfoViewController.m in Sources */,
 				9F5543ED1B6C9D880002ACD4 /* MainViewController.m in Sources */,
 				30FEDA511B61DBA5008D6FAD /* CustomerLocationViewController.mm in Sources */,
+				9F3BC37D1B704F2200E972F8 /* YiRefreshFooter.m in Sources */,
 				9F7781961B6328E000174524 /* JSGridViewCell.m in Sources */,
 				9F3FF5571B6605B500AEE5D8 /* AddSpaceViewController.m in Sources */,
 				3092C3A71B60EB6D00BDF274 /* CustomerInfoViewController.m in Sources */,
 				9F7781991B63292300174524 /* JSGridView.m in Sources */,
+				9F3BC37E1B704F2200E972F8 /* YiRefreshHeader.m in Sources */,
 				9F7781FA1B637FFE00174524 /* EditSpaceViewController.m in Sources */,
 				3092C39E1B60BF2800BDF274 /* UserinfoViewController.m in Sources */,
 				3092C39B1B60BEC800BDF274 /* GalleryViewController.m in Sources */,

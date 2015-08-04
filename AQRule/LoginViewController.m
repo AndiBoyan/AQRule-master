@@ -112,14 +112,18 @@
     
     request.HTTPMethod = @"POST";
     
-    NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"login\",\"username\":\"%@\",\"pwd\":\"%@\"}&Command=Login/Login",self.name,self.password];
+    //NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"login\",\"username\":\"%@\",\"pwd\":\"%@\"}&Command=Login/Login",self.name,self.password];
+     NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"pdBcFCMd\\/hDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC+omUKBlk5av4c8qgvFa1za/Q3HB02gJhEPmjA=\",\"Adress\":\"软件路15号\",\"Mobile\":\"15866669999\",\"Province\":\"广东省\",\"CustomerName\":\"李明\",\"CArea\":\"天河区\",\"City\":\"广州市\",\"Sex\":1}&Command=Customer/CreateCustomer"];
+    loginStr = [loginStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSData *loginData = [loginStr dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
     
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
     {
         NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"%@",str);
         str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+        str = [str stringByReplacingOccurrencesOfString:@"/" withString:@"\\/"];
         NSData *newData = [[self newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
         NSString *InfoMessage = [dic objectForKey:@"InfoMessage"];

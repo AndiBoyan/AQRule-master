@@ -9,6 +9,8 @@
 #import "CustomerViewController.h"
 #import "AddNewCustomerViewController.h"
 #import "CustomerInfoViewController.h"
+#import "YiRefreshHeader.h"
+#import "YiRefreshFooter.h"
 
 @interface CustomerViewController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
@@ -16,6 +18,9 @@
     UIBarButtonItem *addCustomerBarButton;
     UIBarButtonItem *backButton;
     UIBarButtonItem *donebutton;
+    
+    YiRefreshHeader *refreshHeader;
+    YiRefreshFooter *refreshFooter;
 }
 @property UITableView *customerTable;
 @property NSArray *nameAry;
@@ -55,6 +60,45 @@
     self.customerTable.delegate = self;
     self.customerTable.dataSource = self;
     [self.view addSubview:self.customerTable];
+    
+    // YiRefreshHeader  头部刷新按钮的使用
+    refreshHeader=[[YiRefreshHeader alloc] init];
+    refreshHeader.scrollView=self.customerTable;
+    [refreshHeader header];
+    
+    refreshHeader.beginRefreshingBlock=^(){
+        // 后台执行：
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            sleep(2);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // 主线程刷新视图
+                [self.customerTable reloadData];
+                [refreshHeader endRefreshing];
+            });
+            
+        });
+        
+    };
+    
+    // 是否在进入该界面的时候就开始进入刷新状态
+    [refreshHeader beginRefreshing];
+    
+    // YiRefreshFooter  底部刷新按钮的使用
+    refreshFooter=[[YiRefreshFooter alloc] init];
+    refreshFooter.scrollView=self.customerTable;
+    [refreshFooter footer];
+    
+    refreshFooter.beginRefreshingBlock=^(){
+        // 后台执行：
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            sleep(2);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // 主线程刷新视图
+                [self.customerTable reloadData];
+                [refreshFooter endRefreshing];
+            });
+        });
+    };
 }
 -(void)buttonAction:(id)sender
 {

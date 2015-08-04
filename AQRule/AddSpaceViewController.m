@@ -14,6 +14,8 @@
                                     QRadioButtonDelegate>
 {
     int typeOfTime;
+    UIScrollView *scrView;
+    NSMutableArray *_images;
 }
 
 @property NSArray *addSpaceAry1;
@@ -289,8 +291,8 @@
             lab.font = [UIFont systemFontOfSize:14.0f];
             [cell.contentView addSubview:lab];
             
-            UIScrollView *scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 20, 2*self.view.frame.size.width, 80)];
-           NSArray *_images = [[NSArray alloc] initWithObjects:
+            scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 20, 2*self.view.frame.size.width, 80)];
+            _images = [[NSMutableArray alloc] initWithObjects:
                        [UIImage imageNamed:@"0.jpeg"],
                        [UIImage imageNamed:@"1.jpeg"],
                        [UIImage imageNamed:@"2.jpeg"],
@@ -312,23 +314,71 @@
     }
     return cell;
 }
--(void)imageShow:(NSArray*)imageAry inView:(UIScrollView*)scrView
+-(void)imageShow:(NSMutableArray*)imageAry inView:(UIScrollView*)scrolView
 {
     int contentSize = 300;
     for (int i = 0; i < imageAry.count+1; i++) {
-        contentSize += 90;
-        [scrView setContentSize:CGSizeMake(contentSize, -200)];
+        contentSize += 95;
+        [scrolView setContentSize:CGSizeMake(contentSize, -200)];
         if (i == imageAry.count) {
             UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
+            img.tag = 1000;
             img.backgroundColor = [UIColor redColor];
-            [scrView addSubview:img];
+            img.userInteractionEnabled=YES;
+            UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
+            [img addGestureRecognizer:singleTap];
+            [scrolView addSubview:img];
             return;
         }
-        UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
+        
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
+        [scrolView addSubview:view];
+        
+        UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 70, 70)];
+        img.tag = 1001+i;
+        img.userInteractionEnabled=YES;
+        UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
+        [img addGestureRecognizer:singleTap];
         img.image = [imageAry objectAtIndex:i];
-        [scrView addSubview:img];
+        [view addSubview:img];
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        button.frame = CGRectMake(50, 0, 20, 20);
+        button.tag = i;
+        [button setTitle:@"x" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(delectImageAction:) forControlEvents:UIControlEventTouchUpInside];
+        [view addSubview:button];
+    }
+}
+
+-(void)delectImageAction:(id)sender
+{
+    for (UIView *subviews in [scrView subviews]) {
+        [subviews removeFromSuperview];
+    }
+    UIButton *btn = (UIButton*)sender;
+    [_images removeObjectAtIndex:btn.tag];
+    [self imageShow:_images inView:scrView];
+}
+-(void) addImage:(UITapGestureRecognizer *)recognizer{
+    UIImageView *img=(UIImageView*)recognizer.view;
+    if (img.tag == 1000) {
+        NSLog(@"22");
         
     }
+}
+-(void)onClickImage:(UITapGestureRecognizer *)recognizer{
+    
+    UIImageView *img=(UIImageView*)recognizer.view;
+    if (img.tag == 1000) {
+        NSLog(@"22");
+        
+    }
+    else
+    {
+        NSLog(@"%ld",img.tag);
+    }
+    // NSLog(@"图片被点击!");
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

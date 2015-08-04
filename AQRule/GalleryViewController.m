@@ -16,13 +16,14 @@
 }
 @end
 //"00000028"
+
 @implementation GalleryViewController
 @synthesize gridView = _gridView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     cellImageWidth = (self.view.frame.size.width/2)-10;
-    self.gridView = [[JSGridView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-65)];
+    self.gridView = [[JSGridView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-45)];
     self.gridView.delegate = self;
     self.gridView.dataSource = self;
     [self.view addSubview:self.gridView];
@@ -43,7 +44,6 @@
                [UIImage imageNamed:@"9.jpeg"],
                [UIImage imageNamed:@"10.jpeg"], nil];
     [self addTableViewData];
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -79,11 +79,13 @@
             [_rightArray addObject:info];
         }
     }
-    NSLog(@"l = %@r = %@",_leftArray,_rightArray);
+    //NSLog(@"l = %@r = %@",_leftArray,_rightArray);
     [_gridView reloadData];
 }
 
 #pragma mark - JSGridView
+
+
 - (JSGridViewConstSize)constSizeForGeidView:(JSGridView *)gridView {
     return JSGridViewConstSizeWidth;
 }
@@ -108,7 +110,7 @@
 - (void)gridView:(JSGridView *)gridView scrolledToEdge:(JSGridViewEdge)edge {
     if (edge == JSGridViewEdgeBottom) {
         //        _isLoading = YES;
-        //[self addTableViewData];
+        [self addTableViewData];
     }
 }
 - (JSGridViewCell *)gridView:(JSGridView *)gridView viewForRow:(NSInteger)row column:(NSInteger)column {
@@ -121,6 +123,7 @@
         imageView.tag = 50;
         imageView.layer.cornerRadius = 5;
         imageView.layer.masksToBounds = YES;
+        
         [cell addSubview:imageView];
         
         UILabel *lab = [[UILabel alloc]init];
@@ -143,11 +146,15 @@
     imageView.image = [_images objectAtIndex:i];
     
     UILabel *lab = (UILabel*)[cell viewWithTag:60];
-    lab.frame = CGRectMake(5, height-15, cellImageWidth, 20);
+    lab.frame = CGRectMake(5, height-25, cellImageWidth, 30);
     lab.textAlignment = NSTextAlignmentCenter ;
     lab.text = [NSString stringWithFormat:@"%ld",i];
-    lab.layer.cornerRadius = 5;
-    lab.layer.masksToBounds = YES;
+    
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:lab.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(5, 5)];
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    maskLayer.frame = lab.bounds;
+    maskLayer.path = maskPath.CGPath;
+    lab.layer.mask = maskLayer;
 
     return cell;
 }
