@@ -8,6 +8,7 @@
 
 #import "LoginViewController.h"
 #import "MainViewController.h"
+#import "RequestDataParse.h"
 
 @interface LoginViewController ()
 {
@@ -90,12 +91,11 @@
     [button addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
 }
- //@"Params={\"authCode\":\"login\",\"username\":\"oppeinadmin\",\"pwd\":\"hegii@2014\"}&Command=Login/Login";
+
 -(void)login
 {
     self.name = @"oppeinadmin";//self.nameField.text;
     self.password = @"hegii@2014";//self.pwdField.text;
-    
     if ((self.name.length <= 0)&&(self.password <= 0)) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示"
                                                        message:@"用户名或者密码为空"
@@ -106,33 +106,34 @@
         return;
     }
     
-
     NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
     request.HTTPMethod = @"POST";
+
+    NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"login\",\"username\":\"%@\",\"pwd\":\"%@\"}&Command=Login/Login",self.name,self.password];
     
-    //NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"login\",\"username\":\"%@\",\"pwd\":\"%@\"}&Command=Login/Login",self.name,self.password];
-     NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"pdBcFCMd\\/hDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC+omUKBlk5av4c8qgvFa1za/Q3HB02gJhEPmjA=\",\"Adress\":\"软件路15号\",\"Mobile\":\"15866669999\",\"Province\":\"广东省\",\"CustomerName\":\"李明\",\"CArea\":\"天河区\",\"City\":\"广州市\",\"Sex\":1}&Command=Customer/CreateCustomer"];
-    loginStr = [loginStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",loginStr);
     NSData *loginData = [loginStr dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
     
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
     {
         NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"%@",str);
         str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
-        str = [str stringByReplacingOccurrencesOfString:@"/" withString:@"\\/"];
-        NSData *newData = [[self newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+        NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
         NSString *InfoMessage = [dic objectForKey:@"InfoMessage"];
+        NSDictionary *JSON = [dic objectForKey:@"JSON"];
+        NSString *AuthCode = [JSON objectForKey:@"AuthCode"];
+        AuthCode = [AuthCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSLog(@"AuthCode:%@",AuthCode);
         
         if (InfoMessage.length > 0) {
             //登陆成功
-            //[self dismissViewControllerAnimated:YES completion:nil];
             MainViewController *vc = [[MainViewController alloc]init];
             vc.selectedIndex = 0;
+            
             [self presentViewController:vc animated:YES completion:nil];
         }
         else
@@ -144,22 +145,5 @@
         }
     }];
 }
--(NSString*)newJsonStr:(NSString*)string
-{
-    int start = 0;
-    int end = 0;
-    for (int i = 0; i < string.length-20; i++) {
-        if ([[string substringWithRange:NSMakeRange(i , 7)]isEqualToString:@"\"JSON\":"]) {
-            start = i + 6;
-        }
-        else if([[string substringWithRange:NSMakeRange(i, 15)]isEqualToString:@",\"ErrorMessage\""])
-        {
-            end = i - 1;
-        }
-    }
-    NSString *str1 = [string substringToIndex:start+1];
-    NSString *str2 = [string substringWithRange:NSMakeRange(start+2, end-start-2)];
-    NSString *str3 = [string substringFromIndex:end+1];
-    return [NSString stringWithFormat:@"%@%@%@",str1,str2,str3];
-}
- @end
+
+@end

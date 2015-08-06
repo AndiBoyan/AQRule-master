@@ -20,12 +20,8 @@
 
 @implementation AppDelegate
 
-/*
- http://oppein.3weijia.com/oppein.axds?Params=%7B"authCode"%3A"pdBcFCMd%5C%2FhDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC%2BomUKBlk5av4c8qgvFa1za%5C%2FQ3HB02gJhEPmjA%3D"%2C"Adress"%3A"了路图他我我"%2C"Mobile"%3A"13719225652"%2C"Province"%3A"广东省"%2C"CustomerName"%3A"悲剧家"%2C"CArea"%3A"天河区"%2C"City"%3A"广州市"%2C"Sex"%3A1%7D&Command=Customer/CreateCustomer
- */
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
     _mapManager = [[BMKMapManager alloc]init];
     BOOL ret = [_mapManager start:@"XXG8pSHWP0O34GLaAxY1nuKe" generalDelegate:self];
     

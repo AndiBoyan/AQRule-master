@@ -34,7 +34,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     // Do any additional setup after loading the view.
-
+   
     _geocodesearch = [[BMKGeoCodeSearch alloc]init];
     _geocodesearch.delegate = self;
     BMKGeoCodeSearchOption *geocodeSearchOption = [[BMKGeoCodeSearchOption alloc]init];
@@ -49,6 +49,7 @@
     {
         NSLog(@"geo检索发送失败");
     }
+    [super viewDidAppear:YES];
 }
 - (void)onGetGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
 {

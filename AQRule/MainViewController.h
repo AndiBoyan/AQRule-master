@@ -10,4 +10,6 @@
 
 @interface MainViewController : UITabBarController
 
+@property NSString *AuthCode;
+
 @end

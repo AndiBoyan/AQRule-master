@@ -10,7 +10,10 @@
 #import "HZAreaPickerView.h"
 #import "QRadioButton.h"
 
-
+/*
+ http://oppein.3weijia.com/oppein.axds?Params={"authCode":"pdBcFCMd%2FhDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC%2BomUKBlk5av4c8qgvFa1za%2FQ3HB02gJhEPmjA%3D","CustomerName":"明珠","Sex":"1","Mobile":"13698752635","Province":"广东省","City":"广州市","CArea":"天河区","Adress":"软件路15号"}&Command=Customer/CreateCustomer
+ 2015-08-06 09:36:15.690 AQRule[554:15622] {"Status":200,"JSON":"null","ErrorMessage":"","InfoMessage":""}
+ */
 @interface AddNewCustomerViewController ()<UITableViewDataSource,UITableViewDelegate,
                                           HZAreaPickerDelegate,UITextFieldDelegate,
                                           QRadioButtonDelegate>

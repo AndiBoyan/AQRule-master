@@ -16,7 +16,6 @@
     JSGridView *_gridView;
 
     NSInteger _lefeHeight;
-    NSInteger _middleHeight;
     NSInteger _rightHeight;
 
     NSMutableArray *_leftArray;

@@ -21,6 +21,9 @@
 @synthesize gridView = _gridView;
 
 - (void)viewDidLoad {
+    self.navigationController.navigationBar.backgroundColor = [UIColor greenColor];
+    //self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     [super viewDidLoad];
     cellImageWidth = (self.view.frame.size.width/2)-10;
     self.gridView = [[JSGridView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-45)];

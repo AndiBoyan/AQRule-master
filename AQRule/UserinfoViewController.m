@@ -20,6 +20,9 @@
 @implementation UserinfoViewController
 
 - (void)viewDidLoad {
+    self.navigationController.navigationBar.backgroundColor = [UIColor greenColor];
+    //self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.userInfoTable =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
