@@ -46,6 +46,8 @@
     //把导航栏集合添加入导航栏中，设置动画关闭
     navigationItem.leftBarButtonItem = leftButton;
     [navigationBar pushNavigationItem:navigationItem animated:NO];
+    navigationBar.backgroundColor = [UIColor greenColor];
+    navigationBar.barStyle = UIBarStyleBlack;
     [self.view addSubview:navigationBar];
     
 }

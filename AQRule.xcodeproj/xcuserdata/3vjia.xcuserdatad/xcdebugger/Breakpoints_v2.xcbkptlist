@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AQRule/AddSpaceViewController.m"
-            timestampString = "460257884.555209"
+            timestampString = "460603827.215164"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "412"
-            endingLineNumber = "412"
+            startingLineNumber = "414"
+            endingLineNumber = "414"
             landmarkName = "-weekAry"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AQRule/AddNewCustomerViewController.m"
-            timestampString = "460518655.062791"
+            timestampString = "460603827.215164"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "202"
-            endingLineNumber = "202"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
             landmarkName = "-showView:"
             landmarkType = "5">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AQRule/AddNewCustomerViewController.m"
-            timestampString = "460518655.062791"
+            timestampString = "460603827.215164"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "-showView:"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,23 +74,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AQRule/LoginViewController.m"
-            timestampString = "460448595.553914"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
-            landmarkName = "-login"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AQRule/LoginViewController.m"
-            timestampString = "460448595.553914"
+            timestampString = "460603827.215164"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "112"
@@ -105,12 +89,28 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AQRule/RuleInfoViewController.m"
-            timestampString = "460025227.010724"
+            filePath = "AQRule/LoginViewController.m"
+            timestampString = "460603827.215164"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "-login"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AQRule/RuleInfoViewController.m"
+            timestampString = "460603827.215164"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
             landmarkName = "-delectImageAction:"
             landmarkType = "5">
          </BreakpointContent>
@@ -122,43 +122,43 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AQRule/LoginViewController.m"
-            timestampString = "460448595.553914"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
-            landmarkName = "-login"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AQRule/LoginViewController.m"
-            timestampString = "460518655.062791"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
-            landmarkName = "-login"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AQRule/LoginViewController.m"
-            timestampString = "460518655.062791"
+            timestampString = "460603827.215164"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "125"
             endingLineNumber = "125"
+            landmarkName = "-login"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AQRule/LoginViewController.m"
+            timestampString = "460603827.215164"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
+            landmarkName = "-login"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AQRule/LoginViewController.m"
+            timestampString = "460603827.215164"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
             landmarkName = "-login"
             landmarkType = "5">
          </BreakpointContent>

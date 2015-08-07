@@ -49,7 +49,7 @@
  Communication = 已沟通,
  checked = 已复尺,
  SignedContract = 已签合同
- 
+ http://oppein.3weijia.com/oppein.axds?Params={"authCode":"pdBcFCMd%2FhDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC%2BomUKBlk5av4c8qgvFa1za%2FQ3HB02gJhEPmjA%3D","pageIndex":"1","pageSize":"20","keyWord":"","CustomerSchedule":"Allocated"}&Command=Customer/GetCustomerList
  */
 
 -(void)analyseRequestData//:(NSString*)authCode pageIndex:(NSString*)index pageSize:(NSString*)size keyWord:(NSString*)keyWord customerType:(NSString*)customerType
@@ -100,6 +100,17 @@
      }];
 
 }
+- (void)setExtraCellLineHidden: (UITableView *)tableView{
+    
+    UIView *view =[ [UIView alloc]init];
+    
+    view.backgroundColor = [UIColor clearColor];
+    
+    [tableView setTableFooterView:view];
+    
+    [tableView setTableHeaderView:view];
+    
+}
 
 - (void)viewDidLoad {
     
@@ -129,6 +140,8 @@
     self.customerTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 105, self.view.frame.size.width, self.view.frame.size.height-155)];
     self.customerTable.delegate = self;
     self.customerTable.dataSource = self;
+     [self setExtraCellLineHidden:self.customerTable];
+    
     [self.view addSubview:self.customerTable];
     
     // YiRefreshHeader  头部刷新按钮的使用
@@ -139,8 +152,11 @@
     refreshHeader.beginRefreshingBlock=^(){
         // 后台执行：
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            sleep(2);
+           // sleep(2);
             [self analyseRequestData];
+            if (self.customerAddrAry.count <= 0) {
+                NSLog(@"无数据");
+            }
             dispatch_async(dispatch_get_main_queue(), ^{
                 // 主线程刷新视图
                 [self.customerTable reloadData];

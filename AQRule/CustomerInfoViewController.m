@@ -57,6 +57,9 @@
     navigationItem.leftBarButtonItem = leftButton;
     navigationItem.rightBarButtonItem = rightButton;
     [navigationBar pushNavigationItem:navigationItem animated:NO];
+    navigationBar.backgroundColor = [UIColor greenColor];
+    navigationBar.barStyle = UIBarStyleBlack;
+    
     [self.view addSubview:navigationBar];
     
 }

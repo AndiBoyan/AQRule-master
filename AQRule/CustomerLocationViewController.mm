@@ -92,6 +92,8 @@
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
     navigationItem.leftBarButtonItem = leftButton;
     [navigationBar pushNavigationItem:navigationItem animated:NO];
+    navigationBar.backgroundColor = [UIColor greenColor];
+    navigationBar.barStyle = UIBarStyleBlack;
     [self.view addSubview:navigationBar];
 
 }

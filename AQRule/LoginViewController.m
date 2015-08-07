@@ -20,6 +20,7 @@
 
 @property NSString *name;
 @property NSString *password;
+
 @end
 
 @implementation LoginViewController
@@ -42,11 +43,12 @@
 -(void)initNavigation
 {
     UINavigationBar *navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 65)];
-    
     //创建一个导航栏集合
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
     [navigationItem setTitle:@"登录"];
     [navigationBar pushNavigationItem:navigationItem animated:NO];
+    navigationBar.backgroundColor = [UIColor greenColor];
+    navigationBar.barStyle = UIBarStyleBlack;
     [self.view addSubview:navigationBar];
 }
 
