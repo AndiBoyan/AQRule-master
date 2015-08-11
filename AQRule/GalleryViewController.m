@@ -66,7 +66,6 @@
 
 - (void)addTableViewData {
    // _loadCount += kOnceLoadingCount;
-    NSLog(@"%ld",_images.count);
     for (int i = 0; i<_images.count; i++) {
         UIImage *img = [_images objectAtIndex:i];
         float height = img.size.height/(img.size.width/150);//(float)(arc4random()%225);

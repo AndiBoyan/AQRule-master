@@ -93,7 +93,6 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         if(indexPath.section == 0)
         {
-            
             if (indexPath.row == 0) {
                 UILabel *nameLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 15, 100, 20)];
                 nameLab.textAlignment = NSTextAlignmentLeft;
@@ -109,6 +108,7 @@
                     UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                     btn.frame = CGRectMake(self.view.frame.size.width-55-i*40, 20, 40, 30);
                     btn.tag = 2000+i;
+                    
                     [btn setTitle:(i == 0)?@"电话":@"短信" forState:UIControlStateNormal];
                     [btn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
                     [cell.contentView addSubview:btn];
@@ -207,5 +207,6 @@
         //发送短信
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"sms://800888"]];
     }
+
 }
 @end

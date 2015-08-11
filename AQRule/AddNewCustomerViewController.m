@@ -44,9 +44,10 @@
     [self.view addSubview:self.customerTable];
     
     self.AreaView = [[UIView alloc]init];
-    self.AreaView.backgroundColor = [UIColor whiteColor];
+    self.AreaView.backgroundColor = [UIColor redColor];
     
     self.locatePicker = [[HZAreaPickerView alloc] initWithStyle:HZAreaPickerWithStateAndCityAndDistrict delegate:self];
+    self.locatePicker.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.customerAry1 = [[NSArray alloc]initWithObjects:@"姓名",@"手机号", nil];
     self.customerAry2 = [[NSArray alloc]initWithObjects:@"所在区域",@"详细地址",@"备注", nil];
     [self initNavigation];
@@ -203,10 +204,8 @@
 {
     self.AreaView.frame = CGRectMake(0, view.frame.size.height, view.frame.size.width, self.locatePicker.frame.size.height);
     [self.AreaView addSubview:self.locatePicker];
-    self.locatePicker.frame = CGRectMake(0, 0, self.view.frame.size.width, self.AreaView.frame.size.height);
-    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 40, self.view.frame.size.width, 1)];
-    lineView.backgroundColor =[UIColor groupTableViewBackgroundColor];
-    [self.AreaView addSubview:lineView];
+    self.AreaView.backgroundColor = [UIColor whiteColor];
+    self.locatePicker.frame = CGRectMake(0, 40, self.view.frame.size.width, self.AreaView.frame.size.height);
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     btn1.frame = CGRectMake(30, 5, 40, 30);

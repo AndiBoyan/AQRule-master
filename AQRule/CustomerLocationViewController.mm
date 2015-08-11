@@ -9,13 +9,13 @@
 #import "CustomerLocationViewController.h"
 #import <BaiduMapAPI/BMKMapView.h>
 #import <BaiduMapAPI/BMapKit.h>
+#import "NSAlertView.h"
 
 @interface CustomerLocationViewController ()<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>
 {
     BMKGeoCodeSearch* _geocodesearch;
+    BMKGeoCodeSearch* _searcher;
     BMKMapView* mapView;
-    BOOL updataState;
-    bool isGeoSearch;
 }
 
 @end
@@ -24,6 +24,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //地图初始化
     mapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     mapView.delegate = self;
     [self.view addSubview:mapView];
@@ -34,29 +36,27 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     // Do any additional setup after loading the view.
-   
+    [super viewDidAppear:YES];
+    [self geocodeSearch];
+}
+
+-(void)geocodeSearch
+{
     _geocodesearch = [[BMKGeoCodeSearch alloc]init];
     _geocodesearch.delegate = self;
     BMKGeoCodeSearchOption *geocodeSearchOption = [[BMKGeoCodeSearchOption alloc]init];
     geocodeSearchOption.city= @"广州市";
     geocodeSearchOption.address = @"天河区软件路15号";
     BOOL flag = [_geocodesearch geoCode:geocodeSearchOption];
-    if(flag)
+    if(!flag)
     {
-        NSLog(@"geo检索发送成功");
+        [NSAlertView alert:@"geo检索发送失败"];
     }
-    else
-    {
-        NSLog(@"geo检索发送失败");
-    }
-    [super viewDidAppear:YES];
 }
+
+#pragma mark 地理编码
 - (void)onGetGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
 {
-   // NSArray* array = [NSArray arrayWithArray:mapView.annotations];
-    //[mapView removeAnnotations:array];
-   // array = [NSArray arrayWithArray:mapView.overlays];
-    //[mapView removeOverlays:array];
     if (error == 0) {
         BMKPointAnnotation* item = [[BMKPointAnnotation alloc]init];
         item.coordinate = result.location;
