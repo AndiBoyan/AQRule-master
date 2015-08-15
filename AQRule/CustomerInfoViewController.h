@@ -10,4 +10,8 @@
 
 @interface CustomerInfoViewController : UIViewController
 
+@property NSString *name;
+@property NSString *phone;
+@property NSString *address;
+
 @end

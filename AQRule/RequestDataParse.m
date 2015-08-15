@@ -24,21 +24,12 @@
 
 + (NSString*)newJsonStr:(NSString*)string
 {
-    int start = 0;
-    int end = 0;
-    for (int i = 0; i < string.length-20; i++) {
-        if ([[string substringWithRange:NSMakeRange(i , 7)]isEqualToString:@"\"JSON\":"]) {
-            start = i + 6;
-        }
-        else if([[string substringWithRange:NSMakeRange(i, 15)]isEqualToString:@",\"ErrorMessage\""])
-        {
-            end = i - 1;
-        }
-    }
-    NSString *str1 = [string substringToIndex:start+1];
-    NSString *str2 = [string substringWithRange:NSMakeRange(start+2, end-start-2)];
-    NSString *str3 = [string substringFromIndex:end+1];
-    return [NSString stringWithFormat:@"%@%@%@",str1,str2,str3];
+    string = [string stringByReplacingOccurrencesOfString:@"\"JSON\":\"" withString:@"\"JSON\":"];
+    string = [string stringByReplacingOccurrencesOfString:@"}\"," withString:@"},"];
+    string = [string stringByReplacingOccurrencesOfString:@"]\"," withString:@"],"];
+    string = [string stringByReplacingOccurrencesOfString:@"\"JSON\":\"\\\"\\\"\"" withString:@"\"JSON\":\"\""];
+    string = [string stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+    return string;
 }
 
 @end

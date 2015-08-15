@@ -49,7 +49,6 @@
     navigationBar.backgroundColor = [UIColor greenColor];
     navigationBar.barStyle = UIBarStyleBlack;
     [self.view addSubview:navigationBar];
-    
 }
 -(void)back
 {

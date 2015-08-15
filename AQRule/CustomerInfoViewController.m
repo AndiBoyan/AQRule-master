@@ -11,11 +11,10 @@
 #import "CustomerInfoListViewController.h"
 #import "RuleInfoViewController.h"
 #import "AddSpaceViewController.h"
+#import "RequestDataParse.h"
 
 @interface CustomerInfoViewController ()<UITableViewDataSource,UITableViewDelegate>
 
-@property NSString *name;
-@property NSString *phone;
 @property NSArray *customerAry1;
 @property NSMutableArray *customerAry2;
 @property UITableView *customerTable;
@@ -32,10 +31,11 @@
     self.customerTable.delegate = self;
     self.customerTable.dataSource = self;
     [self.view addSubview:self.customerTable];
-    self.name = @"余大妞";
-    self.phone = @"15377772222";
-    self.customerAry1 = [[NSArray alloc]initWithObjects:@"天河软件园管委会",@"查看客户详情", nil];
+    
+    self.customerAry1 = [[NSArray alloc]initWithObjects:self.address,@"查看客户详情", nil];
     self.customerAry2 = [[NSMutableArray alloc]initWithObjects:@"AAAAAA",@"BBBBBBB",@"CCCCCCC", nil];
+    
+    
     [self initNavigation];
 }
 
@@ -51,8 +51,8 @@
     //创建一个导航栏集合
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
     [navigationItem setTitle:@"量尺空间"];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"新增空间" style:UIBarButtonItemStylePlain target:self action:@selector(addRoom)];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"first_normal@2x.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"first_normal@2x.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(addRoom)];
     //把导航栏集合添加入导航栏中，设置动画关闭
     navigationItem.leftBarButtonItem = leftButton;
     navigationItem.rightBarButtonItem = rightButton;
@@ -87,6 +87,20 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(self.customerAry2.count <= 0)
+    {
+        UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake((self.view.frame.size.width-200)/2, 240, 200, 40)];
+        lab.textAlignment = NSTextAlignmentCenter;
+        lab.font = [UIFont systemFontOfSize:15.0f];
+        lab.text = @"暂无量尺信息";
+        [self.customerTable addSubview:lab];
+        
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        btn.frame = CGRectMake((self.view.frame.size.width-60)/2, 270, 60, 40);
+        [btn setTitle:@"添加空间" forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(addRoom) forControlEvents:UIControlEventTouchUpInside];
+        [self.customerTable addSubview:btn];
+    }
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell1"];
@@ -106,10 +120,10 @@
                 [cell.contentView addSubview:phoneLab];
                 for (int i = 0; i < 2; i++) {
                     UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                    btn.frame = CGRectMake(self.view.frame.size.width-55-i*40, 20, 40, 30);
+                    btn.frame = CGRectMake(self.view.frame.size.width-50-i*60, 20, 40, 30);
                     btn.tag = 2000+i;
+                    [btn setImage:[[UIImage imageNamed:(i == 0)?@"first_normal@2x":@"second_normal@2x"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
                     
-                    [btn setTitle:(i == 0)?@"电话":@"短信" forState:UIControlStateNormal];
                     [btn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
                     [cell.contentView addSubview:btn];
                 }
@@ -133,16 +147,35 @@
             typeLab.font = [UIFont systemFontOfSize:15.0f];
             typeLab.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:typeLab];
+
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            btn.frame = CGRectMake(self.view.frame.size.width-50, 15, 40, 30);
+
+            [btn setImage:[[UIImage imageNamed:@"second_normal@2x"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
             
-            UILabel *stateLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-60, 15, 50, 30)];
-            stateLab.text = @"未上传";
-            stateLab.font = [UIFont systemFontOfSize:14.0f];
-            stateLab.textAlignment = NSTextAlignmentCenter;
-            [cell.contentView addSubview:stateLab];
+            [btn addTarget:self action:@selector(updataRoomInfo:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.contentView addSubview:btn];
+            
+            UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            btn1.frame = CGRectMake(self.view.frame.size.width-110, 15, 40, 30);
+            
+            [btn1 setImage:[[UIImage imageNamed:@"second_normal@2x"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+            
+            [btn1 addTarget:self action:@selector(deleteRoomInfo:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.contentView addSubview:btn1];
+
             
         }
     }
     return cell;
+}
+-(void)deleteRoomInfo:(id)sender
+{
+    
+}
+-(void)updataRoomInfo:(id)sender
+{
+    
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -209,4 +242,56 @@
     }
 
 }
+
+-(NSMutableURLRequest*)initializtionRequest//:(NSString*)index customerType:(NSString*)customerType
+{
+    NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"POST";
+    
+    NSString *code = @"pdBcFCMd/hDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC+omUKBlk5av4c8qgvFa1za/Q3HB02gJhEPmjA=";
+    
+    code = [RequestDataParse encodeToPercentEscapeString:code];
+    
+    
+    NSString *string = [NSString stringWithFormat:
+                        @"Params={\"authCode\":\"%@\",\"customerId\":\"00000005\",\"serviceId\":\"00000044\"}&Command=Customer/GetCustomerInfo",code];
+    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    
+    NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:loginData];
+    
+    return request;
+}
+-(void)analyseRequestData
+{
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSMutableURLRequest *request = [self initializtionRequest];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+         {
+             NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             
+             NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
+             NSString *InfoMessage = [dic objectForKey:@"InfoMessage"];
+             if (InfoMessage.length <= 0) {
+                 return ;
+             }
+             NSDictionary *JSON = [dic objectForKey:@"JSON"];
+             NSArray *ReList = [JSON objectForKey:@"ReList"];
+             for (id relist in ReList) {
+                 //customerId  serviceId
+                 NSString *CustomerName = [relist objectForKey:@"CustomerName"];
+                 NSString *Mobile = [relist objectForKey:@"Mobile"];
+                 NSString *Address = [relist objectForKey:@"Address"];
+
+             }
+         }];
+    });
+}
+
 @end

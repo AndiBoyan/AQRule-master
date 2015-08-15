@@ -8,13 +8,14 @@
 
 #import "RuleInfoViewController.h"
 #import "EditSpaceViewController.h"
+#import "ImageExamine.h"
 
 @interface RuleInfoViewController ()
 {
-    int imageCount;
     int point_h;
     NSMutableArray *_images;
     UIScrollView *scrView;
+    UIScrollView *scrollView;
 }
 @end
 
@@ -22,11 +23,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:view];
+    scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height-30)];
+    scrollView.backgroundColor = [UIColor whiteColor];
+    scrollView.contentSize = CGSizeMake(0, self.view.frame.size.height+100);
+    [self.view addSubview:scrollView];
+    
     // Do any additional setup after loading the view.
-    imageCount = 6;
+
     [self initView];
     [self initNavigation];
 }
@@ -64,16 +67,16 @@
         UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 35+40*i, 300, 30)];
         lab.font = [UIFont systemFontOfSize:14.0f];
         lab.text = [NSString stringWithFormat:@"%@ %@",[tagAry1 objectAtIndex:i],[tagAry3 objectAtIndex:i]];//[tagAry1 objectAtIndex:i];
-        [self.view addSubview:lab];
+        [scrollView addSubview:lab];
     }
     UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(15, 315, self.view.frame.size.width-30, 1)];
     lineView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    [self.view addSubview:lineView];
+    [scrollView addSubview:lineView];
     
     UILabel *imageLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 320, 40, 30)];
     imageLab.text = @"附件:";
     imageLab.font = [UIFont systemFontOfSize:14.0f];
-    [self.view addSubview:imageLab];
+    [scrollView addSubview:imageLab];
      scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 340, 2*self.view.frame.size.width, 80)];
     _images = [[NSMutableArray alloc] initWithObjects:
                         [UIImage imageNamed:@"0.jpeg"],
@@ -88,31 +91,23 @@
                         [UIImage imageNamed:@"9.jpeg"],
                         [UIImage imageNamed:@"10.jpeg"], nil];
     [self imageShow:_images inView:scrView];
-    [self.view addSubview:scrView];
+    [scrollView addSubview:scrView];
     for(int i = 0;i < 4; i++)
     {
-        UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 420+i*40, 400, 40)];
+        UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 420+i*40, 305, 40)];
         lab.text = [NSString stringWithFormat:@"%@ %@",[tagAry2 objectAtIndex:i],[tagAry4 objectAtIndex:i]];//[tagAry2 objectAtIndex:i];
         lab.font = [UIFont systemFontOfSize:14.0f];
-        [self.view addSubview:lab];
+        lab.lineBreakMode = NSLineBreakByWordWrapping;
+        lab.numberOfLines = 0;
+        [scrollView addSubview:lab];
     }
 }
 -(void)imageShow:(NSMutableArray*)imageAry inView:(UIScrollView*)scrolView
 {
     int contentSize = 300;
-    for (int i = 0; i < imageAry.count+1; i++) {
+    for (int i = 0; i < imageAry.count; i++) {
         contentSize += 95;
         [scrolView setContentSize:CGSizeMake(contentSize, -200)];
-        if (i == imageAry.count) {
-            UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
-            img.tag = 1000;
-            img.backgroundColor = [UIColor redColor];
-            img.userInteractionEnabled=YES;
-            UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
-            [img addGestureRecognizer:singleTap];
-            [scrolView addSubview:img];
-            return;
-        }
         
         UIView *view = [[UIView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
         [scrolView addSubview:view];
@@ -124,44 +119,18 @@
         [img addGestureRecognizer:singleTap];
         img.image = [imageAry objectAtIndex:i];
         [view addSubview:img];
-        
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        button.frame = CGRectMake(50, 0, 20, 20);
-        button.tag = i;
-        [button setTitle:@"x" forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(delectImageAction:) forControlEvents:UIControlEventTouchUpInside];
-        [view addSubview:button];
     }
 }
 
--(void)delectImageAction:(id)sender
-{
-    for (UIView *subviews in [scrView subviews]) {
-        [subviews removeFromSuperview];
-    }
-    UIButton *btn = (UIButton*)sender;
-    [_images removeObjectAtIndex:btn.tag];
-    [self imageShow:_images inView:scrView];
-}
--(void) addImage:(UITapGestureRecognizer *)recognizer{
-    UIImageView *img=(UIImageView*)recognizer.view;
-    if (img.tag == 1000) {
-        NSLog(@"22");
-
-    }
-}
 -(void)onClickImage:(UITapGestureRecognizer *)recognizer{
     
     UIImageView *img=(UIImageView*)recognizer.view;
-    if (img.tag == 1000) {
-        NSLog(@"22");
-        
-    }
-    else
-    {
-        NSLog(@"%ld",img.tag);
-    }
-   // NSLog(@"图片被点击!");
+    ImageExamine *imageExamine = [[ImageExamine alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    [self.view addSubview:imageExamine];
+    imageExamine.image = img.image;
+    imageExamine.imageWidth = img.image.size.width;
+    imageExamine.imageHeigth = img.image.size.height;
+    
 }
 -(void)back
 {

@@ -32,6 +32,7 @@
 		9F3BC37E1B704F2200E972F8 /* YiRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3BC37B1B704F2200E972F8 /* YiRefreshHeader.m */; };
 		9F3BC38D1B70A55B00E972F8 /* HTHorizontalSelectionList.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3BC38A1B70A55B00E972F8 /* HTHorizontalSelectionList.m */; };
 		9F3BC38E1B70A55B00E972F8 /* HTHorizontalSelectionListScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3BC38C1B70A55B00E972F8 /* HTHorizontalSelectionListScrollView.m */; };
+		9F3C3F431B79DCDF00B8A1B6 /* ImageExamine.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3C3F421B79DCDF00B8A1B6 /* ImageExamine.m */; };
 		9F3FF5571B6605B500AEE5D8 /* AddSpaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3FF5561B6605B500AEE5D8 /* AddSpaceViewController.m */; };
 		9F5543ED1B6C9D880002ACD4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F5543EC1B6C9D880002ACD4 /* MainViewController.m */; };
 		9F70B1291B69B536001FC86D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F70B1281B69B536001FC86D /* LoginViewController.m */; };
@@ -131,6 +132,8 @@
 		9F3BC38A1B70A55B00E972F8 /* HTHorizontalSelectionList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTHorizontalSelectionList.m; sourceTree = "<group>"; };
 		9F3BC38B1B70A55B00E972F8 /* HTHorizontalSelectionListScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTHorizontalSelectionListScrollView.h; sourceTree = "<group>"; };
 		9F3BC38C1B70A55B00E972F8 /* HTHorizontalSelectionListScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTHorizontalSelectionListScrollView.m; sourceTree = "<group>"; };
+		9F3C3F411B79DCDF00B8A1B6 /* ImageExamine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageExamine.h; sourceTree = "<group>"; };
+		9F3C3F421B79DCDF00B8A1B6 /* ImageExamine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageExamine.m; sourceTree = "<group>"; };
 		9F3FF5551B6605B500AEE5D8 /* AddSpaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSpaceViewController.h; sourceTree = "<group>"; };
 		9F3FF5561B6605B500AEE5D8 /* AddSpaceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSpaceViewController.m; sourceTree = "<group>"; };
 		9F5543EB1B6C9D880002ACD4 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
@@ -248,6 +251,8 @@
 				9F90E87C1B72F0CA00A0CBF9 /* RequestDataParse.m */,
 				9FA2CDF01B7884A200209BDC /* NSAlertView.h */,
 				9FA2CDF11B7884A200209BDC /* NSAlertView.m */,
+				9F3C3F411B79DCDF00B8A1B6 /* ImageExamine.h */,
+				9F3C3F421B79DCDF00B8A1B6 /* ImageExamine.m */,
 				3092C3741B60BDBF00BDF274 /* AppDelegate.h */,
 				3092C3751B60BDC000BDF274 /* AppDelegate.m */,
 				9F5543EB1B6C9D880002ACD4 /* MainViewController.h */,
@@ -566,6 +571,7 @@
 				9F90E87D1B72F0CA00A0CBF9 /* RequestDataParse.m in Sources */,
 				30FEDA641B61E2F0008D6FAD /* CustomerInfoListViewController.m in Sources */,
 				3092C3981B60BE8800BDF274 /* CustomerViewController.m in Sources */,
+				9F3C3F431B79DCDF00B8A1B6 /* ImageExamine.m in Sources */,
 				9F3BC38D1B70A55B00E972F8 /* HTHorizontalSelectionList.m in Sources */,
 				3092C3731B60BDBF00BDF274 /* main.m in Sources */,
 			);

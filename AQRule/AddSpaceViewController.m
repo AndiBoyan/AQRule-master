@@ -8,6 +8,7 @@
 
 #import "AddSpaceViewController.h"
 #import "QRadioButton.h"
+#import "RequestDataParse.h"
 
 @interface AddSpaceViewController ()<UITableViewDataSource,UITableViewDelegate,
                                     UIPickerViewDataSource,UIPickerViewDelegate,
@@ -35,7 +36,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    UITableView *addSpaceTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 40, self.view.frame.size.width, self.view.frame.size.height-40) style:UITableViewStyleGrouped];
+    UITableView *addSpaceTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height-30) style:UITableViewStyleGrouped];
     addSpaceTable.delegate = self;
     addSpaceTable.dataSource = self;
     [self.view addSubview:addSpaceTable];
@@ -50,9 +51,10 @@
     
     self.dateView = [[UIView alloc]init];
     self.dateView.backgroundColor = [UIColor whiteColor];
-    self.picker = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 30, self.dateView.frame.size.width, self.dateView.frame.size.height-30)];
+    self.picker = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 40, self.dateView.frame.size.width, self.dateView.frame.size.height-20)];
     self.picker.delegate = self;
     self.picker.dataSource = self;
+    self.picker.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [self.picker selectRow:self.addSpaceDateAry.count*40 inComponent:0 animated:NO];
     [self.picker selectRow:self.addSpaceHourAry.count*40+4 inComponent:1 animated:NO];
     [self.picker selectRow:self.addSpaceMinAry.count*40 inComponent:2 animated:NO];
@@ -347,7 +349,7 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         button.frame = CGRectMake(50, 0, 20, 20);
         button.tag = i;
-        [button setTitle:@"x" forState:UIControlStateNormal];
+               [button setImage:[[UIImage imageNamed:@"delete_img.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(delectImageAction:) forControlEvents:UIControlEventTouchUpInside];
         [view addSubview:button];
     }
@@ -382,6 +384,21 @@
     }
     // NSLog(@"图片被点击!");
 }
+- (void)showAlertView:(UIView *) view
+{
+    UIView *newView = [[UIView alloc]initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, self.view.frame.size.height-400)];
+    newView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.5];
+    [view addSubview:newView];
+    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 100, 200)];
+    v.backgroundColor = [UIColor redColor];
+    [newView addSubview:v];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        newView.frame = CGRectMake(0, view.frame.size.height - newView.frame.size.height, newView.frame.size.width, newView.frame.size.height);
+        
+    }];
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -393,6 +410,27 @@
         {
             typeOfTime = 2;
             [self showView:self.view];
+        }
+    }
+    if (indexPath.section == 1)
+    {
+        if (indexPath.row == 0) {
+            //空间
+            //[self showAlertView:self.view];
+            [self analyseRequestData];
+        }
+        else if (indexPath.row == 1)
+        {
+            //风格
+        }
+        else if (indexPath.row == 2)
+        {
+            //面积
+        }
+        else if (indexPath.row == 3)
+        {
+            //预购产品线
+            [self analyseRequestRequestProductLineData];
         }
     }
 }
@@ -538,4 +576,128 @@
         return 80;
 }
 
+-(NSMutableURLRequest*)initializtionRequestModelId
+{
+    NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"POST";
+    
+    NSString *code = @"pdBcFCMd/hDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC+omUKBlk5av4c8qgvFa1za/Q3HB02gJhEPmjA=";
+    
+    code = [RequestDataParse encodeToPercentEscapeString:code];
+    
+    
+    NSString *string = [NSString stringWithFormat:
+                     @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetCustomModelList",code];
+    
+    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    
+    NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:loginData];
+    
+    return request;
+}
+
+-(void)analyseRequestData
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSMutableURLRequest *request = [self initializtionRequestModelId];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+         {
+             NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             NSLog(@"%@",[RequestDataParse newJsonStr:str]);
+             NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
+             
+             NSArray *JSON = [dic objectForKey:@"JSON"];
+             NSMutableArray *radioAry = [[NSMutableArray alloc]init];
+             
+             for (id relist in JSON) {
+                 NSString *CustomName = [relist objectForKey:@"CustomName"];
+                 NSString *ModelId = [relist objectForKey:@"ModelId"];
+                 NSLog(@"%@,%@",CustomName,ModelId);
+                 [radioAry addObject:CustomName];
+             }
+             [self radioView:radioAry groupID:@"CustomName"];
+         }];
+    });
+}
+//http://oppein.3weijia.com/oppein.axds?Params={"authCode":"pdBcFCMd%2FhDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC%2BomUKBlk5av4c8qgvFa1za%2FQ3HB02gJhEPmjA%3D","ModelId":"00002361"}&Command=MeasureSpace/GetCustomModel
+
+-(NSMutableURLRequest*)initializtionRequestProductLine
+{
+    NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"POST";
+    
+    NSString *code = @"pdBcFCMd/hDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC+omUKBlk5av4c8qgvFa1za/Q3HB02gJhEPmjA=";
+    
+    code = [RequestDataParse encodeToPercentEscapeString:code];
+    
+    NSString *string = [NSString stringWithFormat:
+                        @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetProductLine",code];
+    
+    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    
+    NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [request setHTTPBody:loginData];
+    
+    return request;
+}
+
+-(void)analyseRequestRequestProductLineData
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSMutableURLRequest *request = [self initializtionRequestProductLine];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+         {
+             NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             
+             str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+             
+             NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
+             
+             NSArray *JSON = [dic objectForKey:@"JSON"];
+             for (id relist in JSON) {
+                 NSString *ItemName = [relist objectForKey:@"ItemName"];
+                 NSLog(@"%@",ItemName);
+             }
+         }];
+    });
+}
+
+-(void)radioView:(NSArray *)radioAry groupID:(NSString*)groupID
+{
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
+    view.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
+    [self.view addSubview:view];
+    
+    UIView *radioView = [[UIView alloc]initWithFrame:CGRectMake(45, 20, view.frame.size.width-90, view.frame.size.height-40)];
+    radioView.backgroundColor = [[UIColor greenColor]colorWithAlphaComponent:1.0f];
+    [view addSubview:radioView];
+    
+    float fristH = 1/2*(view.frame.size.height)-1/2*(radioAry.count)*40+25;
+
+    
+    for (int i = 0; i < radioAry.count; i++) {
+        
+        QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:groupID];
+        _radio1.frame =CGRectMake(50, fristH+40*i, 200, 30);
+        [_radio1 setTitle:[radioAry objectAtIndex:i] forState:UIControlStateNormal];
+        [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_radio1.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
+        [radioView addSubview:_radio1];
+        if (i == 0) {
+             [_radio1 setChecked:YES];
+        }
+    }
+}
 @end

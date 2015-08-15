@@ -100,7 +100,7 @@
 -(void)login
 {
     self.name = @"oppeinadmin";//self.nameField.text;
-    self.password = @"hegii@2014";//self.pwdField.text;
+    self.password = @"op123456";//self.pwdField.text;
     if ((self.name.length <= 0)&&(self.password <= 0)) {
         [NSAlertView alert:@"用户名或者密码为空"];
         return;
@@ -115,9 +115,10 @@
                  NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
                  
                  //将string中的\去除（去除转义字符）
-                 str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+                 NSLog(@"%@",[RequestDataParse newJsonStr:str]);
                  
                  //将数据变成标准的json数据
+                 
                  NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
                  NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
                  
@@ -129,7 +130,6 @@
                  NSString *InfoMessage = [dic objectForKey:@"InfoMessage"];
                  NSDictionary *JSON = [dic objectForKey:@"JSON"];
 
-                 
                  if (InfoMessage.length > 0) {
                      
                      //登陆成功

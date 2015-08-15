@@ -14,7 +14,7 @@
 #import "HTHorizontalSelectionList.h"
 #import "RequestDataParse.h"
 
-@interface CustomerViewController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,HTHorizontalSelectionListDelegate, HTHorizontalSelectionListDataSource>
+@interface CustomerViewController ()<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,HTHorizontalSelectionListDelegate, HTHorizontalSelectionListDataSource>
 {
     UIBarButtonItem *searchBarButton;
     UIBarButtonItem *addCustomerBarButton;
@@ -23,24 +23,40 @@
     
     YiRefreshHeader *refreshHeader;
     YiRefreshFooter *refreshFooter;
+    
+    UITextField *searchField;
 }
 @property UITableView *customerTable;
-@property NSArray *nameAry;
-@property NSArray *phoneAry;
-@property NSArray *addrAry;
+
 @property (nonatomic, strong) HTHorizontalSelectionList *selectionList;
 @property (nonatomic, strong) NSArray *carMakes;
 
+@property NSMutableArray *nameAry;
+@property NSMutableArray *phoneAry;
+@property NSMutableArray *addrAry;
 @property NSMutableArray *customerNameAry;
 @property NSMutableArray *customerPhoneAry;
 @property NSMutableArray *customerAddrAry;
+@property NSMutableArray *indexAry;
+
 
 @end
 
 @implementation CustomerViewController
 
 - (void)viewDidLoad {
+    self.customerNameAry = [[NSMutableArray alloc]initWithObjects:@"JACK",@"TOM",@"Lee", nil];
+    self.customerPhoneAry = [[NSMutableArray alloc]initWithObjects:@"13569321456",@"18240036598",@"13285965412", nil];
+    self.customerAddrAry = [[NSMutableArray alloc]initWithObjects:@"天河区软件西路15号",@"中山大道西214号",@"科韵路31号", nil];
+    self.nameAry = [[NSMutableArray alloc]initWithArray:self.customerNameAry];
+    self.phoneAry = [[NSMutableArray alloc]initWithArray:self.customerPhoneAry];
+    self.addrAry = [[NSMutableArray alloc]initWithArray:self.customerAddrAry];
     
+    self.indexAry = [[NSMutableArray alloc]init];
+    [self.indexAry addObjectsFromArray:self.customerNameAry];
+    [self.indexAry addObjectsFromArray:self.customerPhoneAry];
+    [self.indexAry addObjectsFromArray:self.customerAddrAry];
+
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self initNavigation];
@@ -81,7 +97,7 @@
         // 后台执行：
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
            // sleep(2);
-            //[self analyseRequestData];
+           // [self analyseRequestData];
            // if (self.customerAddrAry.count <= 0) {
            //     NSLog(@"无数据");
            // }
@@ -129,6 +145,7 @@
 #pragma mark - HTHorizontalSelectionListDelegate Protocol Methods
 
 - (void)selectionList:(HTHorizontalSelectionList *)selectionList didSelectButtonWithIndex:(NSInteger)index {
+    [searchField resignFirstResponder];
     // update the view for the corresponding index
     NSLog(@"%@",self.carMakes[index]) ;
 }
@@ -138,6 +155,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 //初始化导航栏
 -(void)initNavigation
 {
@@ -156,16 +174,31 @@
 -(void)searchAction:(id)sender
 {
     //self.title = @"";
-    UITextField *searchField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 200, 30)];
+    searchField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 200, 30)];
     searchField.borderStyle = UITextBorderStyleRoundedRect;
+    searchField.font = [UIFont systemFontOfSize:14.0f];
+    searchField.placeholder = @"关键字";
+    searchField.delegate = self;
+    searchField.returnKeyType = UIReturnKeyDone;
+    
     self.navigationItem.rightBarButtonItems = nil;
     self.navigationItem.titleView = searchField;
     self.navigationItem.leftBarButtonItem = backButton;
     self.navigationItem.rightBarButtonItem = donebutton;
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
 -(void)cancelAction:(id)sender
 {
+    self.nameAry = [[NSMutableArray alloc]initWithArray:self.customerNameAry];
+    self.phoneAry = [[NSMutableArray alloc]initWithArray:self.customerPhoneAry];
+    self.addrAry = [[NSMutableArray alloc]initWithArray:self.customerAddrAry];
+    [self.customerTable reloadData];
+    [searchField resignFirstResponder];
     self.navigationItem.titleView = nil;
     self.navigationItem.title = @"我的客户";
     self.navigationItem.leftBarButtonItem = nil;
@@ -173,6 +206,27 @@
 }
 -(void)doneAction:(id)sender
 {
+    [searchField resignFirstResponder];
+    if (searchField.text.length <= 0) {
+        return;
+    }
+    static BOOL isIndexCount;
+    self.nameAry = [[NSMutableArray alloc]init];
+    self.phoneAry = [[NSMutableArray alloc]init];
+    self.addrAry = [[NSMutableArray alloc]init];
+    for (int i = 0; i < self.indexAry.count; i++) {
+        if ([[self.indexAry objectAtIndex:i]isEqualToString:searchField.text]) {
+            isIndexCount = YES;
+            NSInteger index = i%(self.customerAddrAry.count);
+            [self.nameAry addObject:[self.customerNameAry objectAtIndex:index]];
+            [self.phoneAry addObject:[self.customerPhoneAry objectAtIndex:index]];
+            [self.addrAry addObject:[self.customerAddrAry objectAtIndex:index]];
+        }
+    }
+    if (!isIndexCount) {
+        NSLog(@"无结果");
+    }
+    [self.customerTable reloadData];
     
 }
 //添加用户信息
@@ -184,7 +238,7 @@
 #pragma mark uitabledelegate
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;//self.customerNameAry.count;
+    return self.nameAry.count;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -193,19 +247,19 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell1"];
         cell.selectionStyle = UITableViewCellAccessoryNone;
         UILabel *nameLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 5, 65, 20)];
-        nameLab.text = @"李民浩";//[self.customerNameAry objectAtIndex:indexPath.row];
+        nameLab.text = [self.nameAry objectAtIndex:indexPath.row];
         nameLab.textAlignment = NSTextAlignmentLeft;
         nameLab.font = [UIFont systemFontOfSize:17.0f];
         [cell.contentView addSubview:nameLab];
         
         UILabel *phoneLab = [[UILabel alloc]initWithFrame:CGRectMake(80, 5, 200, 20)];
-        phoneLab.text = @"15896325698";//[self.customerPhoneAry objectAtIndex:indexPath.row];
+        phoneLab.text = [self.phoneAry objectAtIndex:indexPath.row];
         phoneLab.textAlignment = NSTextAlignmentLeft;
         phoneLab.font = [UIFont systemFontOfSize:12.0f];
         [cell.contentView addSubview:phoneLab];
         
         UILabel *adrLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 30, 300, 20)];
-        adrLab.text =@"广州市天河区软件路15号"; //[self.customerAddrAry objectAtIndex:indexPath.row];
+        adrLab.text =[self.addrAry objectAtIndex:indexPath.row];
         adrLab.textAlignment = NSTextAlignmentLeft;
         adrLab.font = [UIFont systemFontOfSize:12.0f];
         [cell.contentView addSubview:adrLab];
@@ -221,6 +275,10 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CustomerInfoViewController *customerInfoVC = [[CustomerInfoViewController alloc]init];
+    customerInfoVC.name = [self.nameAry objectAtIndex:indexPath.row];
+    customerInfoVC.phone = [self.phoneAry objectAtIndex:indexPath.row];
+    customerInfoVC.address = [self.addrAry objectAtIndex:indexPath.row];
+    
     [self presentViewController:customerInfoVC animated:YES completion:nil];
 }
 
@@ -260,6 +318,7 @@
     
     code = [RequestDataParse encodeToPercentEscapeString:code];
     
+    
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\",\"pageIndex\":\"1\",\"pageSize\":\"5\",\"keyWord\":\"\",\"CustomerSchedule\":\"Allocated\"}&Command=Customer/GetCustomerList",code];
     NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
@@ -274,17 +333,15 @@
     self.customerNameAry = [[NSMutableArray alloc]init];
     self.customerPhoneAry = [[NSMutableArray alloc]init];
     self.customerAddrAry = [[NSMutableArray alloc]init];
-    
+
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         NSMutableURLRequest *request = [self initializtionRequest];
-        
+    
         [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
          {
              NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-             
-             str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
              
              NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
              NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
@@ -295,6 +352,7 @@
              NSDictionary *JSON = [dic objectForKey:@"JSON"];
              NSArray *ReList = [JSON objectForKey:@"ReList"];
              for (id relist in ReList) {
+                 //customerId  serviceId
                  NSString *CustomerName = [relist objectForKey:@"CustomerName"];
                  NSString *Mobile = [relist objectForKey:@"Mobile"];
                  NSString *Address = [relist objectForKey:@"Address"];

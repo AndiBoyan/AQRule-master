@@ -17,6 +17,8 @@
     int typeOfTime;
     UIScrollView *scrView;
     NSMutableArray *_images;
+    NSString *measure;
+    NSString *finish;
 }
 
 @property NSArray *addSpaceAry1;
@@ -36,7 +38,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    UITableView *addSpaceTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 40, self.view.frame.size.width, self.view.frame.size.height-40) style:UITableViewStyleGrouped];
+    UITableView *addSpaceTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height-30) style:UITableViewStyleGrouped];
     addSpaceTable.delegate = self;
     addSpaceTable.dataSource = self;
     [self.view addSubview:addSpaceTable];
@@ -51,7 +53,8 @@
     
     self.dateView = [[UIView alloc]init];
     self.dateView.backgroundColor = [UIColor whiteColor];
-    self.picker = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 30, self.dateView.frame.size.width, self.dateView.frame.size.height-30)];
+    self.picker = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 40, self.dateView.frame.size.width, self.dateView.frame.size.height-20)];
+    self.picker.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.picker.delegate = self;
     self.picker.dataSource = self;
     [self.picker selectRow:self.addSpaceDateAry.count*40 inComponent:0 animated:NO];
@@ -66,7 +69,7 @@
     btn1.frame = CGRectMake(offWidth, 5, 40, 30);
     btn1.tag = 1001;
     [btn1 setTitle:@"取消" forState:UIControlStateNormal];
-    [btn1 addTarget:self action:@selector(dateChoose:) forControlEvents:UIControlEventTouchUpInside];
+    [btn1 addTarget:self action:@selector(cancelView) forControlEvents:UIControlEventTouchUpInside];
     [self.dateView addSubview:btn1];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -150,10 +153,12 @@
     NSString *string = [NSString stringWithFormat:@"%@ %@ %@>",str1,str2,str3];
     if (typeOfTime == 1) {
         self.measureLab.text = string;
+        measure = string;
     }
     else if(typeOfTime == 2)
     {
         self.finishLab.text = string;
+        finish = string;
     }
     [self cancelView];
 }
@@ -276,7 +281,13 @@
             else if(indexPath.row == 1)
             {
                 self.measureLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2, 5, -15+self.view.frame.size.width/2, 35)];
-                self.measureLab.text = @"未设置";
+                if (measure == nil) {
+                    self.measureLab.text = @"未设置";
+                }
+                else
+                {
+                     self.measureLab.text = measure;
+                }
                 self.measureLab.font = [UIFont systemFontOfSize:14.0f];
                 self.measureLab.textAlignment = NSTextAlignmentRight;
                 [cell.contentView addSubview:self.measureLab];
@@ -284,7 +295,14 @@
             else if (indexPath.row == 2)
             {
                 self.finishLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2, 5, -15+self.view.frame.size.width/2, 35)];
-                self.finishLab.text = @"未设置";
+                if(finish == nil)
+                {
+                   self.finishLab.text = @"未设置";
+                }
+                else
+                {
+                    self.finishLab.text = finish;
+                }
                 self.finishLab.font = [UIFont systemFontOfSize:14.0f];
                 self.finishLab.textAlignment = NSTextAlignmentRight;
                 [cell.contentView addSubview:self.finishLab];
@@ -354,7 +372,8 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         button.frame = CGRectMake(50, 0, 20, 20);
         button.tag = i;
-        [button setTitle:@"x" forState:UIControlStateNormal];
+        [button setImage:[[UIImage imageNamed:@"delete_img.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+        //[button setTitle:@"x" forState:UIControlStateNormal];
         [button addTarget:self action:@selector(delectImageAction:) forControlEvents:UIControlEventTouchUpInside];
         [view addSubview:button];
     }
