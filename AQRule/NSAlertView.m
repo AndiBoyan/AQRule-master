@@ -16,4 +16,22 @@
     
     [alert show];
 }
+
++(void)initLabelView:(UIView*)insertView
+               frame:(CGRect)frame
+                text:(NSString*)string
+                font:(float)font
+           alignment:(NSTextAlignment)alignment
+           isNumLine:(BOOL)numLine
+{
+    UILabel *lab = [[UILabel alloc]initWithFrame:frame];
+    lab.text = string;
+    lab.font = [UIFont systemFontOfSize:font];
+    lab.textAlignment = alignment;
+    if (numLine) {
+        lab.lineBreakMode = NSLineBreakByWordWrapping;
+        lab.numberOfLines = 0;
+    }
+    [insertView addSubview:lab];
+}
 @end

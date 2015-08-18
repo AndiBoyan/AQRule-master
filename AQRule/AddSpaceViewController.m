@@ -9,6 +9,7 @@
 #import "AddSpaceViewController.h"
 #import "QRadioButton.h"
 #import "RequestDataParse.h"
+#import "NSAlertView.h"
 
 @interface AddSpaceViewController ()<UITableViewDataSource,UITableViewDelegate,
                                     UIPickerViewDataSource,UIPickerViewDelegate,
@@ -17,6 +18,17 @@
     int typeOfTime;
     UIScrollView *scrView;
     NSMutableArray *_images;
+    
+    NSString *measure;
+    NSString *finish;
+    UITableView *addSpaceTable;
+    NSMutableArray *spaceUpdataData;
+    NSMutableArray *spaceUpdataDataCount;
+    NSMutableArray *spaceText;
+    UITableView *spaceModelTable;
+    NSMutableArray *spaceText1;
+    NSMutableArray *spaceData;
+    UIView *spaceView;
 }
 
 @property NSArray *addSpaceAry1;
@@ -24,6 +36,7 @@
 @property NSArray *addSpaceDateAry;
 @property NSArray *addSpaceHourAry;
 @property NSArray *addSpaceMinAry;
+@property NSMutableArray *spaceModel;
 @property UIPickerView *picker;
 @property UIView *dateView;
 @property UILabel *measureLab;//测量时间
@@ -36,7 +49,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    UITableView *addSpaceTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height-30) style:UITableViewStyleGrouped];
+    addSpaceTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height-30) style:UITableViewStyleGrouped];
     addSpaceTable.delegate = self;
     addSpaceTable.dataSource = self;
     [self.view addSubview:addSpaceTable];
@@ -45,9 +58,9 @@
     
     self.addSpaceAry1 = [[NSArray alloc]initWithObjects:@"量尺类型",@"量尺时间",@"预计完成时间", nil];
     self.addSpaceAry2 = [[NSArray alloc]initWithObjects:@"空间",@"风格",@"面积(m2)",@"预购产品线", nil];
-    self.addSpaceDateAry = [self weekAry];
-    self.addSpaceHourAry = [self hourAry];
-    self.addSpaceMinAry = [self minAry];
+    self.addSpaceDateAry = [RequestDataParse weekAry];
+    self.addSpaceHourAry = [RequestDataParse hourAry];
+    self.addSpaceMinAry = [RequestDataParse minAry];
     
     self.dateView = [[UIView alloc]init];
     self.dateView.backgroundColor = [UIColor whiteColor];
@@ -67,7 +80,7 @@
     btn1.frame = CGRectMake(offWidth, 5, 40, 30);
     btn1.tag = 1001;
     [btn1 setTitle:@"取消" forState:UIControlStateNormal];
-    [btn1 addTarget:self action:@selector(dateChoose:) forControlEvents:UIControlEventTouchUpInside];
+    [btn1 addTarget:self action:@selector(cancelView) forControlEvents:UIControlEventTouchUpInside];
     [self.dateView addSubview:btn1];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -151,10 +164,12 @@
     NSString *string = [NSString stringWithFormat:@"%@ %@ %@>",str1,str2,str3];
     if (typeOfTime == 1) {
         self.measureLab.text = string;
+        measure = string;
     }
     else if(typeOfTime == 2)
     {
         self.finishLab.text = string;
+        finish = string;
     }
     [self cancelView];
 }
@@ -204,17 +219,29 @@
 
 -(void)back
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"是否放弃添加" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alert.tag = 2001;
+    [alert show];
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 2001) {
+        if (buttonIndex == 1) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
+    }
+}
 -(void)save
 {
     
 }
-#pragma mark tablegeledate
+
+#pragma mark tableViewDeledate
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 2) {
+    if ((indexPath.section == 2)&&(indexPath.row == 0)) {
         return 100;
     }
     else if(indexPath.section == 3)
@@ -226,164 +253,194 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
-}
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (section == 0) {
-        return self.addSpaceAry1.count;
-    }
-    if (section == 1) {
-        return self.addSpaceAry2.count;
+    if (tableView == addSpaceTable) {
+        return 4;
     }
     else
         return 1;
 }
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (tableView == addSpaceTable) {
+        if (section == 0) {
+            return self.addSpaceAry1.count;
+        }
+        if (section == 1) {
+            return self.addSpaceAry2.count;
+        }
+        if (section == 2) {
+            return self.spaceModel.count+1;
+        }
+        else
+            return 1;
+    }
+    else
+        return spaceText1.count;
+}
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell1"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
-        if (indexPath.section == 0) {
-            cell.textLabel.text = [self.addSpaceAry1 objectAtIndex:indexPath.row];
-            if(indexPath.row == 0)
-            {
-                QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
-                _radio1.frame =CGRectMake(self.view.frame.size.width-80, 5, 60, 30);
-                [_radio1 setTitle:@"复尺" forState:UIControlStateNormal];
-                [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                [_radio1.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
-                [cell.contentView addSubview:_radio1];
-                
-    
-                QRadioButton *_radio2 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
-                _radio2.frame = CGRectMake(self.view.frame.size.width-160, 5, 60, 30);
-                [_radio2 setTitle:@"单尺" forState:UIControlStateNormal];
-                [_radio2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                [_radio2.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
-                [cell.contentView addSubview:_radio2];
-                [_radio1 setChecked:YES];
-
+    if (tableView == addSpaceTable) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell1"];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+            if (indexPath.section == 0) {
+                cell.textLabel.text = [self.addSpaceAry1 objectAtIndex:indexPath.row];
+                if(indexPath.row == 0)
+                {
+                    QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
+                    _radio1.frame =CGRectMake(self.view.frame.size.width-80, 5, 60, 30);
+                    [_radio1 setTitle:@"复尺" forState:UIControlStateNormal];
+                    [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                    [_radio1.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
+                    [cell.contentView addSubview:_radio1];
+                    
+                    QRadioButton *_radio2 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
+                    _radio2.frame = CGRectMake(self.view.frame.size.width-160, 5, 60, 30);
+                    [_radio2 setTitle:@"单尺" forState:UIControlStateNormal];
+                    [_radio2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                    [_radio2.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
+                    [cell.contentView addSubview:_radio2];
+                    [_radio1 setChecked:YES];
+                    
+                }
+                else if(indexPath.row == 1)
+                {
+                    self.measureLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2, 5, -15+self.view.frame.size.width/2, 35)];
+                    if (measure == nil) {
+                        self.measureLab.text = @"未设置";
+                    }
+                    else
+                    {
+                        self.measureLab.text = measure;
+                    }
+                    self.measureLab.font = [UIFont systemFontOfSize:14.0f];
+                    self.measureLab.textAlignment = NSTextAlignmentRight;
+                    [cell.contentView addSubview:self.measureLab];
+                }
+                else if (indexPath.row == 2)
+                {
+                    self.finishLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2, 5, -15+self.view.frame.size.width/2, 35)];
+                    if(finish == nil)
+                    {
+                        self.finishLab.text = @"未设置";
+                    }
+                    else
+                    {
+                        self.finishLab.text = finish;
+                    }
+                    self.finishLab.font = [UIFont systemFontOfSize:14.0f];
+                    self.finishLab.textAlignment = NSTextAlignmentRight;
+                    [cell.contentView addSubview:self.finishLab];
+                }
             }
-            else if(indexPath.row == 1)
-            {
-                self.measureLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2, 5, -15+self.view.frame.size.width/2, 35)];
-                self.measureLab.text = @"未设置";
-                self.measureLab.font = [UIFont systemFontOfSize:14.0f];
-                self.measureLab.textAlignment = NSTextAlignmentRight;
-                [cell.contentView addSubview:self.measureLab];
+            else if (indexPath.section == 1) {
+                cell.textLabel.text = [self.addSpaceAry2 objectAtIndex:indexPath.row];
             }
-            else if (indexPath.row == 2)
+            else if(indexPath.section == 2)
             {
-                self.finishLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2, 5, -15+self.view.frame.size.width/2, 35)];
-                self.finishLab.text = @"未设置";
-                self.finishLab.font = [UIFont systemFontOfSize:14.0f];
-                self.finishLab.textAlignment = NSTextAlignmentRight;
-                [cell.contentView addSubview:self.finishLab];
+                if (indexPath.row == 0) {
+                    [NSAlertView initLabelView:cell.contentView
+                                         frame:CGRectMake(15, 5, 60, 15)
+                                          text:@"附件"
+                                          font:14
+                                     alignment:NSTextAlignmentLeft
+                                     isNumLine:NO];
+                    
+                    scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 20, 2*self.view.frame.size.width, 80)];
+                    _images = [[NSMutableArray alloc] initWithObjects:
+                               [UIImage imageNamed:@"0.jpeg"],
+                               [UIImage imageNamed:@"1.jpeg"],
+                               [UIImage imageNamed:@"2.jpeg"],
+                               [UIImage imageNamed:@"3.jpeg"],
+                               [UIImage imageNamed:@"4.jpeg"],
+                               [UIImage imageNamed:@"5.jpeg"],
+                               [UIImage imageNamed:@"6.jpeg"],
+                               [UIImage imageNamed:@"7.jpeg"],
+                               [UIImage imageNamed:@"8.jpeg"],
+                               [UIImage imageNamed:@"9.jpeg"],
+                               [UIImage imageNamed:@"10.jpeg"], nil];
+                    [self imageShow:_images inView:scrView];
+                    [cell.contentView addSubview:scrView];
+                }
+                else
+                {
+                    cell.textLabel.text = [self.spaceModel objectAtIndex:indexPath.row-1];
+                }
+            }
+            else if(indexPath.section == 3)
+            {
+                cell.textLabel.text = @"备注";
             }
         }
-        else if (indexPath.section == 1) {
-            cell.textLabel.text = [self.addSpaceAry2 objectAtIndex:indexPath.row];
-        }
-        else if(indexPath.section == 2)
-        {
-            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 5, 60, 15)];
-            lab.text = @"附件：";
-            lab.font = [UIFont systemFontOfSize:14.0f];
-            [cell.contentView addSubview:lab];
-            
-            scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 20, 2*self.view.frame.size.width, 80)];
-            _images = [[NSMutableArray alloc] initWithObjects:
-                       [UIImage imageNamed:@"0.jpeg"],
-                       [UIImage imageNamed:@"1.jpeg"],
-                       [UIImage imageNamed:@"2.jpeg"],
-                       [UIImage imageNamed:@"3.jpeg"],
-                       [UIImage imageNamed:@"4.jpeg"],
-                       [UIImage imageNamed:@"5.jpeg"],
-                       [UIImage imageNamed:@"6.jpeg"],
-                       [UIImage imageNamed:@"7.jpeg"],
-                       [UIImage imageNamed:@"8.jpeg"],
-                       [UIImage imageNamed:@"9.jpeg"],
-                       [UIImage imageNamed:@"10.jpeg"], nil];
-            [self imageShow:_images inView:scrView];
-            [cell.contentView addSubview:scrView];
-        }
-        else if(indexPath.section == 3)
-        {
-            cell.textLabel.text = @"备注";
-        }
-    }
-    return cell;
-}
--(void)imageShow:(NSMutableArray*)imageAry inView:(UIScrollView*)scrolView
-{
-    int contentSize = 300;
-    for (int i = 0; i < imageAry.count+1; i++) {
-        contentSize += 95;
-        [scrolView setContentSize:CGSizeMake(contentSize, -200)];
-        if (i == imageAry.count) {
-            UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
-            img.tag = 1000;
-            img.backgroundColor = [UIColor redColor];
-            img.userInteractionEnabled=YES;
-            UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
-            [img addGestureRecognizer:singleTap];
-            [scrolView addSubview:img];
-            return;
-        }
-        
-        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
-        [scrolView addSubview:view];
-        
-        UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 70, 70)];
-        img.tag = 1001+i;
-        img.userInteractionEnabled=YES;
-        UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
-        [img addGestureRecognizer:singleTap];
-        img.image = [imageAry objectAtIndex:i];
-        [view addSubview:img];
-        
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        button.frame = CGRectMake(50, 0, 20, 20);
-        button.tag = i;
-               [button setImage:[[UIImage imageNamed:@"delete_img.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(delectImageAction:) forControlEvents:UIControlEventTouchUpInside];
-        [view addSubview:button];
-    }
-}
-
--(void)delectImageAction:(id)sender
-{
-    for (UIView *subviews in [scrView subviews]) {
-        [subviews removeFromSuperview];
-    }
-    UIButton *btn = (UIButton*)sender;
-    [_images removeObjectAtIndex:btn.tag];
-    [self imageShow:_images inView:scrView];
-}
--(void) addImage:(UITapGestureRecognizer *)recognizer{
-    UIImageView *img=(UIImageView*)recognizer.view;
-    if (img.tag == 1000) {
-        NSLog(@"22");
-        
-    }
-}
--(void)onClickImage:(UITapGestureRecognizer *)recognizer{
-    
-    UIImageView *img=(UIImageView*)recognizer.view;
-    if (img.tag == 1000) {
-        NSLog(@"22");
-        
+        return cell;
     }
     else
     {
-        NSLog(@"%ld",img.tag);
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+        if (cell == nil)
+        {
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell1"];
+            cell.textLabel.text = [spaceText1 objectAtIndex:indexPath.row];
+            cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+            if ([[spaceUpdataData objectAtIndex:indexPath.row] isEqualToString:@"text;"]) {
+                NSLog(@"这是一个输入框");
+            }
+            else if ([[[spaceUpdataData objectAtIndex:indexPath.row]substringToIndex:9] isEqualToString:@"checkbox;"])
+            {
+                NSLog(@"这是一个多选框");
+                NSString *string = [[spaceUpdataData objectAtIndex:indexPath.row]substringFromIndex:9];
+                NSLog(@"%@",string);
+                NSMutableArray *ary = [[NSMutableArray alloc]init];
+                NSInteger length = string.length;
+                int j = 0;
+                for (int i = 0; i < length; i++) {
+                    NSString *str = [string substringWithRange:NSMakeRange(i, 1)];
+                    if ([str isEqualToString:@";"]) {
+                        [ary addObject:[string substringWithRange:NSMakeRange(j, i-j)]];
+                        j = i+1;
+                    }
+                }
+                [ary addObject:[string substringFromIndex:j]];
+                NSLog(@"%@",ary);
+            }
+            else
+            {
+                NSLog(@"这是一个单选框");
+                NSString *string = [[spaceUpdataData objectAtIndex:indexPath.row]substringFromIndex:6];
+                NSLog(@"%@",string);
+                NSMutableArray *ary = [[NSMutableArray alloc]init];
+                NSInteger length = string.length;
+                int j = 0;
+                for (int i = 0; i < length; i++) {
+                    NSString *str = [string substringWithRange:NSMakeRange(i, 1)];
+                    if ([str isEqualToString:@";"]) {
+                        [ary addObject:[string substringWithRange:NSMakeRange(j, i-j)]];
+                        j = i+1;
+                    }
+                }
+                [ary addObject:[string substringFromIndex:j]];
+                for (int i = 0; i < ary.count; i++) {
+                    QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:@"aaa"];
+                    _radio1.frame =CGRectMake(100+40*i, 5, 200, 30);
+                    [_radio1 setTitle:[ary objectAtIndex:i] forState:UIControlStateNormal];
+                    [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                    [_radio1.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
+                    [cell.contentView addSubview:_radio1];
+                    if (i == 0) {
+                        [_radio1 setChecked:YES];
+                    }
+                    }
+                        
+                    }
+        }
+        return cell;
     }
-    // NSLog(@"图片被点击!");
+    return nil;
 }
+
 - (void)showAlertView:(UIView *) view
 {
     UIView *newView = [[UIView alloc]initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, self.view.frame.size.height-400)];
@@ -401,124 +458,54 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        if (indexPath.row == 1) {
-            typeOfTime = 1;
-            [self showView:self.view];
+    if (tableView == addSpaceTable) {
+        if (indexPath.section == 0) {
+            if (indexPath.row == 1) {
+                typeOfTime = 1;
+                [self showView:self.view];
+            }
+            else if (indexPath.row == 2)
+            {
+                typeOfTime = 2;
+                [self showView:self.view];
+            }
         }
-        else if (indexPath.row == 2)
+        if (indexPath.section == 1)
         {
-            typeOfTime = 2;
-            [self showView:self.view];
+            if (indexPath.row == 0) {
+                //空间
+                //[self showAlertView:self.view];
+                [self analyseModelListData];
+            }
+            else if (indexPath.row == 1)
+            {
+                //风格
+            }
+            else if (indexPath.row == 2)
+            {
+                //面积
+            }
+            else if (indexPath.row == 3)
+            {
+                //预购产品线
+                [self analyseModelData];
+            }
         }
+        if(indexPath.section == 2)
+        {
+            if (indexPath.row != 0) {
+                [self drawModel:indexPath.row];
+            }
+        }
+
     }
-    if (indexPath.section == 1)
+    else
     {
-        if (indexPath.row == 0) {
-            //空间
-            //[self showAlertView:self.view];
-            [self analyseRequestData];
-        }
-        else if (indexPath.row == 1)
-        {
-            //风格
-        }
-        else if (indexPath.row == 2)
-        {
-            //面积
-        }
-        else if (indexPath.row == 3)
-        {
-            //预购产品线
-            [self analyseRequestRequestProductLineData];
-        }
+        
     }
 }
 - (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId {
     NSLog(@"did selected radio:%@ groupId:%@", radio.titleLabel.text, groupId);
-}
-#pragma mark 日期
--(NSMutableArray*)weekAry
-{
-    NSMutableArray *ary = [[NSMutableArray alloc]init];
-    NSDate *now = [NSDate date];
-    NSDate *date;
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-    NSTimeInterval  interval = 24*60*60*1;
-    [dateFormatter setDateFormat:@"MM月dd日"];
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSUInteger unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
-    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
-    NSInteger week = [dateComponent weekday];
-    for (int i = 0; i < 30; i++) {
-        if (week > 7) {
-            week = 1;
-        }
-        NSString *weekStr;
-        if (week == 1) {
-            weekStr = @"周日";
-        }
-        else if (week == 2) {
-            weekStr = @"周一";
-        }
-        else if (week == 3) {
-            weekStr = @"周二";
-        }
-        else if (week == 4) {
-            weekStr = @"周三";
-        }
-        else if (week == 5) {
-            weekStr = @"周四";
-        }
-        else if (week == 6) {
-            weekStr = @"周五";
-        }
-        else if (week == 7) {
-            weekStr = @"周六";
-        }
-        if(i == 0)
-        {
-            date = now;
-            NSString *str = [NSString stringWithFormat:@"%@(今天)",[dateFormatter stringFromDate:date]];
-            [ary addObject:str];
-        }
-        else if (i == 1) {
-            date = [date dateByAddingTimeInterval:+interval];
-            NSString *str = [NSString stringWithFormat:@"%@(明天)",[dateFormatter stringFromDate:date]];
-            [ary addObject:str];
-        }
-        else
-        {
-            date = [date dateByAddingTimeInterval:+interval];
-            NSString *str = [NSString stringWithFormat:@"%@(%@)",[dateFormatter stringFromDate:date],weekStr];
-            [ary addObject:str];
-        }
-        week++;
-    }
-    return ary;
-}
-//小时
--(NSMutableArray*)hourAry
-{
-    NSMutableArray *ary = [[NSMutableArray alloc]init];
-    for (int i = 0; i <= 12; i++) {
-        NSString *str = [NSString stringWithFormat:@"%d时",8+i];
-        [ary addObject:str];
-    }
-    return ary;
-}
-//分钟
--(NSMutableArray*)minAry
-{
-    NSMutableArray *ary = [[NSMutableArray alloc]init];
-    for (int i = 0; i < 12; i++) {
-        NSString *str = [NSString stringWithFormat:@"%d分",i*5];
-        if (i < 2) {
-            str = [NSString stringWithFormat:@"0%@",str];
-        }
-        [ary addObject:str];
-    }
-    return ary;
 }
 
 #pragma mark pickerDelegate
@@ -575,8 +562,92 @@
     else
         return 80;
 }
+-(void)radioView:(NSArray *)radioAry groupID:(NSString*)groupID
+{
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
+    view.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.2f];
+    [self.view addSubview:view];
+    
+    UIView *radioView = [[UIView alloc]initWithFrame:CGRectMake(45, (view.frame.size.height-(radioAry.count+2)*40)/2, view.frame.size.width-90, (radioAry.count+2)*40)];
+    
+    radioView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:1.0f];
+    [view addSubview:radioView];
+    
+    float fristH = 1/2*(view.frame.size.height)-1/2*(radioAry.count)*40+25;
+    
+    
+    for (int i = 0; i < radioAry.count; i++) {
+        
+        QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:groupID];
+        _radio1.frame =CGRectMake(15, fristH+40*i, 200, 30);
+        [_radio1 setTitle:[radioAry objectAtIndex:i] forState:UIControlStateNormal];
+        [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_radio1.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
+        [radioView addSubview:_radio1];
+        if (i == 0) {
+            [_radio1 setChecked:YES];
+        }
+    }
+    float buttonH = fristH+40*(radioAry.count);
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    button.frame = CGRectMake(0, buttonH+10, 60, 30);
+    [button setTitle:@"取消" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [radioView addSubview:button];
+    
+    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    button1.frame = CGRectMake(radioView.frame.size.width-60, buttonH+10, 60, 30);
+    [button1 setTitle:@"取消" forState:UIControlStateNormal];
+    [button1 addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [radioView addSubview:button1];
+    
+}
+-(void)radioViewCancel:(id)sender
+{
+    
+}
+#pragma mark 空间模板绘制
 
--(NSMutableURLRequest*)initializtionRequestModelId
+-(void)drawModel:(NSInteger)row
+{
+    spaceView = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
+    spaceView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.5f];
+    [self.view addSubview:spaceView];
+    
+    spaceText1 = [[NSMutableArray alloc]init];
+    spaceData = [[NSMutableArray alloc]init];
+    int count = 0;
+    int index = 0;
+    for (int i = 0; i <= row-1; i++) {
+        NSString *countStr= [spaceUpdataDataCount objectAtIndex:i];
+        index = count;
+        count += countStr.intValue;
+    }
+
+    for (int i = index; i <  count; i++) {
+        [spaceText1 addObject:[spaceText objectAtIndex:i]];
+        [spaceData addObject:[spaceUpdataData objectAtIndex:i]];
+    }
+    spaceModelTable = [[UITableView alloc]initWithFrame:CGRectMake(20, 0, spaceView.frame.size.width-40, spaceView.frame.size.height-40)];
+    spaceModelTable.delegate = self;
+    spaceModelTable.dataSource = self;
+    [spaceView addSubview:spaceModelTable];
+
+}
+
+#pragma mark 网络请求以及数据解析
+
+#pragma mark 获取空间模板列表
+/*
+ 方法描述：获取空间模板列表 空间名称，空间编号
+ 
+ 请求方式：GET和POST
+ 
+ 入参描述：@authCode:授权码；
+ */
+//网络请求
+
+-(NSMutableURLRequest*)getCustomerModelList
 {
     NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -589,7 +660,7 @@
     
     
     NSString *string = [NSString stringWithFormat:
-                     @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetCustomModelList",code];
+                        @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetCustomModelList",code];
     
     NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
     
@@ -597,13 +668,15 @@
     [request setHTTPBody:loginData];
     
     return request;
-}
 
--(void)analyseRequestData
+}
+//数据解析
+
+-(void)analyseModelListData
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        NSMutableURLRequest *request = [self initializtionRequestModelId];
+        NSMutableURLRequest *request = [self getCustomerModelList];
         
         [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
          {
@@ -625,9 +698,18 @@
          }];
     });
 }
-//http://oppein.3weijia.com/oppein.axds?Params={"authCode":"pdBcFCMd%2FhDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC%2BomUKBlk5av4c8qgvFa1za%2FQ3HB02gJhEPmjA%3D","ModelId":"00002361"}&Command=MeasureSpace/GetCustomModel
 
--(NSMutableURLRequest*)initializtionRequestProductLine
+#pragma mark 预购产品线
+/*
+ 方法描述：预购产品线
+ 
+ 请求方式：GET和POST
+ 
+ 入参描述：@authCode:授权码；
+ */
+//网络请求
+
+-(NSMutableURLRequest*)getProductLine
 {
     NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -638,23 +720,25 @@
     
     code = [RequestDataParse encodeToPercentEscapeString:code];
     
+    
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetProductLine",code];
     
     NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
-    
     [request setHTTPBody:loginData];
     
     return request;
+    
 }
+//数据解析
 
--(void)analyseRequestRequestProductLineData
+-(void)analyseProductLineData
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        NSMutableURLRequest *request = [self initializtionRequestProductLine];
+        NSMutableURLRequest *request = [self getProductLine];
         
         [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
          {
@@ -674,30 +758,151 @@
     });
 }
 
--(void)radioView:(NSArray *)radioAry groupID:(NSString*)groupID
-{
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
-    view.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
-    [self.view addSubview:view];
-    
-    UIView *radioView = [[UIView alloc]initWithFrame:CGRectMake(45, 20, view.frame.size.width-90, view.frame.size.height-40)];
-    radioView.backgroundColor = [[UIColor greenColor]colorWithAlphaComponent:1.0f];
-    [view addSubview:radioView];
-    
-    float fristH = 1/2*(view.frame.size.height)-1/2*(radioAry.count)*40+25;
+#pragma mark 获取空间模板
+/*
+ 方法描述：获取空间模板
+ 
+ 请求方式：GET和POST
+ 
+ 入参描述：@authCode:授权码；@ModelId:空间模板编号
+ */
+//网络请求
 
+-(NSMutableURLRequest*)getCustomModel
+{
+    NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
-    for (int i = 0; i < radioAry.count; i++) {
+    request.HTTPMethod = @"POST";
+    
+    NSString *code = @"pdBcFCMd/hDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC+omUKBlk5av4c8qgvFa1za/Q3HB02gJhEPmjA=";
+    
+    code = [RequestDataParse encodeToPercentEscapeString:code];
+    
+    
+    NSString *string = [NSString stringWithFormat:
+                        @"Params={\"authCode\":\"%@\",\"ModelId\":\"00002203\"}&Command=MeasureSpace/GetCustomModel",code];
+    
+    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    
+    NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:loginData];
+    
+    return request;
+    
+}
+//数据解析
+
+-(void)analyseModelData
+{
+    self.spaceModel = [[NSMutableArray alloc]init];
+    spaceUpdataData = [[NSMutableArray alloc]init];
+    spaceUpdataDataCount = [[NSMutableArray alloc]init];
+    spaceText = [[NSMutableArray alloc]init];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:groupID];
-        _radio1.frame =CGRectMake(50, fristH+40*i, 200, 30);
-        [_radio1 setTitle:[radioAry objectAtIndex:i] forState:UIControlStateNormal];
-        [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_radio1.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
-        [radioView addSubview:_radio1];
-        if (i == 0) {
-             [_radio1 setChecked:YES];
+        NSMutableURLRequest *request = [self getCustomModel];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+         {
+             NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             
+             str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+             
+             NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
+             
+             NSDictionary *JSON = [dic objectForKey:@"JSON"];
+             NSArray *ContrlInfos = [JSON objectForKey:@"ContrlInfos"];
+             int count;
+             for (id ContrlInfo in ContrlInfos) {
+                 count = 0;
+                 NSString *GroupName = [ContrlInfo objectForKey:@"GroupName"];
+                 [self.spaceModel addObject:GroupName];
+                 NSArray *ContrlContainers = [ContrlInfo objectForKey:@"ContrlContainer"];
+                 for (id ContrlContainer in ContrlContainers) {
+                     NSString *Text = [ContrlContainer objectForKey:@"Text"];
+                     NSString *ControlType = [ContrlContainer objectForKey:@"ControlType"];
+                     NSString *DefaultValue = [ContrlContainer objectForKey:@"DefaultValue"];
+                     [spaceText addObject:Text];
+                     [spaceUpdataData addObject:[NSString stringWithFormat:@"%@;%@",ControlType,DefaultValue]];
+                     count++;
+                 }
+                 [spaceUpdataDataCount addObject:[NSString stringWithFormat:@"%d",count]];
+             }
+            [addSpaceTable reloadData];
+            }];
+    });
+    
+}
+
+#pragma mark 图片查看器
+
+-(void)imageShow:(NSMutableArray*)imageAry inView:(UIScrollView*)scrolView
+{
+    int contentSize = 300;
+    for (int i = 0; i < imageAry.count+1; i++) {
+        contentSize += 95;
+        [scrolView setContentSize:CGSizeMake(contentSize, -200)];
+        if (i == imageAry.count) {
+            UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
+            img.tag = 1000;
+            img.backgroundColor = [UIColor redColor];
+            img.userInteractionEnabled=YES;
+            UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
+            [img addGestureRecognizer:singleTap];
+            [scrolView addSubview:img];
+            return;
         }
+        
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
+        [scrolView addSubview:view];
+        
+        UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 70, 70)];
+        img.tag = 1001+i;
+        img.userInteractionEnabled=YES;
+        UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
+        [img addGestureRecognizer:singleTap];
+        img.image = [imageAry objectAtIndex:i];
+        [view addSubview:img];
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        button.frame = CGRectMake(50, 0, 20, 20);
+        button.tag = i;
+        [button setImage:[[UIImage imageNamed:@"delete_img.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(delectImageAction:) forControlEvents:UIControlEventTouchUpInside];
+        [view addSubview:button];
     }
+}
+
+-(void)delectImageAction:(id)sender
+{
+    for (UIView *subviews in [scrView subviews]) {
+        [subviews removeFromSuperview];
+    }
+    UIButton *btn = (UIButton*)sender;
+    [_images removeObjectAtIndex:btn.tag];
+    [self imageShow:_images inView:scrView];
+}
+-(void) addImage:(UITapGestureRecognizer *)recognizer{
+    UIImageView *img=(UIImageView*)recognizer.view;
+    if (img.tag == 1000) {
+        NSLog(@"22");
+        
+    }
+}
+-(void)onClickImage:(UITapGestureRecognizer *)recognizer{
+    
+    UIImageView *img=(UIImageView*)recognizer.view;
+    if (img.tag == 1000) {
+        NSLog(@"22");
+        
+    }
+    else
+    {
+        NSLog(@"%ld",img.tag);
+    }
+    // NSLog(@"图片被点击!");
 }
 @end

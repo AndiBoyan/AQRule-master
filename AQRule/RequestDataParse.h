@@ -14,4 +14,10 @@
 
 + (NSString*)newJsonStr:(NSString*)string;
 
++(NSMutableArray*)weekAry;
+
++(NSMutableArray*)hourAry;
+
++(NSMutableArray*)minAry;
+
 @end

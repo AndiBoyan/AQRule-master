@@ -13,4 +13,10 @@
 
 +(void)alert:(NSString*)message;
 
++(void)initLabelView:(UIView*)insertView
+               frame:(CGRect)frame
+                text:(NSString*)string
+                font:(float)font
+           alignment:(NSTextAlignment)alignment
+           isNumLine:(BOOL)numLine;
 @end

@@ -349,6 +349,7 @@
              if (InfoMessage.length <= 0) {
                  return ;
              }
+             
              NSDictionary *JSON = [dic objectForKey:@"JSON"];
              NSArray *ReList = [JSON objectForKey:@"ReList"];
              for (id relist in ReList) {

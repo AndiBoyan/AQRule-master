@@ -16,7 +16,12 @@
     NSMutableArray *_images;
     UIScrollView *scrView;
     UIScrollView *scrollView;
+    NSString *noteString;
 }
+@property NSMutableArray *tagAry1;
+@property NSMutableArray *tagAry2;
+@property NSMutableArray *tagAry3;
+@property NSMutableArray *tagAry4;
 @end
 
 @implementation RuleInfoViewController
@@ -58,15 +63,18 @@
 }
 -(void)initView
 {
-    NSArray *tagAry1 = [[NSArray alloc]initWithObjects:@"量尺类型 :",@"量尺时间:",@"预计完成时间:",@"空间:",@"风格:",@"面积(m²):",@"预购产品线:", nil];
-    NSArray *tagAry2 = [[NSArray alloc]initWithObjects:@"地砖颜色 :",@"墙砖颜色 : ",@"购买意向 : ",@"备注 : ", nil];
+    self.tagAry1 = [[NSMutableArray alloc]initWithObjects:@"量尺类型 :",@"量尺时间:",@"预计完成时间:",@"空间:",@"风格:",@"面积(m²):",@"预购产品线:", nil];
+    self.tagAry2 = [[NSMutableArray alloc]initWithObjects:@"地砖颜色 :",@"墙砖颜色 : ",@"购买意向 : ",@"备注 : ", nil];
     
-    NSArray *tagAry3 = [[NSArray alloc]initWithObjects:@"复尺",@"6月24日 (周三) 12:00",@"6月24日 (周三) 12:00",@"客餐厅",@"地中海",@"9-12",@"寝室/家具/衣柜/鞋柜", nil];
-    NSArray *tagAry4 = [[NSArray alloc]initWithObjects:@"无 (毛坯)",@"无 (毛坯)",@"冰箱/灶台/净水器/净化器",@"家里有两条狗，希望东西耐用，防止被狗抓咬", nil];
+    self.tagAry3 = [[NSMutableArray alloc]initWithObjects:@"复尺",@"6月24日 (周三) 12:00>",@"6月24日 (周三) 12:00>",@"客餐厅",@"地中海",@"9-12",@"寝室/家具/衣柜/鞋柜", nil];
+    self.tagAry4 = [[NSMutableArray alloc]initWithObjects:@"无 (毛坯)",@"无 (毛坯)",@"冰箱/灶台/净水器/净化器", nil];
+    
+    noteString = @"家里有两条狗，希望东西耐用，防止被狗抓咬";
+    
     for (int i = 0 ; i < 7; i++) {
         UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 35+40*i, 300, 30)];
         lab.font = [UIFont systemFontOfSize:14.0f];
-        lab.text = [NSString stringWithFormat:@"%@ %@",[tagAry1 objectAtIndex:i],[tagAry3 objectAtIndex:i]];//[tagAry1 objectAtIndex:i];
+        lab.text = [NSString stringWithFormat:@"%@ %@",[self.tagAry1 objectAtIndex:i],[self.tagAry3 objectAtIndex:i]];//[tagAry1 objectAtIndex:i];
         [scrollView addSubview:lab];
     }
     UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(15, 315, self.view.frame.size.width-30, 1)];
@@ -92,15 +100,22 @@
                         [UIImage imageNamed:@"10.jpeg"], nil];
     [self imageShow:_images inView:scrView];
     [scrollView addSubview:scrView];
-    for(int i = 0;i < 4; i++)
+    for(int i = 0;i < 3; i++)
     {
         UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 420+i*40, 305, 40)];
-        lab.text = [NSString stringWithFormat:@"%@ %@",[tagAry2 objectAtIndex:i],[tagAry4 objectAtIndex:i]];//[tagAry2 objectAtIndex:i];
+        lab.text = [NSString stringWithFormat:@"%@ %@",[self.tagAry2 objectAtIndex:i],[self.tagAry4 objectAtIndex:i]];//[tagAry2 objectAtIndex:i];
         lab.font = [UIFont systemFontOfSize:14.0f];
         lab.lineBreakMode = NSLineBreakByWordWrapping;
         lab.numberOfLines = 0;
         [scrollView addSubview:lab];
     }
+    UILabel *noteLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 540, 305, 40)];
+    noteLab.text = [NSString stringWithFormat:@"%@ %@",[self.tagAry2 objectAtIndex:3],noteString];
+    noteLab.font = [UIFont systemFontOfSize:14.0f];
+    noteLab.lineBreakMode = NSLineBreakByWordWrapping;
+    noteLab.numberOfLines = 0;
+    [scrollView addSubview:noteLab];
+    
 }
 -(void)imageShow:(NSMutableArray*)imageAry inView:(UIScrollView*)scrolView
 {
@@ -130,15 +145,31 @@
     imageExamine.image = img.image;
     imageExamine.imageWidth = img.image.size.width;
     imageExamine.imageHeigth = img.image.size.height;
-    
 }
+
 -(void)back
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 -(void)updata
 {
     EditSpaceViewController *vc = [[EditSpaceViewController alloc]init];
+    vc.ruleType = [self.tagAry3 objectAtIndex:0];
+    vc.measure = [self.tagAry3 objectAtIndex:1];
+    vc.finish = [self.tagAry3 objectAtIndex:2];
+    vc.addSpaceAry3 = [[NSMutableArray alloc]init];
+    for (int i = 0; i < 4; i++) {
+        [vc.addSpaceAry3 addObject:[self.tagAry3 objectAtIndex:3+i]];
+    }
+    vc.addSpaceAry4 = [[NSMutableArray alloc]init];
+    for (int i = 0; i < 3; i++) {
+        NSString *str = [NSString stringWithFormat:@"%@ %@",[self.tagAry2 objectAtIndex:i],[self.tagAry4 objectAtIndex:i]];
+        
+        [vc.addSpaceAry4 addObject:str];
+    }
+    vc.noteString = [NSString stringWithFormat:@"%@ %@",[self.tagAry2 objectAtIndex:3],noteString];
+    
     [self presentViewController:vc animated:YES completion:nil];
 }
 @end
