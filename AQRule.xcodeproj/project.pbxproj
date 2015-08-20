@@ -27,6 +27,11 @@
 		30FEDA5F1B61DC7B008D6FAD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30FEDA5E1B61DC7B008D6FAD /* Security.framework */; };
 		30FEDA611B61DCB2008D6FAD /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 30FEDA601B61DCB2008D6FAD /* mapapi.bundle */; };
 		30FEDA641B61E2F0008D6FAD /* CustomerInfoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30FEDA631B61E2F0008D6FAD /* CustomerInfoListViewController.m */; };
+		9F383C981B8417FC009E867C /* checkbox1_checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F383C921B8417FC009E867C /* checkbox1_checked.png */; };
+		9F383C991B8417FC009E867C /* checkbox1_checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F383C931B8417FC009E867C /* checkbox1_checked@2x.png */; };
+		9F383C9A1B8417FC009E867C /* checkbox1_unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F383C941B8417FC009E867C /* checkbox1_unchecked.png */; };
+		9F383C9B1B8417FC009E867C /* checkbox1_unchecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F383C951B8417FC009E867C /* checkbox1_unchecked@2x.png */; };
+		9F383C9C1B8417FC009E867C /* QCheckBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C971B8417FC009E867C /* QCheckBox.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9F3BC37C1B704F2200E972F8 /* down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3BC3771B704F2200E972F8 /* down@2x.png */; };
 		9F3BC37D1B704F2200E972F8 /* YiRefreshFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3BC3791B704F2200E972F8 /* YiRefreshFooter.m */; };
 		9F3BC37E1B704F2200E972F8 /* YiRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3BC37B1B704F2200E972F8 /* YiRefreshHeader.m */; };
@@ -123,6 +128,12 @@
 		30FEDA601B61DCB2008D6FAD /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = mapapi.bundle; path = ../baiduMapSDK/BaiduMapAPI.framework/Resources/mapapi.bundle; sourceTree = "<group>"; };
 		30FEDA621B61E2F0008D6FAD /* CustomerInfoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerInfoListViewController.h; sourceTree = "<group>"; };
 		30FEDA631B61E2F0008D6FAD /* CustomerInfoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerInfoListViewController.m; sourceTree = "<group>"; };
+		9F383C921B8417FC009E867C /* checkbox1_checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox1_checked.png; sourceTree = "<group>"; };
+		9F383C931B8417FC009E867C /* checkbox1_checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox1_checked@2x.png"; sourceTree = "<group>"; };
+		9F383C941B8417FC009E867C /* checkbox1_unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox1_unchecked.png; sourceTree = "<group>"; };
+		9F383C951B8417FC009E867C /* checkbox1_unchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox1_unchecked@2x.png"; sourceTree = "<group>"; };
+		9F383C961B8417FC009E867C /* QCheckBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCheckBox.h; sourceTree = "<group>"; };
+		9F383C971B8417FC009E867C /* QCheckBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCheckBox.m; sourceTree = "<group>"; };
 		9F3BC3771B704F2200E972F8 /* down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "down@2x.png"; sourceTree = "<group>"; };
 		9F3BC3781B704F2200E972F8 /* YiRefreshFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YiRefreshFooter.h; sourceTree = "<group>"; };
 		9F3BC3791B704F2200E972F8 /* YiRefreshFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YiRefreshFooter.m; sourceTree = "<group>"; };
@@ -222,6 +233,7 @@
 		3092C3641B60BDBF00BDF274 = {
 			isa = PBXGroup;
 			children = (
+				9F383C911B8417FC009E867C /* QCheckbox */,
 				9F90E87E1B7338EB00A0CBF9 /* image */,
 				9F3BC3881B70A55B00E972F8 /* HTHorizontalSelectionList */,
 				9F3BC3761B704F2200E972F8 /* YiRefresh */,
@@ -319,6 +331,19 @@
 				3092C38B1B60BDC000BDF274 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9F383C911B8417FC009E867C /* QCheckbox */ = {
+			isa = PBXGroup;
+			children = (
+				9F383C921B8417FC009E867C /* checkbox1_checked.png */,
+				9F383C931B8417FC009E867C /* checkbox1_checked@2x.png */,
+				9F383C941B8417FC009E867C /* checkbox1_unchecked.png */,
+				9F383C951B8417FC009E867C /* checkbox1_unchecked@2x.png */,
+				9F383C961B8417FC009E867C /* QCheckBox.h */,
+				9F383C971B8417FC009E867C /* QCheckBox.m */,
+			);
+			path = QCheckbox;
 			sourceTree = "<group>";
 		};
 		9F3BC3761B704F2200E972F8 /* YiRefresh */ = {
@@ -499,8 +524,10 @@
 				9F8FF8021B75DCC40068BE6B /* third_normal.png in Resources */,
 				9F7781AE1B632C9400174524 /* 9.jpeg in Resources */,
 				9F7781AB1B632C9400174524 /* 6.jpeg in Resources */,
+				9F383C981B8417FC009E867C /* checkbox1_checked.png in Resources */,
 				9F7781AF1B632C9400174524 /* 10.jpeg in Resources */,
 				9F806FF41B68BBA7001AB039 /* radio_unchecked@2x.png in Resources */,
+				9F383C991B8417FC009E867C /* checkbox1_checked@2x.png in Resources */,
 				9F8FF8041B75DCC40068BE6B /* third_selected.png in Resources */,
 				9F7781A61B632C9400174524 /* 1.jpeg in Resources */,
 				9F7781AD1B632C9400174524 /* 8.jpeg in Resources */,
@@ -525,10 +552,12 @@
 				9F8FF8011B75DCC40068BE6B /* second_selected@2x.png in Resources */,
 				9F7781E91B63669A00174524 /* area.plist in Resources */,
 				9F7781A81B632C9400174524 /* 3.jpeg in Resources */,
+				9F383C9B1B8417FC009E867C /* checkbox1_unchecked@2x.png in Resources */,
 				9F8FF7FA1B75DCC40068BE6B /* first_normal.png in Resources */,
 				9F8FF7FB1B75DCC40068BE6B /* first_normal@2x.png in Resources */,
 				9F7781A91B632C9400174524 /* 4.jpeg in Resources */,
 				9F806FF21B68BBA7001AB039 /* radio_checked@2x.png in Resources */,
+				9F383C9A1B8417FC009E867C /* checkbox1_unchecked.png in Resources */,
 				9F8FF7FE1B75DCC40068BE6B /* second_normal.png in Resources */,
 				3092C37E1B60BDC000BDF274 /* Images.xcassets in Resources */,
 			);
@@ -562,6 +591,7 @@
 				9F7781961B6328E000174524 /* JSGridViewCell.m in Sources */,
 				9F3FF5571B6605B500AEE5D8 /* AddSpaceViewController.m in Sources */,
 				3092C3A71B60EB6D00BDF274 /* CustomerInfoViewController.m in Sources */,
+				9F383C9C1B8417FC009E867C /* QCheckBox.m in Sources */,
 				9F7781991B63292300174524 /* JSGridView.m in Sources */,
 				9F3BC37E1B704F2200E972F8 /* YiRefreshHeader.m in Sources */,
 				9F7781FA1B637FFE00174524 /* EditSpaceViewController.m in Sources */,

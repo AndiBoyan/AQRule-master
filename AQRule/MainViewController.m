@@ -56,7 +56,7 @@
                                          imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     self.viewControllers = [NSArray arrayWithObjects:customerNav,galleryNav,userinfoNav,nil];
-    
+
     //self.tabBar.tintColor = [UIColor blackColor];
     //UIView *bgView = [[UIView alloc] initWithFrame:self.tabBar.bounds];
     //bgView.backgroundColor = [UIColor colorWithRed:0.2f green:0.6 blue:0.2f alpha:1.0f];
