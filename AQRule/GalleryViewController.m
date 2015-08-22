@@ -150,7 +150,7 @@
     UILabel *lab = (UILabel*)[cell viewWithTag:60];
     lab.frame = CGRectMake(5, height-25, cellImageWidth, 30);
     lab.textAlignment = NSTextAlignmentCenter ;
-    lab.text = [NSString stringWithFormat:@"%ld",i];
+    lab.text = [NSString stringWithFormat:@"%ld",(long)i];
     
     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:lab.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(5, 5)];
     CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
@@ -162,7 +162,7 @@
 }
 
 - (void)gridViewCellWasTouched:(JSGridViewCell *)gridViewCell {
-    NSLog(@"row : %ld, column : %ld", gridViewCell.row, gridViewCell.column);
+    NSLog(@"row : %ld, column : %ld", (long)gridViewCell.row, gridViewCell.column);
 }
 
 

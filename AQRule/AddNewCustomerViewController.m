@@ -10,6 +10,7 @@
 #import "HZAreaPickerView.h"
 #import "QRadioButton.h"
 #import "RequestDataParse.h"
+#import "URLApi.h"
 
 @interface AddNewCustomerViewController ()<UITableViewDataSource,UITableViewDelegate,
                                           HZAreaPickerDelegate,UITextFieldDelegate,
@@ -41,12 +42,12 @@
  */
 -(NSMutableURLRequest*)initializtionRequest
 {
-    NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
+    NSURL *url = [NSURL URLWithString:[URLApi initURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
     request.HTTPMethod = @"POST";
     
-    NSString *code = @"pdBcFCMd/hDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC+omUKBlk5av4c8qgvFa1za/Q3HB02gJhEPmjA=";
+    NSString *code = [URLApi initCode];
     
     code = [RequestDataParse encodeToPercentEscapeString:code];
     

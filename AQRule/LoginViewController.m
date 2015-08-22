@@ -10,6 +10,7 @@
 #import "MainViewController.h"
 #import "RequestDataParse.h"
 #import "NSAlertView.h"
+#import "URLApi.h"
 
 @interface LoginViewController ()
 {
@@ -114,9 +115,6 @@
                  //将得到的NSData数据转换成NSString
                  NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
                  
-                 //将string中的\去除（去除转义字符）
-                 NSLog(@"%@",[RequestDataParse newJsonStr:str]);
-                 
                  //将数据变成标准的json数据
                  
                  NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
@@ -127,6 +125,7 @@
                   JSON        : 登录返回数据
                   AuthCode    : 用户的授权码
                 */
+                 
                  NSString *InfoMessage = [dic objectForKey:@"InfoMessage"];
                  NSDictionary *JSON = [dic objectForKey:@"JSON"];
 
@@ -134,6 +133,12 @@
                      
                      //登陆成功
                      NSString *AuthCode = [JSON objectForKey:@"AuthCode"];
+                     
+                     
+                     
+                     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                     [userDefaults setObject:AuthCode forKey:@"AuthCode"];
+                     
                      AuthCode = [RequestDataParse encodeToPercentEscapeString:AuthCode];
                      MainViewController *vc = [[MainViewController alloc]init];
                      vc.selectedIndex = 0;
@@ -151,7 +156,7 @@
 
 -(NSMutableURLRequest*)initializtionRequest
 {
-    NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
+    NSURL *url = [NSURL URLWithString:[URLApi initURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
     request.HTTPMethod = @"POST";

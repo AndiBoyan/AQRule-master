@@ -23,7 +23,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    A = YES;
+    A = NO;
     _mapManager = [[BMKMapManager alloc]init];
     BOOL ret = [_mapManager start:@"XXG8pSHWP0O34GLaAxY1nuKe" generalDelegate:self];
     

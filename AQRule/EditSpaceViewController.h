@@ -27,4 +27,6 @@
 @property(nonatomic, strong) NSString *finish;
 @property(nonatomic, strong) NSString *noteString;
 
+@property NSMutableArray *spaceModel;
+
 @end
