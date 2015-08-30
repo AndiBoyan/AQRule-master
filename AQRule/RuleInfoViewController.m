@@ -9,6 +9,8 @@
 #import "RuleInfoViewController.h"
 #import "EditSpaceViewController.h"
 #import "ImageExamine.h"
+#import "URLApi.h"
+#import "RequestDataParse.h"
 
 @interface RuleInfoViewController ()
 {
@@ -27,7 +29,9 @@
 @implementation RuleInfoViewController
 
 - (void)viewDidLoad {
+    [self analyseRequestData];
     [super viewDidLoad];
+    _images = [[NSMutableArray alloc]init];
     scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height-30)];
     scrollView.backgroundColor = [UIColor whiteColor];
     scrollView.contentSize = CGSizeMake(0, self.view.frame.size.height+100);
@@ -35,7 +39,7 @@
     
     // Do any additional setup after loading the view.
 
-    [self initView];
+    //[self initView];
     [self initNavigation];
 }
 
@@ -51,25 +55,27 @@
     //创建一个导航栏集合
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
     [navigationItem setTitle:@"量尺详情"];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"back.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
      UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(updata)];
+    rightButton.tintColor = [UIColor blackColor];
     //把导航栏集合添加入导航栏中，设置动画关闭
     navigationItem.leftBarButtonItem = leftButton;
     navigationItem.rightBarButtonItem = rightButton;
     [navigationBar pushNavigationItem:navigationItem animated:NO];
-    navigationBar.backgroundColor = [UIColor greenColor];
     navigationBar.barStyle = UIBarStyleBlack;
+    [navigationBar setBarTintColor:[UIColor colorWithRed:239/255.0 green:185/255.0 blue:75/255.0 alpha:1.0]];
+    [navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor],NSFontAttributeName:[UIFont systemFontOfSize:19.0]}];
     [self.view addSubview:navigationBar];
 }
 -(void)initView
 {
     self.tagAry1 = [[NSMutableArray alloc]initWithObjects:@"量尺类型 :",@"量尺时间:",@"预计完成时间:",@"空间:",@"风格:",@"面积(m²):",@"预购产品线:", nil];
-    self.tagAry2 = [[NSMutableArray alloc]initWithObjects:@"地砖颜色 :",@"墙砖颜色 : ",@"购买意向 : ",@"备注 : ", nil];
+    //self.tagAry2 = [[NSMutableArray alloc]initWithObjects:@"地砖颜色 :",@"墙砖颜色 : ",@"购买意向 : ",@"备注 : ", nil];
     
-    self.tagAry3 = [[NSMutableArray alloc]initWithObjects:@"复尺",@"6月24日 (周三) 12:00>",@"6月24日 (周三) 12:00>",@"客餐厅",@"地中海",@"9-12",@"寝室/家具/衣柜/鞋柜", nil];
-    self.tagAry4 = [[NSMutableArray alloc]initWithObjects:@"无 (毛坯)",@"无 (毛坯)",@"冰箱/灶台/净水器/净化器", nil];
+    //self.tagAry3 = [[NSMutableArray alloc]initWithObjects:@"复尺",@"6月24日 (周三) 12:00>",@"6月24日 (周三) 12:00>",@"客餐厅",@"地中海",@"9-12",@"寝室/家具/衣柜/鞋柜", nil];
+    //self.tagAry4 = [[NSMutableArray alloc]initWithObjects:@"无 (毛坯)",@"无 (毛坯)",@"冰箱/灶台/净水器/净化器", nil];
     
-    noteString = @"家里有两条狗，希望东西耐用，防止被狗抓咬";
+    //noteString = @"家里有两条狗，希望东西耐用，防止被狗抓咬";
     
     for (int i = 0 ; i < 7; i++) {
         UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 35+40*i, 300, 30)];
@@ -86,35 +92,18 @@
     imageLab.font = [UIFont systemFontOfSize:14.0f];
     [scrollView addSubview:imageLab];
      scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 340, 2*self.view.frame.size.width, 80)];
-    _images = [[NSMutableArray alloc] initWithObjects:
-                        [UIImage imageNamed:@"0.jpeg"],
-                        [UIImage imageNamed:@"1.jpeg"],
-                        [UIImage imageNamed:@"2.jpeg"],
-                        [UIImage imageNamed:@"3.jpeg"],
-                        [UIImage imageNamed:@"4.jpeg"],
-                        [UIImage imageNamed:@"5.jpeg"],
-                        [UIImage imageNamed:@"6.jpeg"],
-                        [UIImage imageNamed:@"7.jpeg"],
-                        [UIImage imageNamed:@"8.jpeg"],
-                        [UIImage imageNamed:@"9.jpeg"],
-                        [UIImage imageNamed:@"10.jpeg"], nil];
     [self imageShow:_images inView:scrView];
     [scrollView addSubview:scrView];
-    for(int i = 0;i < 3; i++)
+    for(int i = 0;i < self.tagAry2.count; i++)
     {
         UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 420+i*40, 305, 40)];
-        lab.text = [NSString stringWithFormat:@"%@ %@",[self.tagAry2 objectAtIndex:i],[self.tagAry4 objectAtIndex:i]];//[tagAry2 objectAtIndex:i];
+        lab.text = [NSString stringWithFormat:@"%@",[self.tagAry2 objectAtIndex:i]];//[tagAry2 objectAtIndex:i];
         lab.font = [UIFont systemFontOfSize:14.0f];
         lab.lineBreakMode = NSLineBreakByWordWrapping;
         lab.numberOfLines = 0;
         [scrollView addSubview:lab];
     }
-    UILabel *noteLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 540, 305, 40)];
-    noteLab.text = [NSString stringWithFormat:@"%@ %@",[self.tagAry2 objectAtIndex:3],noteString];
-    noteLab.font = [UIFont systemFontOfSize:14.0f];
-    noteLab.lineBreakMode = NSLineBreakByWordWrapping;
-    noteLab.numberOfLines = 0;
-    [scrollView addSubview:noteLab];
+   
     
 }
 -(void)imageShow:(NSMutableArray*)imageAry inView:(UIScrollView*)scrolView
@@ -155,21 +144,95 @@
 -(void)updata
 {
     EditSpaceViewController *vc = [[EditSpaceViewController alloc]init];
-    vc.ruleType = [self.tagAry3 objectAtIndex:0];
-    vc.measure = [self.tagAry3 objectAtIndex:1];
-    vc.finish = [self.tagAry3 objectAtIndex:2];
-    vc.addSpaceAry3 = [[NSMutableArray alloc]init];
-    for (int i = 0; i < 4; i++) {
-        [vc.addSpaceAry3 addObject:[self.tagAry3 objectAtIndex:3+i]];
-    }
-    vc.addSpaceAry4 = [[NSMutableArray alloc]init];
-    for (int i = 0; i < 3; i++) {
-        NSString *str = [NSString stringWithFormat:@"%@ %@",[self.tagAry2 objectAtIndex:i],[self.tagAry4 objectAtIndex:i]];
-        
-        [vc.addSpaceAry4 addObject:str];
-    }
-    vc.noteString = [NSString stringWithFormat:@"%@ %@",[self.tagAry2 objectAtIndex:3],noteString];
     
     [self presentViewController:vc animated:YES completion:nil];
 }
+-(NSMutableURLRequest*)initializtionRequest
+{
+    NSURL *url = [NSURL URLWithString:[URLApi initURL]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"POST";
+    
+    NSString *code = [URLApi initCode];
+    
+    
+    code = [RequestDataParse encodeToPercentEscapeString:code];
+    
+    
+    NSString *string = [NSString stringWithFormat:
+                        @"Params={\"authCode\":\"%@\",\"MeasureId\":\"%@\"}&Command=MeasureSpace/GetMeasureInfo",code,self.MeasureId];
+    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    
+    NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:loginData];
+    return request;
+}
+-(void)analyseRequestData
+{
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSMutableURLRequest *request = [self initializtionRequest];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+         {
+             NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             NSLog(@"%@",[RequestDataParse newJsonStr:str]);
+             NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
+             NSDictionary *JSON = [dic objectForKey:@"JSON"];
+             NSNumber *MeasureType = [JSON objectForKey:@"MeasureType"];
+             NSInteger type = [MeasureType integerValue];
+             self.tagAry3 = [[NSMutableArray alloc]init];
+             self.tagAry2 = [[NSMutableArray alloc]init];
+             if (type == 0) {
+                 [self.tagAry3 addObject:@"初尺"];
+             }
+             else
+             {
+                 [self.tagAry3 addObject:@"复尺"];
+             }
+             NSString *MeasureTime = [JSON objectForKey:@"MeasureTime"];
+             [self.tagAry3 addObject:MeasureTime];
+             NSString *FinishTime = [JSON objectForKey:@"FinishTime"];
+             [self.tagAry3 addObject:FinishTime];
+             NSString *SpaceName = [JSON objectForKey:@"SpaceName"];
+             [self.tagAry3 addObject:SpaceName];
+             NSString *Style = [JSON objectForKey:@"Style"];
+             [self.tagAry3 addObject:Style];
+             NSString *Area = [JSON objectForKey:@"Area"];
+             [self.tagAry3 addObject:Area];
+             NSString *RoomType = [JSON objectForKey:@"RoomType"];
+             //预购产品线
+             NSArray *BuyWillView = [JSON objectForKey:@"BuyWillView"];
+             
+             NSString *buyString;
+             for (id buywill in BuyWillView) {
+                 NSString *ItemName = [buywill objectForKey:@"ItemName"];
+                 buyString = [NSString stringWithFormat:@"%@\%@",buyString,ItemName];
+             }
+             if (buyString == nil) {
+                 buyString = @"无";
+             }
+             [self.tagAry3 addObject:buyString];
+             NSArray *FileList = [JSON objectForKey:@"FileList"];
+             //购买意向
+             NSString *BuyWill = [JSON objectForKey:@"BuyWill"];
+             
+             NSDictionary *AppCustomModel = [JSON objectForKey:@"AppCustomModel"];
+             NSArray *ContrlInfos = [AppCustomModel objectForKey:@"ContrlInfos"];
+             for (id ContrlInfo in ContrlInfos) {
+                 NSString *GroupName = [ContrlInfo objectForKey:@"GroupName"];
+                 NSLog(@"%@",GroupName);
+                 [self.tagAry2 addObject:GroupName];
+             }
+             NSLog(@"%@",BuyWill);
+             NSString *buywillString = [NSString stringWithFormat:@"购买意向:%@",BuyWill];
+             [self.tagAry2 addObject:buywillString];
+             [self initView];
+        }];
+    });
+}
+
 @end

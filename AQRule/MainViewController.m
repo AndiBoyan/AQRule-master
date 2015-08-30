@@ -28,6 +28,7 @@
      GalleryViewController  : 图库
      UserinfoViewController : 我
      */
+    
     CustomerViewController *customerVC = [[CustomerViewController alloc]init];
     GalleryViewController *galleryVC = [[GalleryViewController alloc]init];
     UserinfoViewController *userinfoVC = [[UserinfoViewController alloc]init];
@@ -40,19 +41,19 @@
     UINavigationController *galleryNav = [[UINavigationController alloc]initWithRootViewController:galleryVC];
     UINavigationController *userinfoNav = [[UINavigationController alloc]initWithRootViewController:userinfoVC];
     
-    customerNav.tabBarItem.image = [[UIImage imageNamed:@"first_normal@2x"]
+    customerNav.tabBarItem.image = [[UIImage imageNamed:@"first_normal"]
                                  imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    customerNav.tabBarItem.selectedImage = [[UIImage imageNamed:@"first_selected@2x"]
+    customerNav.tabBarItem.selectedImage = [[UIImage imageNamed:@"first_selected"]
                                          imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 
-    galleryNav.tabBarItem.image = [[UIImage imageNamed:@"second_normal@2x"]
+    galleryNav.tabBarItem.image = [[UIImage imageNamed:@"second_normal"]
                                 imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    galleryNav.tabBarItem.selectedImage = [[UIImage imageNamed:@"second_selected@2x"]
+    galleryNav.tabBarItem.selectedImage = [[UIImage imageNamed:@"second_selected"]
                                         imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
-    userinfoNav.tabBarItem.image = [[UIImage imageNamed:@"third_normal@2x"]
+    userinfoNav.tabBarItem.image = [[UIImage imageNamed:@"third_normal"]
                                  imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    userinfoNav.tabBarItem.selectedImage = [[UIImage imageNamed:@"third_selected@2x"]
+    userinfoNav.tabBarItem.selectedImage = [[UIImage imageNamed:@"third_selected"]
                                          imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     self.viewControllers = [NSArray arrayWithObjects:customerNav,galleryNav,userinfoNav,nil];

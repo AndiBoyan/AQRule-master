@@ -10,4 +10,6 @@
 
 @interface RuleInfoViewController : UIViewController
 
+@property NSString *MeasureId;
+
 @end

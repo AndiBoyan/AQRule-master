@@ -34,4 +34,22 @@
     }
     [insertView addSubview:lab];
 }
++(void)addAnimation:(UIView*)view push:(BOOL)push
+{
+    CATransition *transition = [CATransition animation];
+    transition.delegate = self;
+    transition.duration = 1.0f;
+    transition.timingFunction = UIViewAnimationCurveEaseInOut;
+    if (push) {
+        transition.subtype = kCAGravityTopRight;
+    }
+    else
+    {
+        transition.subtype = kCAGravityTopLeft;
+    }
+        
+    
+    
+    [view.layer addAnimation:transition forKey:nil];
+}
 @end

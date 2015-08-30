@@ -89,11 +89,12 @@
     //创建一个导航栏集合
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
     navigationItem.title = self.navTitle;
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"back.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
     navigationItem.leftBarButtonItem = leftButton;
     [navigationBar pushNavigationItem:navigationItem animated:NO];
-    navigationBar.backgroundColor = [UIColor greenColor];
     navigationBar.barStyle = UIBarStyleBlack;
+    [navigationBar setBarTintColor:[UIColor colorWithRed:239/255.0 green:185/255.0 blue:75/255.0 alpha:1.0]];
+    [navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor],NSFontAttributeName:[UIFont systemFontOfSize:19.0]}];
     [self.view addSubview:navigationBar];
 
 }

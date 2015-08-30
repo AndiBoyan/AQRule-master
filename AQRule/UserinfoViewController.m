@@ -20,12 +20,14 @@
 @implementation UserinfoViewController
 
 - (void)viewDidLoad {
-    self.navigationController.navigationBar.backgroundColor = [UIColor greenColor];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:239/255.0 green:185/255.0 blue:75/255.0 alpha:1.0]];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor],NSFontAttributeName:[UIFont systemFontOfSize:19.0]}];
+
     //self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.userInfoTable =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
+    self.userInfoTable =[[UITableView alloc]initWithFrame:CGRectMake(0, -40, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     self.userInfoTable.delegate = self;
     self.userInfoTable.dataSource = self;
     [self.view addSubview:self.userInfoTable];

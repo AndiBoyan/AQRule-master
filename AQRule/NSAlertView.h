@@ -13,6 +13,8 @@
 
 +(void)alert:(NSString*)message;
 
++(void)addAnimation:(UIView*)view push:(BOOL)push;
+
 +(void)initLabelView:(UIView*)insertView
                frame:(CGRect)frame
                 text:(NSString*)string

@@ -16,12 +16,14 @@
 
 @interface AddSpaceViewController ()<UITableViewDataSource,UITableViewDelegate,
                                     UIPickerViewDataSource,UIPickerViewDelegate,
-                                    QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate>
+                                    QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     int typeOfTime;//判断是测量时间还是结束时间
+    BOOL isReflash;
     NSString *measure;//量尺时间
     NSString *finish;//结束时间
     NSString *upDatasSring;
+    NSString *MeasureId;
     
     //图片查看器
     UIScrollView *scrView;
@@ -30,6 +32,7 @@
     int MeasureType;//量尺类型
     NSString *modelType;
     NSString *uptadaData;
+    NSString *SpaceId;
     
     //addingSpaceTable
     UITableView *addingSpaceTable;//新增空间table
@@ -54,8 +57,10 @@
     UIView *spaceView;
     
     UIView *spaceRadioView;
+    
+    NSMutableArray *spaceMutableAry;
+    NSInteger spaceIndex;
 }
-
 @property NSArray *addSpaceAry1;
 @property NSArray *addSpaceAry2;
 @property NSArray *addSpaceDateAry;
@@ -67,24 +72,20 @@
 
 @property UILabel *measureLab;//测量时间
 @property UILabel *finishLab;//完成时间
-
+@property UILabel *spaceLab;
+@property UILabel *styleLab;
+@property UILabel *areaLab;
+@property UILabel *materialLab;
+@property UILabel *layoutLab;
+@property UILabel *procutLab;
 @end
 
 @implementation AddSpaceViewController
 
-- (void)setExtraCellLineHidden: (UITableView *)tableView{
-    
-    UIView *view =[ [UIView alloc]init];
-    
-    view.backgroundColor = [UIColor clearColor];
-    
-    [tableView setTableFooterView:view];
-    
-    [tableView setTableHeaderView:view];
-    
-}
+
 
 - (void)viewDidLoad {
+    _images = [[NSMutableArray alloc]init];
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     addingSpaceTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height-30) style:UITableViewStyleGrouped];
@@ -96,13 +97,13 @@
     [self initNavigation];
     
     self.addSpaceAry1 = [[NSArray alloc]initWithObjects:@"量尺类型",@"量尺时间",@"预计完成时间", nil];
-    self.addSpaceAry2 = [[NSArray alloc]initWithObjects:@"空间",@"风格",@"面积(m2)",@"预购产品线", nil];
+    self.addSpaceAry2 = [[NSArray alloc]initWithObjects:@"空间",@"风格",@"面积(m2)",@"材料",@"布局",@"预购产品线", nil];
     self.addSpaceDateAry = [RequestDataParse weekAry];
     self.addSpaceHourAry = [RequestDataParse hourAry];
     self.addSpaceMinAry = [RequestDataParse minAry];
     
     self.dateView = [[UIView alloc]init];
-    self.dateView.backgroundColor = [UIColor colorWithRed:0.8 green:0.2 blue:0.5 alpha:0.8f];
+    self.dateView.backgroundColor = [UIColor colorWithRed:0.5294 green:0.8078 blue:0.9803 alpha:1.0f];
     self.picker = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 40, self.dateView.frame.size.width, self.dateView.frame.size.height-20)];
     self.picker.delegate = self;
     self.picker.dataSource = self;
@@ -112,6 +113,7 @@
     [self.picker selectRow:self.addSpaceMinAry.count*40 inComponent:2 animated:NO];
     [self.dateView addSubview:self.picker];
     
+    spaceMutableAry = [[NSMutableArray alloc]init];
     float offWidth;
     offWidth = 30*(self.view.frame.size.width)/320;
     NSLog(@"%f",offWidth);
@@ -119,6 +121,7 @@
     btn1.frame = CGRectMake(offWidth, 5, 40, 30);
     btn1.tag = 1001;
     [btn1 setTitle:@"取消" forState:UIControlStateNormal];
+    [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(cancelView) forControlEvents:UIControlEventTouchUpInside];
     [self.dateView addSubview:btn1];
     
@@ -126,6 +129,7 @@
     btn2.frame = CGRectMake(self.view.frame.size.width-40-offWidth, 5, 40, 30);
     btn2.tag = 1002;
     [btn2 setTitle:@"确定" forState:UIControlStateNormal];
+    [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(dateChoose:) forControlEvents:UIControlEventTouchUpInside];
     [self.dateView addSubview:btn2];
     
@@ -145,16 +149,17 @@
     //创建一个导航栏集合
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
     [navigationItem setTitle:@"新增空间"];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"back.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(save)];
+    rightButton.tintColor = [UIColor blackColor];
     navigationItem.leftBarButtonItem = leftButton;
     navigationItem.rightBarButtonItem = rightButton;
     [navigationBar pushNavigationItem:navigationItem animated:NO];
-    navigationBar.backgroundColor = [UIColor greenColor];
     navigationBar.barStyle = UIBarStyleBlack;
+    [navigationBar setBarTintColor:[UIColor colorWithRed:239/255.0 green:185/255.0 blue:75/255.0 alpha:1.0]];
+    [navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor],NSFontAttributeName:[UIFont systemFontOfSize:19.0]}];
+    
     [self.view addSubview:navigationBar];
-    
-    
 }
 
 #pragma mark 返回上一层
@@ -178,12 +183,358 @@
 
 #pragma mark 保存数据
 
+//去除tableView多余部分
+
+
 -(void)save
 {
+    NSString *string = @"";
+    for (int i = 0; i < spaceMutableAry.count; i++) {
+        string = [NSString stringWithFormat:@"%@%@",string,[spaceMutableAry objectAtIndex:i]];
+    }
+    
+    NSString *code = [URLApi initCode];
+     
+     code = [RequestDataParse encodeToPercentEscapeString:code];
+     NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\":%d,\"ContrlContentList\":{%@},\"RoomType\":\"两房一厅\",\"FinishTime\":\"2015-08-24 12: 00\",\"SpaceName\":\"%@\",\"MeasureTime\": \"2015-08-24 12: 00\",\"BuyWill\": \"Bedding\",\"Area\": \"%@\",\"Style\":\"%@\",\"ServiceId\":\"%@\",\"UserId\": \"%@\",\"SpaceId\":\"%@\",\"Budget\":58899,\"Material\":\"%@\",\"Layout\":\"%@\"}}&Command=MeasureSpace/AddMeasureInfo",code,MeasureType,string,self.spaceLab.text,self.areaLab.text,self.styleLab.text,self.ServiceId,self.UserId,SpaceId,self.materialLab.text,self.layoutLab.text];
+     str = [str stringByReplacingOccurrencesOfString:@"{," withString:@"{"];
+     
+     NSLog(@"%@",str);
+     uptadaData = str;
+    
     [self analyseUpdataCustomer];//updataCustomer
+    UIImage *img = [_images objectAtIndex:0];
+    [self updataImage:[self encodeToPercentEscapeString:[self image2DataURL:img]]];
+}
+- (NSString *)encodeToPercentEscapeString: (NSString *) input
+{
+    // Encode all the reserved characters, per RFC 3986
+    NSString *outputStr = (NSString *)
+    CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                              (CFStringRef)input,
+                                                              NULL,
+                                                              (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                                              kCFStringEncodingUTF8));
+    return outputStr;
+}
+-(void)sureSpaceInfo:(id)sender
+{
+    upDatasSring = @"";
+    for (int i = 0; i < spaceModelFormat.count; i++) {
+        if ([[spaceModelDatas objectAtIndex:i]isEqualToString:@"text;"]) {
+            upDatasSring = [NSString stringWithFormat:@"%@,\"txt_%@\":\"%@\"",upDatasSring,[spaceModelID objectAtIndex:i],[spaceModelData objectAtIndex:i]];
+        }
+        else
+        {
+            upDatasSring = [NSString stringWithFormat:@"%@,\"rdo_%@\":\"%@\"",upDatasSring,[spaceModelID objectAtIndex:i],[spaceModelData objectAtIndex:i]];
+        }
+        
+    }
+    [spaceMutableAry replaceObjectAtIndex:spaceIndex withObject:upDatasSring ];
+
+    [spaceView removeFromSuperview];
+    spaceModelTable.delegate = nil;
+    spaceModelTable.dataSource = nil;
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [spaceModelData replaceObjectAtIndex:textField.tag withObject:textField.text];
+    NSLog(@"%@",spaceModelData);
+}
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
 }
 
+
+- (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId {
+    if([groupId isEqualToString:@"CustomName"])
+    {
+        modelType = radio.titleLabel.text;
+    }
+    //@"Style"
+    else if ([groupId isEqualToString:@"Style"])
+    {
+        self.styleLab.text = radio.titleLabel.text;
+        return;
+    }
+    else if ([groupId isEqualToString:@"array"])
+    {
+        self.areaLab.text = radio.titleLabel.text;
+        return;
+    }
+    else if ([groupId isEqualToString:@"Materials"])
+    {
+        self.materialLab.text = radio.titleLabel.text;
+        return;
+    }
+    else if ([groupId isEqualToString:@"Layouts"])
+    {
+        self.layoutLab.text = radio.titleLabel.text;
+        return;
+    }
+    else if (radio.tag == 1001) {
+        if ([radio.titleLabel.text isEqualToString:@"单尺"]) {
+            MeasureType = 0;
+        }
+        else
+        {
+            MeasureType = 1;
+        }
+        return;
+    }
+    
+   else if (radio.tag == 1002) {
+        
+        return;
+    }
+    [spaceModelData replaceObjectAtIndex:radio.tag withObject:radio.titleLabel.text];
+}
+
+- (void)didSelectedCheckBox:(QCheckBox *)checkbox checked:(BOOL)checked {
+    if (checkbox.tag == 2000) {
+        if (self.procutLab.text==nil) {
+            self.procutLab.text = @"";
+        }
+        NSString *str = self.procutLab.text;
+        if (checked) {
+            if (![str isEqualToString:@""]) {
+                str = [NSString stringWithFormat:@"%@;%@",str,checkbox.titleLabel.text];
+            }
+            else
+                str = [NSString stringWithFormat:@"%@",checkbox.titleLabel.text];
+        }
+        else
+        {
+            str = [str stringByReplacingOccurrencesOfString:checkbox.titleLabel.text withString:@""];
+            str = [str stringByReplacingOccurrencesOfString:@";;" withString:@""];
+        }
+        self.procutLab.text = str;
+        return;
+    }
+    else
+    {
+        if(checked == YES)
+        {
+            NSString *str = [spaceModelData objectAtIndex:checkbox.tag];
+            if ([str isEqualToString:@""]) {
+                str = [NSString stringWithFormat:@"%@",checkbox.titleLabel.text];
+            }
+            else{
+                str = [NSString stringWithFormat:@"%@;%@",str,checkbox.titleLabel.text];
+            }
+            [spaceModelData replaceObjectAtIndex:checkbox.tag withObject:str];
+        }
+        else
+        {
+            NSString *str = [spaceModelData objectAtIndex:checkbox.tag];
+            str = [str stringByReplacingOccurrencesOfString:checkbox.titleLabel.text withString:@""];
+            str = [str stringByReplacingOccurrencesOfString:@";;" withString:@";"];
+            if ((str.length > 0)&&[[str substringWithRange:NSMakeRange(0, 1)] isEqualToString:@";"]) {
+                str = [str substringFromIndex:1];
+            }
+            if ((str.length > 0)&&[[str substringWithRange:NSMakeRange(str.length-1, 1)] isEqualToString:@";"]) {
+                str = [str substringToIndex:str.length-1];
+            }
+            
+            [spaceModelData replaceObjectAtIndex:checkbox.tag withObject:str];
+        }
+    }
+}
+
+
+-(void)radioView:(NSArray *)radioAry groupID:(NSString*)groupID title:(NSString*)title
+{
+    spaceRadioView = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
+    spaceRadioView.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
+    [self.view addSubview:spaceRadioView];
+    
+    UIView *radioView = [[UIView alloc]initWithFrame:CGRectMake(45, (spaceRadioView.frame.size.height-(radioAry.count+2)*30)/2, spaceRadioView.frame.size.width-90, (radioAry.count+2)*30)];
+    
+    radioView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:1.0f];
+    [spaceRadioView addSubview:radioView];
+    
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:radioView.bounds  byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(10, 10)];
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    maskLayer.frame = radioView.bounds;
+    maskLayer.path = maskPath.CGPath;
+    radioView.layer.mask = maskLayer;
+    
+    float fristH = 1/2*(spaceRadioView.frame.size.height)-1/2*(radioAry.count)*30+25;
+    
+    for (int i = 0; i < radioAry.count; i++) {
+        
+        QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:groupID];
+        _radio1.frame =CGRectMake(20, fristH+30*i, 200, 30);
+        _radio1.tag = 1002;
+        [_radio1 setTitle:[radioAry objectAtIndex:i] forState:UIControlStateNormal];
+        [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_radio1.titleLabel setFont:[UIFont systemFontOfSize:13.0f]];
+        [radioView addSubview:_radio1];
+        if (i == 0) {
+            [_radio1 setChecked:YES];
+        }
+    }
+    float buttonH = fristH+30*(radioAry.count)-10;
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    button.frame = CGRectMake(20, buttonH+10, 60, 30);
+    [button setTitle:@"取消" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [radioView addSubview:button];
+    
+    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    button1.frame = CGRectMake(radioView.frame.size.width-80, buttonH+10, 60, 30);
+    [button1 setTitle:@"确定" forState:UIControlStateNormal];
+    [button1 addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [radioView addSubview:button1];
+    
+}
+
+-(void)checkView:(NSArray *)checkAry tag:(int)tag
+{
+    spaceRadioView = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
+    spaceRadioView.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
+    [self.view addSubview:spaceRadioView];
+    
+    UIView *checkView = [[UIView alloc]initWithFrame:CGRectMake(45, (spaceRadioView.frame.size.height-(checkAry.count+2)*30)/2, spaceRadioView.frame.size.width-90, (checkAry.count+2)*30)];
+    
+    checkView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:1.0f];
+    [spaceRadioView addSubview:checkView];
+    
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:checkView.bounds  byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(10, 10)];
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    maskLayer.frame = checkView.bounds;
+    maskLayer.path = maskPath.CGPath;
+    checkView.layer.mask = maskLayer;
+    
+    float fristH = 1/2*(spaceRadioView.frame.size.height)-1/2*(checkAry.count)*30+25;
+    
+    for (int i = 0; i < checkAry.count; i++) {
+        
+        QCheckBox *_check1 = [[QCheckBox alloc] initWithDelegate:self];
+        _check1.tag = tag;
+        _check1.frame = CGRectMake(35, fristH+30*i, 200, 30);
+        [_check1 setTitle:[checkAry objectAtIndex:i] forState:UIControlStateNormal];
+        [_check1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_check1.titleLabel setFont:[UIFont systemFontOfSize:13.0f]];
+        [checkView addSubview:_check1];
+    }
+    float buttonH = fristH+30*(checkAry.count)-10;
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    button.frame = CGRectMake(20, buttonH+10, 60, 30);
+    [button setTitle:@"取消" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [checkView addSubview:button];
+    
+    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    button1.frame = CGRectMake(checkView.frame.size.width-80, buttonH+10, 60, 30);
+    [button1 setTitle:@"确定" forState:UIControlStateNormal];
+    [button1 addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [checkView addSubview:button1];
+    
+}
+
+-(void)radioViewCancel:(id)sender
+{
+    if (isReflash == NO) {
+        [spaceRadioView removeFromSuperview];
+        return;
+    }
+    NSInteger count = [modelDic allKeys].count;
+    id key;
+    id value;
+    self.spaceLab.text = modelType;
+    for (int i = 0; i < count; i++) {
+        key = [[modelDic allKeys]objectAtIndex:i];
+        if ([key isEqualToString:modelType]) {
+            value = [modelDic objectForKey:key];
+            SpaceId = value;
+            [self analyseModelData:value];
+        }
+    }
+    [spaceRadioView removeFromSuperview];
+    isReflash = NO;
+}
+#pragma mark 空间模板绘制
+
+-(void)drawModel:(NSInteger)row
+{
+    spaceView = [[UIView alloc]initWithFrame:CGRectMake(0,
+                                                        65,
+                                                        self.view.frame.size.width,
+                                                        self.view.frame.size.height-65)];
+    
+    spaceView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.5f];
+    [self.view addSubview:spaceView];
+    
+    spaceModelFormat = [[NSMutableArray alloc]init];
+  
+    spaceModelDatas = [[NSMutableArray alloc]init];
+    spaceModelID = [[NSMutableArray alloc]init];
+    
+    int count = 0;
+    int index = 0;
+    
+    for (int i = 0; i <= row-1; i++) {
+        NSString *countStr= [spaceModelAllDataCount objectAtIndex:i];
+        index = count;
+        count += countStr.intValue;
+    }
+
+    for (int i = index; i <  count; i++) {
+        
+        [spaceModelFormat addObject:[spaceModelFormats objectAtIndex:i]];
+        [spaceModelDatas addObject:[spaceModelAllData objectAtIndex:i]];
+        [spaceModelID addObject:[spaceModelIDs objectAtIndex:i]];
+        
+    }
+      NSLog(@"%@",spaceModelID);
+    if (spaceMutableAry.count <= 0) {
+        for (int i = index; i <  count; i++) {
+            [spaceMutableAry addObject:@""];
+        }
+    }
+    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(20,
+                                                        (self.view.frame.size.height-65-40*(spaceModelDatas.count+1))/2,
+                                                        spaceView.frame.size.width-40,
+                                                        40*(spaceModelDatas.count+1))];
+    [spaceView addSubview:v];
+    
+    spaceModelTable = [[UITableView alloc]initWithFrame:CGRectMake(0,
+                                                                   0,
+                                                                  v.frame.size.width,
+                                                                  v.frame.size.height)];
+    spaceModelTable.delegate = self;
+    spaceModelTable.dataSource = self;
+    spaceModelTable.scrollEnabled = NO;
+    spaceModelTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    spaceModelTable.backgroundColor = [UIColor clearColor];
+    
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:v.bounds  byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(10, 10)];
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    maskLayer.frame = v.bounds;
+    maskLayer.path = maskPath.CGPath;
+    v.layer.mask = maskLayer;
+    
+    [self setExtraCellLineHidden:spaceModelTable];
+    [v addSubview:spaceModelTable];
+}
 #pragma mark tableViewDeledate
+
+- (void)setExtraCellLineHidden: (UITableView *)tableView{
+    
+    UIView *view =[ [UIView alloc]init];
+    
+    view.backgroundColor = [UIColor clearColor];
+    
+    [tableView setTableFooterView:view];
+    
+    [tableView setTableHeaderView:view];
+    
+}
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -203,7 +554,7 @@
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if (tableView == addingSpaceTable) {
-        return 4;
+        return 3;
     }
     else
         return 1;
@@ -289,6 +640,49 @@
             }
             else if (indexPath.section == 1) {
                 cell.textLabel.text = [self.addSpaceAry2 objectAtIndex:indexPath.row];
+                
+                if (indexPath.row == 0) {
+                    self.spaceLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
+                    self.spaceLab.textAlignment = NSTextAlignmentRight;
+                    self.spaceLab.font = [UIFont systemFontOfSize:14.0f];
+                    self.spaceLab.text = modelType;
+                    [cell.contentView addSubview:self.spaceLab];
+                }
+                else if (indexPath.row == 1)
+                {
+                    self.styleLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
+                    self.styleLab.textAlignment = NSTextAlignmentRight;
+                    self.styleLab.font = [UIFont systemFontOfSize:14.0f];
+                    [cell.contentView addSubview:self.styleLab];
+                }
+                else if (indexPath.row == 2)
+                {
+                    self.areaLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
+                    self.areaLab.textAlignment = NSTextAlignmentRight;
+                    self.areaLab.font = [UIFont systemFontOfSize:14.0f];
+                    [cell.contentView addSubview:self.areaLab];
+                }
+                else if (indexPath.row == 3)
+                {
+                    self.materialLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
+                    self.materialLab.textAlignment = NSTextAlignmentRight;
+                    self.materialLab.font = [UIFont systemFontOfSize:14.0f];
+                    [cell.contentView addSubview:self.materialLab];
+                }
+                else if (indexPath.row == 4)
+                {
+                    self.layoutLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
+                    self.layoutLab.textAlignment = NSTextAlignmentRight;
+                    self.layoutLab.font = [UIFont systemFontOfSize:14.0f];
+                    [cell.contentView addSubview:self.layoutLab];
+                }
+                else if (indexPath.row == 5)
+                {
+                    self.procutLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
+                    self.procutLab.textAlignment = NSTextAlignmentRight;
+                    self.procutLab.font = [UIFont systemFontOfSize:14.0f];
+                    [cell.contentView addSubview:self.procutLab];
+                }
             }
             else if(indexPath.section == 2)
             {
@@ -301,18 +695,7 @@
                                      isNumLine:NO];
                     
                     scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 20, 2*self.view.frame.size.width, 80)];
-                    _images = [[NSMutableArray alloc] initWithObjects:
-                               [UIImage imageNamed:@"0.jpeg"],
-                               [UIImage imageNamed:@"1.jpeg"],
-                               [UIImage imageNamed:@"2.jpeg"],
-                               [UIImage imageNamed:@"3.jpeg"],
-                               [UIImage imageNamed:@"4.jpeg"],
-                               [UIImage imageNamed:@"5.jpeg"],
-                               [UIImage imageNamed:@"6.jpeg"],
-                               [UIImage imageNamed:@"7.jpeg"],
-                               [UIImage imageNamed:@"8.jpeg"],
-                               [UIImage imageNamed:@"9.jpeg"],
-                               [UIImage imageNamed:@"10.jpeg"], nil];
+                    
                     [self imageShow:_images inView:scrView];
                     [cell.contentView addSubview:scrView];
                 }
@@ -320,10 +703,6 @@
                 {
                     cell.textLabel.text = [self.spaceModel objectAtIndex:indexPath.row-1];
                 }
-            }
-            else if(indexPath.section == 3)
-            {
-                cell.textLabel.text = @"备注";
             }
         }
         return cell;
@@ -344,7 +723,7 @@
                 
                 if (indexPath.row == i) {
                     if ([[spaceModelDatas objectAtIndex:indexPath.row] isEqualToString:@"text;"]) {
-                        UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(self.view.frame.size.width-190, 7.5, 150, 25)];
+                        UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(self.view.frame.size.width-190, 7.5, 145, 25)];
                         field.tag = indexPath.row;
                         field.delegate = self;
                         field.borderStyle = UITextBorderStyleRoundedRect;
@@ -366,16 +745,14 @@
                         }
                         [ary addObject:[string substringFromIndex:j]];
                         NSInteger count = ary.count;
-                        if (count > 5) {
-                            count = 5;
-                        }
+
                         for (int i = 0; i < count; i++) {
                             QCheckBox *_check1 = [[QCheckBox alloc] initWithDelegate:self];
                             _check1.tag = indexPath.row;
-                            _check1.frame = CGRectMake(self.view.frame.size.width-80-40*i, 5, 45, 30);
+                            _check1.frame = CGRectMake(self.view.frame.size.width-80-50*i, 5, 50, 30);
                             [_check1 setTitle:[ary objectAtIndex:i] forState:UIControlStateNormal];
                             [_check1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                            [_check1.titleLabel setFont:[UIFont boldSystemFontOfSize:8.0f]];
+                            [_check1.titleLabel setFont:[UIFont boldSystemFontOfSize:10.0f]];
                             [cell.contentView addSubview:_check1];
                         }
                     }
@@ -425,59 +802,6 @@
     return nil;
 }
 
-
--(void)sureSpaceInfo:(id)sender
-{
-    if (upDatasSring == nil) {
-        upDatasSring = @"";
-    }
-    for (int i = 0; i < spaceModelFormat.count; i++) {
-        if ([[spaceModelDatas objectAtIndex:i]isEqualToString:@"text;"]) {
-            upDatasSring = [NSString stringWithFormat:@"%@,\"txt_%@\":\"%@\"",upDatasSring,[spaceModelIDs objectAtIndex:i],[spaceModelData objectAtIndex:i]];
-        }
-        else
-        {
-            upDatasSring = [NSString stringWithFormat:@"%@,\"rdo_%@\":\"%@\"",upDatasSring,[spaceModelIDs objectAtIndex:i],[spaceModelData objectAtIndex:i]];
-        }
-        
-    }
-    NSString *code = [URLApi initCode];
-    
-    code = [RequestDataParse encodeToPercentEscapeString:code];
-    NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\": %d,\"ContrlContentList\":{%@},\"RoomType\": \"\",\"FinishTime\":\"2015-08-24 12: 00\",\"SpaceName\": \"书房\",\"MeasureTime\": \"2015-08-24 12: 00\",\"BuyWill\": \"Bedding\",\"Area\": \"9-12\",\"Style\": \"北欧\",\"ServiceId\": \"00000203\",\"UserId\": \"1000025908\",\"SpaceId\": \"00002201\",\"Budget\": \"58899\"}}&Command=MeasureSpace/AddMeasureInfo",code,MeasureType,upDatasSring];
-    str = [str stringByReplacingOccurrencesOfString:@"{," withString:@"{"];
-    
-    NSLog(@"%@",str);
-    uptadaData = str;
-    
-    [spaceView removeFromSuperview];
-    spaceModelTable.delegate = nil;
-    spaceModelTable.dataSource = nil;
-}
--(void)textFieldDidEndEditing:(UITextField *)textField
-{
-    [spaceModelData replaceObjectAtIndex:textField.tag withObject:textField.text];
-    NSLog(@"%@",spaceModelData);
-}
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return YES;
-}
-- (void)showAlertView:(UIView *) view
-{
-    UIView *newView = [[UIView alloc]initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, self.view.frame.size.height-400)];
-    newView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.5];
-    [view addSubview:newView];
-    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 100, 200)];
-    v.backgroundColor = [UIColor redColor];
-    [newView addSubview:v];
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        newView.frame = CGRectMake(0, view.frame.size.height - newView.frame.size.height, newView.frame.size.width, newView.frame.size.height);
-    }];
-}
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == addingSpaceTable) {
@@ -495,6 +819,7 @@
         {
             if (indexPath.row == 0) {
                 //空间
+                isReflash = YES;
                 [self analyseModelListData];
             }
             else if (indexPath.row == 1)
@@ -509,6 +834,16 @@
             }
             else if (indexPath.row == 3)
             {
+                //材料
+                [self analyseRoomMaterialsData];
+            }
+            else if (indexPath.row == 4)
+            {
+                //布局
+                [self analyseRoomLayoutsData];
+            }
+            else if (indexPath.row == 5)
+            {
                 //预购产品线
                 [self analyseProductLineData];
             }
@@ -516,6 +851,7 @@
         if(indexPath.section == 2)
         {
             if (indexPath.row != 0) {
+                spaceIndex = indexPath.row - 1;
                 [self drawModel:indexPath.row];
                 spaceModelData =[[NSMutableArray alloc]init];
                 for (int i = 0 ; i < spaceModelFormat.count; i++) {
@@ -529,224 +865,7 @@
         
     }
 }
-- (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId {
-    if([groupId isEqualToString:@"CustomName"])
-    {
-        modelType = radio.titleLabel.text;
-        return;
-    }
-    if (radio.tag == 1001) {
-        if ([radio.titleLabel.text isEqualToString:@"单尺"]) {
-            MeasureType = 1;
-        }
-        else
-        {
-            MeasureType = 2;
-        }
-        return;
-    }
-    
-    if (radio.tag == 1002) {
-        
-        return;
-    }
-    [spaceModelData replaceObjectAtIndex:radio.tag withObject:radio.titleLabel.text];
-}
 
-- (void)didSelectedCheckBox:(QCheckBox *)checkbox checked:(BOOL)checked {
-    if(checked == YES)
-    {
-        NSString *str = [spaceModelData objectAtIndex:checkbox.tag];
-        if ([str isEqualToString:@""]) {
-             str = [NSString stringWithFormat:@"%@",checkbox.titleLabel.text];
-        }
-        else{
-            str = [NSString stringWithFormat:@"%@;%@",str,checkbox.titleLabel.text];
-        }
-        [spaceModelData replaceObjectAtIndex:checkbox.tag withObject:str];
-    }
-    else
-    {
-        NSString *str = [spaceModelData objectAtIndex:checkbox.tag];
-        str = [str stringByReplacingOccurrencesOfString:checkbox.titleLabel.text withString:@""];
-        str = [str stringByReplacingOccurrencesOfString:@";;" withString:@";"];
-        if ((str.length > 0)&&[[str substringWithRange:NSMakeRange(0, 1)] isEqualToString:@";"]) {
-            str = [str substringFromIndex:1];
-        }
-        if ((str.length > 0)&&[[str substringWithRange:NSMakeRange(str.length-1, 1)] isEqualToString:@";"]) {
-            str = [str substringToIndex:str.length-1];
-        }
-
-        [spaceModelData replaceObjectAtIndex:checkbox.tag withObject:str];
-    }
-}
-
-
--(void)radioView:(NSArray *)radioAry groupID:(NSString*)groupID title:(NSString*)title
-{
-    spaceRadioView = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
-    spaceRadioView.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
-    [self.view addSubview:spaceRadioView];
-    
-    UIView *radioView = [[UIView alloc]initWithFrame:CGRectMake(45, (spaceRadioView.frame.size.height-(radioAry.count+2)*30)/2, spaceRadioView.frame.size.width-90, (radioAry.count+2)*30)];
-    
-    radioView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:1.0f];
-    [spaceRadioView addSubview:radioView];
-    
-    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:radioView.bounds  byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(10, 10)];
-    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-    maskLayer.frame = radioView.bounds;
-    maskLayer.path = maskPath.CGPath;
-    radioView.layer.mask = maskLayer;
-    
-    float fristH = 1/2*(spaceRadioView.frame.size.height)-1/2*(radioAry.count)*30+25;
-    
-    for (int i = 0; i < radioAry.count; i++) {
-        
-        QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:groupID];
-        _radio1.frame =CGRectMake(20, fristH+30*i, 200, 30);
-        _radio1.tag = 1002;
-        [_radio1 setTitle:[radioAry objectAtIndex:i] forState:UIControlStateNormal];
-        [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_radio1.titleLabel setFont:[UIFont systemFontOfSize:13.0f]];
-        [radioView addSubview:_radio1];
-        if (i == 0) {
-            [_radio1 setChecked:YES];
-        }
-    }
-    float buttonH = fristH+30*(radioAry.count)-10;
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame = CGRectMake(20, buttonH+10, 60, 30);
-    [button setTitle:@"取消" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
-    [radioView addSubview:button];
-    
-    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button1.frame = CGRectMake(radioView.frame.size.width-80, buttonH+10, 60, 30);
-    [button1 setTitle:@"取消" forState:UIControlStateNormal];
-    [button1 addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
-    [radioView addSubview:button1];
-    
-}
-
--(void)checkView:(NSArray *)checkAry
-{
-    spaceRadioView = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
-    spaceRadioView.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
-    [self.view addSubview:spaceRadioView];
-    
-    UIView *checkView = [[UIView alloc]initWithFrame:CGRectMake(45, (spaceRadioView.frame.size.height-(checkAry.count+2)*30)/2, spaceRadioView.frame.size.width-90, (checkAry.count+2)*30)];
-    
-    checkView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:1.0f];
-    [spaceRadioView addSubview:checkView];
-    
-    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:checkView.bounds  byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(10, 10)];
-    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-    maskLayer.frame = checkView.bounds;
-    maskLayer.path = maskPath.CGPath;
-    checkView.layer.mask = maskLayer;
-    
-    float fristH = 1/2*(spaceRadioView.frame.size.height)-1/2*(checkAry.count)*30+25;
-    
-    for (int i = 0; i < checkAry.count; i++) {
-        
-        QCheckBox *_check1 = [[QCheckBox alloc] initWithDelegate:self];
-        _check1.tag = 2000;
-        _check1.frame = CGRectMake(35, fristH+30*i, 200, 30);
-        [_check1 setTitle:[checkAry objectAtIndex:i] forState:UIControlStateNormal];
-        [_check1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_check1.titleLabel setFont:[UIFont systemFontOfSize:13.0f]];
-        [checkView addSubview:_check1];
-    }
-    float buttonH = fristH+30*(checkAry.count)-10;
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame = CGRectMake(20, buttonH+10, 60, 30);
-    [button setTitle:@"取消" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
-    [checkView addSubview:button];
-    
-    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button1.frame = CGRectMake(checkView.frame.size.width-80, buttonH+10, 60, 30);
-    [button1 setTitle:@"取消" forState:UIControlStateNormal];
-    [button1 addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
-    [checkView addSubview:button1];
-    
-}
-
--(void)radioViewCancel:(id)sender
-{
-    NSInteger count = [modelDic allKeys].count;
-    id key;
-    id value;
-    for (int i = 0; i < count; i++) {
-        key = [[modelDic allKeys]objectAtIndex:i];
-        if ([key isEqualToString:modelType]) {
-            value = [modelDic objectForKey:key];
-            
-            [self analyseModelData:value];
-        }
-    }
-    [spaceRadioView removeFromSuperview];
-}
-#pragma mark 空间模板绘制
-
--(void)drawModel:(NSInteger)row
-{
-    spaceView = [[UIView alloc]initWithFrame:CGRectMake(0,
-                                                        65,
-                                                        self.view.frame.size.width,
-                                                        self.view.frame.size.height-65)];
-    
-    spaceView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.5f];
-    [self.view addSubview:spaceView];
-    
-    spaceModelFormat = [[NSMutableArray alloc]init];
-    spaceModelDatas = [[NSMutableArray alloc]init];
-    spaceModelID = [[NSMutableArray alloc]init];
-    
-    int count = 0;
-    int index = 0;
-    
-    for (int i = 0; i <= row-1; i++) {
-        NSString *countStr= [spaceModelAllDataCount objectAtIndex:i];
-        index = count;
-        count += countStr.intValue;
-    }
-
-    for (int i = index; i <  count; i++) {
-        
-        [spaceModelFormat addObject:[spaceModelFormats objectAtIndex:i]];
-        [spaceModelDatas addObject:[spaceModelAllData objectAtIndex:i]];
-        [spaceModelID addObject:[spaceModelIDs objectAtIndex:i]];
-        
-    }
-    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(20,
-                                                        (self.view.frame.size.height-65-40*(spaceModelDatas.count+1))/2,
-                                                        spaceView.frame.size.width-40,
-                                                        40*(spaceModelDatas.count+1))];
-    [spaceView addSubview:v];
-    
-    spaceModelTable = [[UITableView alloc]initWithFrame:CGRectMake(0,
-                                                                   0,
-                                                                  v.frame.size.width,
-                                                                  v.frame.size.height)];
-    spaceModelTable.delegate = self;
-    spaceModelTable.dataSource = self;
-    spaceModelTable.scrollEnabled = NO;
-    spaceModelTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-    spaceModelTable.backgroundColor = [UIColor clearColor];
-    
-    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:v.bounds  byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(10, 10)];
-    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-    maskLayer.frame = v.bounds;
-    maskLayer.path = maskPath.CGPath;
-    v.layer.mask = maskLayer;
-    
-    [self setExtraCellLineHidden:spaceModelTable];
-    [v addSubview:spaceModelTable];
-}
 
 #pragma mark 网络请求以及数据解析
 
@@ -878,7 +997,7 @@
                  NSString *ItemName = [relist objectForKey:@"ItemName"];
                  [itemAry addObject:ItemName];
              }
-             [self checkView:itemAry];
+             [self checkView:itemAry tag:2000];
          }];
     });
 }
@@ -1089,6 +1208,134 @@
          }];
     });
 }
+#pragma mark 获取空间材料
+/*
+ 方法描述：获取空间材料
+ 
+ 请求方式：GET和POST
+ 
+ 入参描述：@authCode:授权码
+ */
+//网络请求
+
+-(NSMutableURLRequest*)getRoomMaterials
+{
+    NSURL *url = [NSURL URLWithString:[URLApi initURL]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"POST";
+    
+    NSString *code = [URLApi initCode];
+    
+    code = [RequestDataParse encodeToPercentEscapeString:code];
+    
+    NSString *string = [NSString stringWithFormat:
+                        @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetRoomInfo",code];
+    
+    NSLog(@"%@?%@",[URLApi initURL],string);
+    
+    NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:loginData];
+    
+    return request;
+    
+}
+//数据解析
+
+-(void)analyseRoomMaterialsData
+{
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSMutableURLRequest *request = [self getRoomStyle];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+         {
+             NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             
+             str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+             
+             NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
+             
+             NSDictionary *JSON = [dic objectForKey:@"JSON"];
+             NSArray *RoomType = [JSON objectForKey:@"RoomType"];
+             for (id type in RoomType)
+             {
+                 if ([[type objectForKey:@"RoomName"]isEqualToString:modelType]) {
+                     NSArray *array = [type objectForKey:@"Materials"];
+                     NSLog(@"%@",array);
+                     [self radioView:array groupID:@"Materials" title:@"材料"];
+                 }
+             }
+         }];
+    });
+}
+
+#pragma mark 获取空间布局
+/*
+ 方法描述：获取空间布局
+ 
+ 请求方式：GET和POST
+ 
+ 入参描述：@authCode:授权码
+ */
+//网络请求
+
+-(NSMutableURLRequest*)getRoomLayouts
+{
+    NSURL *url = [NSURL URLWithString:[URLApi initURL]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"POST";
+    
+    NSString *code = [URLApi initCode];
+    
+    code = [RequestDataParse encodeToPercentEscapeString:code];
+    
+    NSString *string = [NSString stringWithFormat:
+                        @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetRoomInfo",code];
+    
+    NSLog(@"%@?%@",[URLApi initURL],string);
+    
+    NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:loginData];
+    
+    return request;
+    
+}
+//数据解析
+
+-(void)analyseRoomLayoutsData
+{
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSMutableURLRequest *request = [self getRoomStyle];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+         {
+             NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             
+             str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+             
+             NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
+             
+             NSDictionary *JSON = [dic objectForKey:@"JSON"];
+             NSArray *RoomType = [JSON objectForKey:@"RoomType"];
+             for (id type in RoomType)
+             {
+                 if ([[type objectForKey:@"RoomName"]isEqualToString:modelType]) {
+                     NSArray *array = [type objectForKey:@"Layouts"];
+                     NSLog(@"%@",array);
+                     [self radioView:array groupID:@"Layouts" title:@"布局"];
+                 }
+             }
+         }];
+    });
+}
+
 #pragma mark 上传数据
 /*
  方法描述：上传数据
@@ -1141,8 +1388,82 @@
              NSString *JSON = [dic objectForKey:@"JSON"];
              if (JSON != nil) {
                  NSLog(@"上传成功");
+                 MeasureId = JSON;
+                // [self dismissViewControllerAnimated:YES completion:nil];
              }
 
+         }];
+    });
+}
+
+#pragma mark 上传图片
+/*
+ 方法描述：上传数据
+ 
+ 请求方式：GET和POST
+ 
+ 入参描述：
+ 
+ */
+//网络请求
+
+- (BOOL) imageHasAlpha: (UIImage *) img
+{
+    CGImageAlphaInfo alpha = CGImageGetAlphaInfo(img.CGImage);
+    return (alpha == kCGImageAlphaFirst ||
+            alpha == kCGImageAlphaLast ||
+            alpha == kCGImageAlphaPremultipliedFirst ||
+            alpha == kCGImageAlphaPremultipliedLast);
+}
+- (NSString *) image2DataURL: (UIImage *) img
+{
+    NSData *imageData = nil;
+    NSString *mimeType = nil;
+    
+    if ([self imageHasAlpha: img]) {
+        imageData = UIImagePNGRepresentation(img);
+        mimeType = @"image/png";
+    } else {
+        imageData = UIImageJPEGRepresentation(img, 1.0f);
+        mimeType = @"image/jpeg";
+    }
+    
+    //return [NSString stringWithFormat:@"data:%@;base64,%@", mimeType,
+     //[imageData base64EncodedStringWithOptions: 0]];
+    return [NSString stringWithFormat:@"%@",[imageData base64EncodedStringWithOptions:0]];
+    
+}
+-(NSMutableURLRequest*)initializtionRequest:(NSString*)imgstr
+{
+    NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"POST";
+    
+    NSString *code = @"pdBcFCMd%2FhDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC%2BomUKBlk5av4c8qgvFa1za%2FQ3HB02gJhEPmjA%3D";
+    
+    NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"%@\",\"MeasureId\":\"%@\",\"FileString\":\"%@\",\"FileName\":\"pic_100.png\"}&Command=UploadFile/PostMeasureFileByString",code,MeasureId,imgstr];
+    
+    NSData *loginData = [loginStr dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:loginData];
+    
+    return request;
+}
+
+-(void)updataImage:(NSString*)imgstr
+{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        
+        [NSURLConnection sendAsynchronousRequest:[self initializtionRequest:imgstr]
+                                           queue:[NSOperationQueue mainQueue]
+                               completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+         {
+             //将得到的NSData数据转换成NSString
+             NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             
+             //将数据变成标准的json数据
+             NSLog(@"%@",str);
+             
          }];
     });
 }
@@ -1158,9 +1479,9 @@
         contentSize += 95;
         [scrolView setContentSize:CGSizeMake(contentSize, -200)];
         if (i == imageAry.count) {
-            UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
+            UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15+80*i, 15, 70, 50)];
             img.tag = 1000;
-            img.backgroundColor = [UIColor redColor];
+            img.image = [UIImage imageNamed:@"Camera"];
             img.userInteractionEnabled=YES;
             UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
             [img addGestureRecognizer:singleTap];
@@ -1206,8 +1527,8 @@
     
     UIImageView *img=(UIImageView*)recognizer.view;
     if (img.tag == 1000) {
-        NSLog(@"22");
-        
+        UIActionSheet *sheet  = [[UIActionSheet alloc] initWithTitle:@"选择" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"拍照" otherButtonTitles:@"相册",@"取消", nil];
+        [sheet showInView:self.view];
     }
     else
     {
@@ -1215,8 +1536,76 @@
     }
 }
 
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==0) {
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.delegate = self;
+        imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self presentViewController:imagePickerController animated:YES completion:^{}];
+    }else if (buttonIndex==1){
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.delegate = self;
+        imagePickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+        [self presentViewController:imagePickerController animated:YES completion:^{}];
+    }
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    UIImage *image = [info  objectForKey:@"UIImagePickerControllerOriginalImage"];
+    
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"pic_100.png"]];   // 保存文件的名称
+    [UIImagePNGRepresentation(image)writeToFile: filePath    atomically:YES];
+    [self plist];
+    
+}
+-(void)dicPaths
+{
+    NSMutableArray *specialArr = [[NSMutableArray alloc] initWithCapacity:0];
+    
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"pic_100.png"]];   // 保存文件的名称
+    
+    [dic setObject:filePath forKey:@"img"];
+    [specialArr addObject:dic];
+}
+-(void)plist
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"pic_100.png"]];   // 保存文件的名称
+    ;
+    NSLog(@"%@",filePath);
+    UIImage *img = [UIImage imageWithContentsOfFile:filePath];
+    NSLog(@"%@",img);
+    [_images addObject:[UIImage imageWithContentsOfFile:filePath]];
+    NSLog(@"%@",_images);
+    [self imageShow:_images inView:scrView];
+    //[imageView setImage:img];
+}
+
 #pragma mark 时间选择器
 
+- (void)showAlertView:(UIView *) view
+{
+    UIView *newView = [[UIView alloc]initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, self.view.frame.size.height-400)];
+    newView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.5];
+    [view addSubview:newView];
+    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 100, 200)];
+    v.backgroundColor = [UIColor redColor];
+    [newView addSubview:v];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        newView.frame = CGRectMake(0, view.frame.size.height - newView.frame.size.height, newView.frame.size.width, newView.frame.size.height);
+    }];
+}
 // 列数
 
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView

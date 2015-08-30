@@ -14,4 +14,8 @@
 @property NSString *phone;
 @property NSString *address;
 
+@property NSString *CustomerId;
+@property NSString *ServiceId;
+@property NSString *UserId;
+
 @end

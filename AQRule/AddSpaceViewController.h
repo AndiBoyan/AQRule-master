@@ -10,4 +10,7 @@
 
 @interface AddSpaceViewController : UIViewController
 
+@property NSString *ServiceId;
+@property NSString *UserId;
+@property NSString *MeasureId;
 @end

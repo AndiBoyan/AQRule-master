@@ -9,5 +9,33 @@
 #import <UIKit/UIKit.h>
 
 @interface CustomerInfoListViewController : UIViewController
+{
+    NSString *name;
+    NSString *phone1;
+    NSString *phone2;
+    NSString *email;
+    NSString *qq;
+    NSString *addr;
+    NSString *note;
+    
+    NSString *customerSource;
+    NSString *customerType;
+    NSString *shoppingGuide;
+    NSString *designer;
+    NSString *decDesigner;
+    NSString *salesman;
+    NSString *budgetCoust;
+    NSString *budgetTime;
+    NSString *budgetProducts;
+    
+    NSString *roomType;
+    NSString *roomApart;
+    NSString *price;
+    NSString *deliveryTime;
+    NSString *property;
+}
+
+@property NSString* CustomerId;
+@property NSString* ServiceId;
 
 @end
