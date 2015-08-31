@@ -27,6 +27,7 @@
     
     UITextField *searchField;
     NSString *customerType;
+    NSString *customerType1;
     int indexPage;
 }
 @property UITableView *customerTable;
@@ -54,7 +55,13 @@
 
 - (void)viewDidLoad {
    
-
+    self.customerNameAry = [[NSMutableArray alloc]init];
+    self.customerPhoneAry = [[NSMutableArray alloc]init];
+    self.customerAddrAry = [[NSMutableArray alloc]init];
+    self.CustomerId = [[NSMutableArray alloc]init];
+    self.ServiceId = [[NSMutableArray alloc]init];
+    self.UserId = [[NSMutableArray alloc]init];
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self initNavigation];
@@ -103,11 +110,12 @@
            // [self analyseRequestData];
             if (customerType == nil) {
                 customerType = @"HaveRegister";
+                customerType1 = @"HaveRegister";
                 [self analyseRequestData:@"HaveRegister" index:1];
             }
             else
             {
-                [self analyseRequestData:customerType index:indexPage++];
+                [self analyseRequestData:customerType index:indexPage];
             }
             
            // if (self.customerAddrAry.count <= 0) {
@@ -139,11 +147,12 @@
            // [self analyseRequestData];
             if (customerType == nil) {
                 customerType = @"HaveRegister";
+                customerType1 = @"HaveRegister";
                 [self analyseRequestData:@"HaveRegister" index:1];
             }
             else
             {
-                [self analyseRequestData:customerType index:indexPage++];
+                [self analyseRequestData:customerType index:indexPage];
             }
 
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -394,7 +403,17 @@
 -(void)analyseRequestData:(NSString*)customerOfType index:(int)index
 {
 
-    
+    if (![customerType isEqualToString:customerType1]) {
+        
+        self.customerNameAry = [[NSMutableArray alloc]init];
+        self.customerPhoneAry = [[NSMutableArray alloc]init];
+        self.customerAddrAry = [[NSMutableArray alloc]init];
+        self.CustomerId = [[NSMutableArray alloc]init];
+        self.ServiceId = [[NSMutableArray alloc]init];
+        self.UserId = [[NSMutableArray alloc]init];
+        
+        customerType1 = customerType;
+    }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         NSMutableURLRequest *request = [self initializtionRequest:customerOfType index:index];
@@ -412,20 +431,10 @@
                  
                  return ;
              }
-             
+             indexPage++;
              NSDictionary *JSON = [dic objectForKey:@"JSON"];
              NSArray *ReList = [JSON objectForKey:@"ReList"];
-             if (ReList.count <= 0)
-             {
-                 indexPage--;
-                 return;
-             }
-             self.customerNameAry = [[NSMutableArray alloc]init];
-             self.customerPhoneAry = [[NSMutableArray alloc]init];
-             self.customerAddrAry = [[NSMutableArray alloc]init];
-             self.CustomerId = [[NSMutableArray alloc]init];
-             self.ServiceId = [[NSMutableArray alloc]init];
-             self.UserId = [[NSMutableArray alloc]init];
+             
              for (id relist in ReList) {
                  //customerId  serviceId
                  NSString *CustomerName = [relist objectForKey:@"CustomerName"];

@@ -34,7 +34,7 @@
    // self.intentionAry = [[NSMutableArray alloc]initWithArray:self.customerIntentionAry];
     self.customerRoomAry = [[NSArray alloc]initWithObjects:@"房屋类型",@"房屋户型",@"平方价",@"预估交房时间",@"所属楼盘", nil];
    // self.roomAry = [[NSMutableArray alloc]initWithArray:self.customerRoomAry];
-    self.customerInfoListTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height-40) style:UITableViewStyleGrouped];
+    self.customerInfoListTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height-30) style:UITableViewStyleGrouped];
     self.customerInfoListTable.delegate = self;
     self.customerInfoListTable.dataSource = self;
     [self.view addSubview:self.customerInfoListTable];
@@ -74,13 +74,13 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return self.customerBaseAry.count;
+        return self.baseAry.count;
     }
     if (section == 1) {
-        return self.customerIntentionAry.count;
+        return self.intentionAry.count;
     }
     else
-        return self.customerRoomAry.count;
+        return self.roomAry.count;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

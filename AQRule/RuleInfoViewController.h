@@ -11,5 +11,7 @@
 @interface RuleInfoViewController : UIViewController
 
 @property NSString *MeasureId;
+@property NSString *ServiceId;
+@property NSString *UserId;
 
 @end

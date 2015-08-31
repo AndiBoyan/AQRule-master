@@ -11,6 +11,7 @@
 #import "CustomerInfoListViewController.h"
 #import "RuleInfoViewController.h"
 #import "AddSpaceViewController.h"
+#import "OpinionViewController.h"
 #import "RequestDataParse.h"
 #import "URLApi.h"
 
@@ -46,9 +47,20 @@
 
     [self initNavigation];
     
-   
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(self.view.frame.size.width-80, self.view.frame.size.height-80, 80, 80);
+    [button setTitle:@"建议" forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(opinion) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
 }
 
+-(void)opinion
+{
+    OpinionViewController *vc =[[OpinionViewController alloc]init];
+    vc.ServiceId = self.ServiceId;
+    [self presentViewController:vc animated:YES completion:nil];
+}
 -(void)viewDidAppear:(BOOL)animated
 {
     [self analyseRequestData];
@@ -224,6 +236,8 @@
     {
         RuleInfoViewController *ruleInfoVC = [[RuleInfoViewController alloc]init];
         ruleInfoVC.MeasureId =[self.customerAry4 objectAtIndex:indexPath.row];
+        ruleInfoVC.ServiceId = self.ServiceId;
+        ruleInfoVC.UserId = self.UserId;
         [self presentViewController:ruleInfoVC animated:YES completion:nil];
     }
 }

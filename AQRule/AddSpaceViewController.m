@@ -13,6 +13,7 @@
 #import "QCheckBox.h"
 #import "NSAlertView.h"
 #import "URLApi.h"
+#import "EditImageViewController.h"
 
 @interface AddSpaceViewController ()<UITableViewDataSource,UITableViewDelegate,
                                     UIPickerViewDataSource,UIPickerViewDelegate,
@@ -203,8 +204,7 @@
      uptadaData = str;
     
     [self analyseUpdataCustomer];//updataCustomer
-    UIImage *img = [_images objectAtIndex:0];
-    [self updataImage:[self encodeToPercentEscapeString:[self image2DataURL:img]]];
+
 }
 - (NSString *)encodeToPercentEscapeString: (NSString *) input
 {
@@ -350,7 +350,13 @@
     spaceRadioView.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
     [self.view addSubview:spaceRadioView];
     
-    UIView *radioView = [[UIView alloc]initWithFrame:CGRectMake(45, (spaceRadioView.frame.size.height-(radioAry.count+2)*30)/2, spaceRadioView.frame.size.width-90, (radioAry.count+2)*30)];
+    UIScrollView *radioView;
+    
+
+    radioView = [[UIScrollView alloc]initWithFrame:CGRectMake(45, (spaceRadioView.frame.size.height-(radioAry.count+2)*15)/2, spaceRadioView.frame.size.width-90, (radioAry.count+5)*15)];
+        
+    radioView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:1.0f];
+        
     
     radioView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:1.0f];
     [spaceRadioView addSubview:radioView];
@@ -364,28 +370,29 @@
     float fristH = 1/2*(spaceRadioView.frame.size.height)-1/2*(radioAry.count)*30+25;
     
     for (int i = 0; i < radioAry.count; i++) {
-        
+        int row = i/2;
+        int col = i%2;
         QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:groupID];
-        _radio1.frame =CGRectMake(20, fristH+30*i, 200, 30);
+        _radio1.frame =CGRectMake(100*col+15, fristH+30*row, 100, 30);
         _radio1.tag = 1002;
         [_radio1 setTitle:[radioAry objectAtIndex:i] forState:UIControlStateNormal];
         [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_radio1.titleLabel setFont:[UIFont systemFontOfSize:13.0f]];
+        [_radio1.titleLabel setFont:[UIFont systemFontOfSize:12.0f]];
         [radioView addSubview:_radio1];
         if (i == 0) {
             [_radio1 setChecked:YES];
         }
     }
-    float buttonH = fristH+30*(radioAry.count)-10;
+    float buttonH = fristH+15*(radioAry.count)-10;
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame = CGRectMake(20, buttonH+10, 60, 30);
+    button.frame = CGRectMake(20, buttonH+25, 60, 30);
     [button setTitle:@"取消" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
     [radioView addSubview:button];
     
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button1.frame = CGRectMake(radioView.frame.size.width-80, buttonH+10, 60, 30);
+    button1.frame = CGRectMake(radioView.frame.size.width-80, buttonH+25, 60, 30);
     [button1 setTitle:@"确定" forState:UIControlStateNormal];
     [button1 addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
     [radioView addSubview:button1];
@@ -434,7 +441,6 @@
     [button1 setTitle:@"确定" forState:UIControlStateNormal];
     [button1 addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
     [checkView addSubview:button1];
-    
 }
 
 -(void)radioViewCancel:(id)sender
@@ -471,7 +477,6 @@
     [self.view addSubview:spaceView];
     
     spaceModelFormat = [[NSMutableArray alloc]init];
-  
     spaceModelDatas = [[NSMutableArray alloc]init];
     spaceModelID = [[NSMutableArray alloc]init];
     
@@ -548,6 +553,10 @@
         }
         else
             return 40;
+    }
+    else if (tableView == spaceModelTable)
+    {
+        return 40;
     }
     return 40;
 }
@@ -745,11 +754,14 @@
                         }
                         [ary addObject:[string substringFromIndex:j]];
                         NSInteger count = ary.count;
-
+                        
+                        if (count > 5) {
+                            count = 4;
+                        }
                         for (int i = 0; i < count; i++) {
                             QCheckBox *_check1 = [[QCheckBox alloc] initWithDelegate:self];
                             _check1.tag = indexPath.row;
-                            _check1.frame = CGRectMake(self.view.frame.size.width-80-50*i, 5, 50, 30);
+                            _check1.frame = CGRectMake(self.view.frame.size.width-80-55*i, 5, 50, 30);
                             [_check1 setTitle:[ary objectAtIndex:i] forState:UIControlStateNormal];
                             [_check1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                             [_check1.titleLabel setFont:[UIFont boldSystemFontOfSize:10.0f]];
@@ -770,6 +782,7 @@
                                 j = i+1;
                             }
                         }
+                        
                         [ary addObject:[string substringFromIndex:j]];
                         NSString *group = [NSString stringWithFormat:@"%ld",(long)indexPath.row];
                         for (int i = 0; i < ary.count; i++) {
@@ -1386,12 +1399,14 @@
              NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
              
              NSString *JSON = [dic objectForKey:@"JSON"];
+             
              if (JSON != nil) {
                  NSLog(@"上传成功");
                  MeasureId = JSON;
+                 UIImage *img = [_images objectAtIndex:0];
+                 [self updataImage:[self encodeToPercentEscapeString:[self image2DataURL:img]]];
                 // [self dismissViewControllerAnimated:YES completion:nil];
              }
-
          }];
     });
 }
@@ -1441,7 +1456,7 @@
     request.HTTPMethod = @"POST";
     
     NSString *code = @"pdBcFCMd%2FhDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC%2BomUKBlk5av4c8qgvFa1za%2FQ3HB02gJhEPmjA%3D";
-    
+    NSLog(@"%@",MeasureId);
     NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"%@\",\"MeasureId\":\"%@\",\"FileString\":\"%@\",\"FileName\":\"pic_100.png\"}&Command=UploadFile/PostMeasureFileByString",code,MeasureId,imgstr];
     
     NSData *loginData = [loginStr dataUsingEncoding:NSUTF8StringEncoding];
@@ -1532,7 +1547,11 @@
     }
     else
     {
-        NSLog(@"%ld",(long)img.tag);
+        EditImageViewController *VC = [[EditImageViewController alloc]init];
+        NSString *title = [NSString stringWithFormat:@"%ld/%ld",img.tag-1000,(unsigned long)_images.count];
+        VC.image = img.image;
+        VC.navTitle = title;
+        [self presentViewController:VC animated:YES completion:nil];
     }
 }
 

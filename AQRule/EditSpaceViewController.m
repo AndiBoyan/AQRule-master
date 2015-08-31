@@ -13,6 +13,7 @@
 #import "QCheckBox.h"
 #import "NSAlertView.h"
 #import "URLApi.h"
+#import "EditImageViewController.h"
 
 @interface  EditSpaceViewController()<UITableViewDataSource,UITableViewDelegate,
 UIPickerViewDataSource,UIPickerViewDelegate,
@@ -20,16 +21,15 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 {
     int typeOfTime;//判断是测量时间还是结束时间
     BOOL isReflash;
-    NSString *measure;//量尺时间
-    NSString *finish;//结束时间
+
     NSString *upDatasSring;
     
     //图片查看器
     UIScrollView *scrView;
     NSMutableArray *_images;//图片数组
     
-    int MeasureType;//量尺类型
-    NSString *modelType;
+
+    
     NSString *uptadaData;
     NSString *SpaceId;
     
@@ -69,14 +69,8 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 @property UIPickerView *picker;
 @property UIView *dateView;
 
-@property UILabel *measureLab;//测量时间
-@property UILabel *finishLab;//完成时间
-@property UILabel *spaceLab;
-@property UILabel *styleLab;
-@property UILabel *areaLab;
-@property UILabel *materialLab;
-@property UILabel *layoutLab;
-@property UILabel *procutLab;
+
+
 @end
 
 @implementation EditSpaceViewController
@@ -195,7 +189,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     NSString *code = [URLApi initCode];
     
     code = [RequestDataParse encodeToPercentEscapeString:code];
-    NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\":%d,\"ContrlContentList\":{%@},\"RoomType\":\"两房一厅\",\"FinishTime\":\"2015-08-24 12: 00\",\"SpaceName\":\"%@\",\"MeasureTime\": \"2015-08-24 12: 00\",\"BuyWill\": \"Bedding\",\"Area\": \"%@\",\"Style\":\"%@\",\"ServiceId\":\"%@\",\"UserId\": \"%@\",\"SpaceId\":\"%@\",\"Budget\":58899,\"Material\":\"%@\",\"Layout\":\"%@\"}}&Command=MeasureSpace/AddMeasureInfo",code,MeasureType,string,self.spaceLab.text,self.areaLab.text,self.styleLab.text,self.ServiceId,self.UserId,SpaceId,self.materialLab.text,self.layoutLab.text];
+    NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\":%d,\"ContrlContentList\":{%@},\"RoomType\":\"两房一厅\",\"FinishTime\":\"2015-08-24 12: 00\",\"SpaceName\":\"%@\",\"MeasureTime\": \"2015-08-24 12: 00\",\"BuyWill\": \"Bedding\",\"Area\": \"%@\",\"Style\":\"%@\",\"ServiceId\":\"%@\",\"UserId\": \"%@\",\"SpaceId\":\"%@\",\"Budget\":58899,\"Material\":\"%@\",\"Layout\":\"%@\"}}&Command=MeasureSpace/AddMeasureInfo",code,self.MeasureType,string,self.spaceLab.text,self.areaLab.text,self.styleLab.text,self.ServiceId,self.UserId,self.MeasureId,self.materialLab.text,self.layoutLab.text];
     str = [str stringByReplacingOccurrencesOfString:@"{," withString:@"{"];
     
     NSLog(@"%@",str);
@@ -237,7 +231,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 - (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId {
     if([groupId isEqualToString:@"CustomName"])
     {
-        modelType = radio.titleLabel.text;
+        self.modelType = radio.titleLabel.text;
     }
     //@"Style"
     else if ([groupId isEqualToString:@"Style"])
@@ -262,11 +256,11 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     }
     else if (radio.tag == 1001) {
         if ([radio.titleLabel.text isEqualToString:@"单尺"]) {
-            MeasureType = 0;
+            self.MeasureType = 0;
         }
         else
         {
-            MeasureType = 1;
+            self.MeasureType = 1;
         }
         return;
     }
@@ -432,10 +426,10 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     NSInteger count = [modelDic allKeys].count;
     id key;
     id value;
-    self.spaceLab.text = modelType;
+    self.spaceLab.text = self.modelType;
     for (int i = 0; i < count; i++) {
         key = [[modelDic allKeys]objectAtIndex:i];
-        if ([key isEqualToString:modelType]) {
+        if ([key isEqualToString:self.modelType]) {
             value = [modelDic objectForKey:key];
             SpaceId = value;
             [self analyseModelData:value];
@@ -540,7 +534,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if (tableView == addingSpaceTable) {
-        return 4;
+        return 3;
     }
     else
         return 1;
@@ -597,12 +591,12 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                 else if(indexPath.row == 1)
                 {
                     self.measureLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2, 5, -15+self.view.frame.size.width/2, 35)];
-                    if (measure == nil) {
+                    if (self.measure == nil) {
                         self.measureLab.text = @"未设置";
                     }
                     else
                     {
-                        self.measureLab.text = measure;
+                        self.measureLab.text = self.measure;
                     }
                     self.measureLab.font = [UIFont systemFontOfSize:14.0f];
                     self.measureLab.textAlignment = NSTextAlignmentRight;
@@ -611,13 +605,13 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                 else if (indexPath.row == 2)
                 {
                     self.finishLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2, 5, -15+self.view.frame.size.width/2, 35)];
-                    if(finish == nil)
+                    if(self.finish == nil)
                     {
                         self.finishLab.text = @"未设置";
                     }
                     else
                     {
-                        self.finishLab.text = finish;
+                        self.finishLab.text = self.finish;
                     }
                     self.finishLab.font = [UIFont systemFontOfSize:14.0f];
                     self.finishLab.textAlignment = NSTextAlignmentRight;
@@ -631,7 +625,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                     self.spaceLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.spaceLab.textAlignment = NSTextAlignmentRight;
                     self.spaceLab.font = [UIFont systemFontOfSize:14.0f];
-                    self.spaceLab.text = modelType;
+                    self.spaceLab.text = self.modelType;
                     [cell.contentView addSubview:self.spaceLab];
                 }
                 else if (indexPath.row == 1)
@@ -639,6 +633,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                     self.styleLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.styleLab.textAlignment = NSTextAlignmentRight;
                     self.styleLab.font = [UIFont systemFontOfSize:14.0f];
+                    self.styleLab.text = self.styleLabStr;
                     [cell.contentView addSubview:self.styleLab];
                 }
                 else if (indexPath.row == 2)
@@ -646,6 +641,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                     self.areaLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.areaLab.textAlignment = NSTextAlignmentRight;
                     self.areaLab.font = [UIFont systemFontOfSize:14.0f];
+                    self.areaLab.text = self.areaLabStr;
                     [cell.contentView addSubview:self.areaLab];
                 }
                 else if (indexPath.row == 3)
@@ -667,6 +663,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                     self.procutLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.procutLab.textAlignment = NSTextAlignmentRight;
                     self.procutLab.font = [UIFont systemFontOfSize:14.0f];
+                    self.procutLab.text = self.procutLabStr;
                     [cell.contentView addSubview:self.procutLab];
                 }
             }
@@ -689,10 +686,6 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                 {
                     cell.textLabel.text = [self.spaceModel objectAtIndex:indexPath.row-1];
                 }
-            }
-            else if(indexPath.section == 3)
-            {
-                cell.textLabel.text = @"备注";
             }
         }
         return cell;
@@ -1189,7 +1182,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
              NSArray *RoomType = [JSON objectForKey:@"RoomType"];
              for (id type in RoomType)
              {
-                 if ([[type objectForKey:@"RoomName"]isEqualToString:modelType]) {
+                 if ([[type objectForKey:@"RoomName"]isEqualToString:self.modelType]) {
                      NSArray *array = [type objectForKey:@"Areas"];
                      NSLog(@"%@",array);
                      [self radioView:array groupID:@"array" title:@"面积"];
@@ -1252,7 +1245,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
              NSArray *RoomType = [JSON objectForKey:@"RoomType"];
              for (id type in RoomType)
              {
-                 if ([[type objectForKey:@"RoomName"]isEqualToString:modelType]) {
+                 if ([[type objectForKey:@"RoomName"]isEqualToString:self.modelType]) {
                      NSArray *array = [type objectForKey:@"Materials"];
                      NSLog(@"%@",array);
                      [self radioView:array groupID:@"Materials" title:@"材料"];
@@ -1316,7 +1309,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
              NSArray *RoomType = [JSON objectForKey:@"RoomType"];
              for (id type in RoomType)
              {
-                 if ([[type objectForKey:@"RoomName"]isEqualToString:modelType]) {
+                 if ([[type objectForKey:@"RoomName"]isEqualToString:self.modelType]) {
                      NSArray *array = [type objectForKey:@"Layouts"];
                      NSLog(@"%@",array);
                      [self radioView:array groupID:@"Layouts" title:@"布局"];
@@ -1396,9 +1389,9 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
         contentSize += 95;
         [scrolView setContentSize:CGSizeMake(contentSize, -200)];
         if (i == imageAry.count) {
-            UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15+80*i, 5, 70, 70)];
+            UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15+80*i, 15, 70, 50)];
             img.tag = 1000;
-            img.backgroundColor = [UIColor redColor];
+            img.image = [UIImage imageNamed:@"Camera"];
             img.userInteractionEnabled=YES;
             UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
             [img addGestureRecognizer:singleTap];
@@ -1425,7 +1418,6 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
         [view addSubview:button];
     }
 }
-
 // 图片删除按钮响应
 
 -(void)delectImageAction:(id)sender
@@ -1449,7 +1441,11 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     }
     else
     {
-        NSLog(@"%ld",(long)img.tag);
+        EditImageViewController *VC = [[EditImageViewController alloc]init];
+        NSString *title = [NSString stringWithFormat:@"%ld/%ld",img.tag-1000,(unsigned long)_images.count];
+        VC.image = img.image;
+        VC.navTitle = title;
+        [self presentViewController:VC animated:YES completion:nil];
     }
 }
 
@@ -1499,13 +1495,8 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
     NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"pic_100.png"]];   // 保存文件的名称
     ;
-    NSLog(@"%@",filePath);
-    UIImage *img = [UIImage imageWithContentsOfFile:filePath];
-    NSLog(@"%@",img);
     [_images addObject:[UIImage imageWithContentsOfFile:filePath]];
-    NSLog(@"%@",_images);
     [self imageShow:_images inView:scrView];
-    //[imageView setImage:img];
 }
 
 #pragma mark 时间选择器
@@ -1663,12 +1654,12 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     NSString *string = [NSString stringWithFormat:@"%@ %@ %@>",str1,str2,str3];
     if (typeOfTime == 1) {
         self.measureLab.text = string;
-        measure = string;
+        self.measure = string;
     }
     else if(typeOfTime == 2)
     {
         self.finishLab.text = string;
-        finish = string;
+        self.finish = string;
     }
     [self cancelView];
 }

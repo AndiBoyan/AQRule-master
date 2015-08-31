@@ -19,6 +19,8 @@
     UIScrollView *scrView;
     UIScrollView *scrollView;
     NSString *noteString;
+    
+    int Measure;
 }
 @property NSMutableArray *tagAry1;
 @property NSMutableArray *tagAry2;
@@ -29,17 +31,16 @@
 @implementation RuleInfoViewController
 
 - (void)viewDidLoad {
-    [self analyseRequestData];
+   
     [super viewDidLoad];
     _images = [[NSMutableArray alloc]init];
     scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height-30)];
     scrollView.backgroundColor = [UIColor whiteColor];
     scrollView.contentSize = CGSizeMake(0, self.view.frame.size.height+100);
     [self.view addSubview:scrollView];
-    
+     [self analyseRequestData];
     // Do any additional setup after loading the view.
-
-    //[self initView];
+    
     [self initNavigation];
 }
 
@@ -70,12 +71,6 @@
 -(void)initView
 {
     self.tagAry1 = [[NSMutableArray alloc]initWithObjects:@"量尺类型 :",@"量尺时间:",@"预计完成时间:",@"空间:",@"风格:",@"面积(m²):",@"预购产品线:", nil];
-    //self.tagAry2 = [[NSMutableArray alloc]initWithObjects:@"地砖颜色 :",@"墙砖颜色 : ",@"购买意向 : ",@"备注 : ", nil];
-    
-    //self.tagAry3 = [[NSMutableArray alloc]initWithObjects:@"复尺",@"6月24日 (周三) 12:00>",@"6月24日 (周三) 12:00>",@"客餐厅",@"地中海",@"9-12",@"寝室/家具/衣柜/鞋柜", nil];
-    //self.tagAry4 = [[NSMutableArray alloc]initWithObjects:@"无 (毛坯)",@"无 (毛坯)",@"冰箱/灶台/净水器/净化器", nil];
-    
-    //noteString = @"家里有两条狗，希望东西耐用，防止被狗抓咬";
     
     for (int i = 0 ; i < 7; i++) {
         UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 35+40*i, 300, 30)];
@@ -87,11 +82,25 @@
     lineView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [scrollView addSubview:lineView];
     
-    UILabel *imageLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 320, 40, 30)];
+    UILabel *imageLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 320, 60, 30)];
     imageLab.text = @"附件:";
     imageLab.font = [UIFont systemFontOfSize:14.0f];
     [scrollView addSubview:imageLab];
      scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 340, 2*self.view.frame.size.width, 80)];
+    if (_images.count <= 0) {
+        imageLab.text = @"附件:无";
+        for(int i = 0;i < self.tagAry2.count; i++)
+        {
+            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(15, 360+i*40, 305, 40)];
+            lab.text = [NSString stringWithFormat:@"%@",[self.tagAry2 objectAtIndex:i]];//[tagAry2 objectAtIndex:i];
+            lab.font = [UIFont systemFontOfSize:14.0f];
+            lab.lineBreakMode = NSLineBreakByWordWrapping;
+            lab.numberOfLines = 0;
+            [scrollView addSubview:lab];
+        }
+        return;
+    }
+    
     [self imageShow:_images inView:scrView];
     [scrollView addSubview:scrView];
     for(int i = 0;i < self.tagAry2.count; i++)
@@ -103,8 +112,6 @@
         lab.numberOfLines = 0;
         [scrollView addSubview:lab];
     }
-   
-    
 }
 -(void)imageShow:(NSMutableArray*)imageAry inView:(UIScrollView*)scrolView
 {
@@ -118,9 +125,9 @@
         
         UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 70, 70)];
         img.tag = 1001+i;
-        img.userInteractionEnabled=YES;
+        /*img.userInteractionEnabled=YES;
         UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
-        [img addGestureRecognizer:singleTap];
+        [img addGestureRecognizer:singleTap];*/
         img.image = [imageAry objectAtIndex:i];
         [view addSubview:img];
     }
@@ -144,7 +151,16 @@
 -(void)updata
 {
     EditSpaceViewController *vc = [[EditSpaceViewController alloc]init];
-    
+    vc.UserId =self.UserId;
+    vc.ServiceId =self.ServiceId;
+    vc.MeasureType = Measure;
+    vc.measure = [self.tagAry3 objectAtIndex:1];
+    vc.finish = [self.tagAry3 objectAtIndex:2];
+    vc.MeasureId = self.MeasureId;
+    vc.modelType = [self.tagAry3 objectAtIndex:3];
+    vc.styleLabStr = [self.tagAry3 objectAtIndex:4];
+    vc.areaLabStr = [self.tagAry3 objectAtIndex:5];
+    vc.procutLabStr = [self.tagAry3 objectAtIndex:6];
     [self presentViewController:vc animated:YES completion:nil];
 }
 -(NSMutableURLRequest*)initializtionRequest
@@ -188,9 +204,11 @@
              self.tagAry2 = [[NSMutableArray alloc]init];
              if (type == 0) {
                  [self.tagAry3 addObject:@"初尺"];
+                 Measure = 0;
              }
              else
              {
+                 Measure = 1;
                  [self.tagAry3 addObject:@"复尺"];
              }
              NSString *MeasureTime = [JSON objectForKey:@"MeasureTime"];
@@ -207,16 +225,27 @@
              //预购产品线
              NSArray *BuyWillView = [JSON objectForKey:@"BuyWillView"];
              
-             NSString *buyString;
+             NSString *buyString =@"";
              for (id buywill in BuyWillView) {
                  NSString *ItemName = [buywill objectForKey:@"ItemName"];
                  buyString = [NSString stringWithFormat:@"%@\%@",buyString,ItemName];
              }
-             if (buyString == nil) {
+             if ([buyString isEqualToString:@""]) {
                  buyString = @"无";
              }
              [self.tagAry3 addObject:buyString];
              NSArray *FileList = [JSON objectForKey:@"FileList"];
+             for (id filelist in FileList) {
+                 NSString *FileFullPath = [filelist objectForKey:@"FileFullPath"];
+                 NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://oppein.3weijia.com%@",FileFullPath]];
+                 NSData *resultData = [NSData dataWithContentsOfURL:url];
+                 
+                 UIImage *img = [UIImage imageWithData:resultData];
+                 if (img) {
+                     [_images addObject:img];
+                 }
+             }
+            
              //购买意向
              NSString *BuyWill = [JSON objectForKey:@"BuyWill"];
              

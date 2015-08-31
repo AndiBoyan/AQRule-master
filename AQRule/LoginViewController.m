@@ -11,6 +11,7 @@
 #import "RequestDataParse.h"
 #import "NSAlertView.h"
 #import "URLApi.h"
+#import "userSingletion.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
 {
@@ -166,7 +167,7 @@
                  NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
                  
                  //将数据变成标准的json数据
-                 
+                 NSLog(@"%@",[RequestDataParse newJsonStr:str]);
                  NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
                  NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
                  
@@ -182,6 +183,12 @@
                  if (InfoMessage.length > 0) {
                      
                      //登陆成功
+                     NSString *Mobile = [JSON objectForKey:@"Mobile"];
+                     NSString *RealName = [JSON objectForKey:@"RealName"];
+                     userSingletion *user = [userSingletion inituserSingletion];
+                     user.name = RealName;
+                     user.phone = Mobile;
+                     
                      NSString *AuthCode = [JSON objectForKey:@"AuthCode"];
                      
                      NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

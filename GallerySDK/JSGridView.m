@@ -312,16 +312,16 @@ static CGPoint latestContentOffset = (CGPoint){0, 0};
     float width = 0.0;
     float height = 0.0;
     if (_constSizeValue == JSGridViewConstSizeWidth) {
-        int maxRowCount = 1;
+        NSInteger maxRowCount = 1;
         if (NO) {// TODO: check data source flag
             [NSException exceptionWithName:NSGenericException reason:@"JSGroidView datasource must implement more methods...." userInfo:nil];
         }
-        int columnsCount = [_dataSource numberOfConstColumnsInGridView:self];
+        NSInteger columnsCount = [_dataSource numberOfConstColumnsInGridView:self];
         NSMutableArray *cellsOrigin = [NSMutableArray array];
         float heights[columnsCount];
         for (int i=0; i<columnsCount; i++) {
             CGFloat widthI = [_dataSource gridView:self widthForCellAtColumnIndex:i];
-            int rowsAtColumnIndex = [_dataSource numberOfRowsInGridView:self forConstColumnWithIndex:i];
+            NSInteger rowsAtColumnIndex = [_dataSource numberOfRowsInGridView:self forConstColumnWithIndex:i];
             heights[i] = 0.0;
             maxRowCount = MAX(maxRowCount, rowsAtColumnIndex);
             for (int j=0; j<rowsAtColumnIndex; j++) {
@@ -344,13 +344,13 @@ static CGPoint latestContentOffset = (CGPoint){0, 0};
         _reuseCellsInfoOrderDesc = [[cellsOrigin sortedArrayUsingComparator:_bottomSorter] retain];
         height = MAX(self.bounds.size.height+1, height);
     } else {
-        int maxRowCount = 1;
-        int rowsCount = [_dataSource numberOfConstRowsInGridView:self];
+        NSInteger maxRowCount = 1;
+        NSInteger rowsCount = [_dataSource numberOfConstRowsInGridView:self];
         NSMutableArray *cellsOrigin = [NSMutableArray array];
         float widths[rowsCount];
         for (int i=0; i<rowsCount; i++) {
             CGFloat heightI = [_dataSource gridView:self heightForCellAtRow:i];
-            int columnsAtRowIndex = [_dataSource numberOfColumnsInGridView:self forConstRowWithIndex:i];
+            NSInteger columnsAtRowIndex = [_dataSource numberOfColumnsInGridView:self forConstRowWithIndex:i];
             widths[i] = 0.0;
             maxRowCount = MAX(maxRowCount, columnsAtRowIndex);
             for (int j=0; j<columnsAtRowIndex; j++) {

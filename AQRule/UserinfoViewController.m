@@ -8,6 +8,7 @@
 
 #import "UserinfoViewController.h"
 #import "LoginViewController.h"
+#import "userSingletion.h"
 
 @interface UserinfoViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -33,7 +34,7 @@
     [self.view addSubview:self.userInfoTable];
     
     self.userInfoAry1 = [[NSArray alloc]initWithObjects:@"姓名",@"手机号", nil];
-    self.userInfoAry2 = [[NSArray alloc]initWithObjects:@"余大妞",@"15466667777", nil];
+    self.userInfoAry2 = [[NSArray alloc]initWithObjects:[userSingletion inituserSingletion].name,[userSingletion inituserSingletion].phone, nil];
 }
 
 - (void)didReceiveMemoryWarning {
