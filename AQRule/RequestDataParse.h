@@ -16,6 +16,8 @@
 
 +(NSMutableArray*)weekAry;
 
++(NSMutableArray*)weekAry1;
+
 +(NSMutableArray*)hourAry;
 
 +(NSMutableArray*)minAry;

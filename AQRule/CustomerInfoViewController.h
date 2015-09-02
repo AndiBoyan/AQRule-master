@@ -1,5 +1,5 @@
 //
-//  CustomerInfoViewController.h
+//  客户信息类
 //  AQRule
 //
 //  Created by icePhoenix on 15/7/23.
@@ -8,7 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CustomerInfoViewController : UIViewController
+@interface CustomerInfoViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+{
+    UILabel *infoLab;
+    UIButton *infoBtn;
+}
+
+@property NSArray *customerAry1;
+@property NSMutableArray *customerAry2;
+@property NSMutableArray *customerAry3;
+@property NSMutableArray *customerAry4;
+@property NSMutableArray *isUpdataAry;
+@property UITableView *customerTable;
 
 @property NSString *name;
 @property NSString *phone;

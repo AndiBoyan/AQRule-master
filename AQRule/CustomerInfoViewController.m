@@ -15,18 +15,7 @@
 #import "RequestDataParse.h"
 #import "URLApi.h"
 
-@interface CustomerInfoViewController ()<UITableViewDataSource,UITableViewDelegate>
-{
-    UILabel *infoLab;
-    UIButton *infoBtn;
-}
-
-@property NSArray *customerAry1;
-@property NSMutableArray *customerAry2;
-@property NSMutableArray *customerAry3;
-@property NSMutableArray *customerAry4;
-@property NSMutableArray *isUpdataAry;
-@property UITableView *customerTable;
+@interface CustomerInfoViewController ()
 
 @end
 
@@ -35,7 +24,6 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
     self.customerTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     self.customerTable.delegate = self;
@@ -43,14 +31,13 @@
     [self.view addSubview:self.customerTable];
     
     self.customerAry1 = [[NSArray alloc]initWithObjects:self.address,@"查看客户详情", nil];
-   // self.customerAry2 = [[NSMutableArray alloc]initWithObjects:@"AAAAAA",@"BBBBBBB",@"CCCCCCC", nil];
 
     [self initNavigation];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(self.view.frame.size.width-80, self.view.frame.size.height-80, 80, 80);
-    [button setTitle:@"建议" forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    button.frame = CGRectMake(self.view.frame.size.width-80, self.view.frame.size.height-80, 64, 64);
+    //[button setTitle:@"建议" forState:UIControlStateNormal];
+    [button setImage:[[UIImage imageNamed:@"opinion"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(opinion) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
 }
@@ -61,6 +48,8 @@
     vc.ServiceId = self.ServiceId;
     [self presentViewController:vc animated:YES completion:nil];
 }
+
+//每次进入界面的时候刷新数据
 -(void)viewDidAppear:(BOOL)animated
 {
     [self analyseRequestData];
@@ -71,10 +60,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark 导航栏
+
 -(void)initNavigation
 {
     UINavigationBar *navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 65)];
-    
     //创建一个导航栏集合
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
     [navigationItem setTitle:@"量尺空间"];
@@ -101,7 +91,9 @@
     VC.UserId = self.UserId;
     [self presentViewController:VC animated:YES completion:nil];
 }
-#pragma mark uitabledelegate
+
+#pragma mark UITableView
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 2;
@@ -194,14 +186,7 @@
     }
     return cell;
 }
--(void)deleteRoomInfo:(id)sender
-{
-    
-}
--(void)updataRoomInfo:(id)sender
-{
-    
-}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
    if((indexPath.section == 0)&&(indexPath.row == 0))
@@ -241,6 +226,9 @@
         [self presentViewController:ruleInfoVC animated:YES completion:nil];
     }
 }
+
+#pragma mark 通信模块
+
 -(void)sendMessage:(id)sender
 {
     UIButton *button = (UIButton*)sender;
@@ -272,8 +260,9 @@
         //发送短信
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:smsStr]];
     }
-
 }
+
+#pragma mark 获取客户的量尺信息
 
 -(NSMutableURLRequest*)initializtionRequest
 {
@@ -297,6 +286,7 @@
     
     return request;
 }
+
 -(void)analyseRequestData
 {
     self.customerAry2 = [[NSMutableArray alloc]init];
@@ -349,10 +339,7 @@
              [infoBtn removeFromSuperview];
              [self.customerTable reloadData];
          }];
-        
     });
-    
-    
 }
 
 @end

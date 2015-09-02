@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserinfoViewController : UIViewController
+@interface UserinfoViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+
+@property UITableView *userInfoTable;
+@property NSArray *userInfoAry1;
+@property NSArray *userInfoAry2;
 
 @end

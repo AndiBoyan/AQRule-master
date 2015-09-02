@@ -9,64 +9,47 @@
 #import "CustomerViewController.h"
 #import "AddNewCustomerViewController.h"
 #import "CustomerInfoViewController.h"
-#import "YiRefreshHeader.h"
-#import "YiRefreshFooter.h"
-#import "HTHorizontalSelectionList.h"
 #import "RequestDataParse.h"
 #import "URLApi.h"
 
-@interface CustomerViewController ()<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,HTHorizontalSelectionListDelegate, HTHorizontalSelectionListDataSource>
-{
-    UIBarButtonItem *searchBarButton;
-    UIBarButtonItem *addCustomerBarButton;
-    UIBarButtonItem *backButton;
-    UIBarButtonItem *donebutton;
-    
-    YiRefreshHeader *refreshHeader;
-    YiRefreshFooter *refreshFooter;
-    
-    UITextField *searchField;
-    NSString *customerType;
-    NSString *customerType1;
-    int indexPage;
-}
-@property UITableView *customerTable;
-
-@property (nonatomic, strong) HTHorizontalSelectionList *selectionList;
-@property (nonatomic, strong) NSArray *carMakes;
-
-@property NSMutableArray *nameAry;
-@property NSMutableArray *phoneAry;
-@property NSMutableArray *addrAry;
-@property NSMutableArray *customerNameAry;
-@property NSMutableArray *customerPhoneAry;
-@property NSMutableArray *customerAddrAry;
-
-@property NSMutableArray *CustomerId;
-@property NSMutableArray *ServiceId;
-@property NSMutableArray *UserId;
-
-@property NSMutableArray *indexAry;
-
+@interface CustomerViewController ()
 
 @end
 
 @implementation CustomerViewController
 
 - (void)viewDidLoad {
-   
+    [super viewDidLoad];
+    [self initData];
+    [self initNavigation];
+    [self initHTHorizontalView];
+    
+    self.customerTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 105, self.view.frame.size.width, self.view.frame.size.height-155)];
+    self.customerTable.delegate = self;
+    self.customerTable.dataSource = self;
+    [self setExtraCellLineHidden:self.customerTable];
+    [self.view addSubview:self.customerTable];
+    
+    [self initYiRefreshHeader];
+    [self initYiRefreshFooter];
+}
+
+#pragma mark 初始化
+
+//初始化数组
+-(void)initData
+{
     self.customerNameAry = [[NSMutableArray alloc]init];
     self.customerPhoneAry = [[NSMutableArray alloc]init];
     self.customerAddrAry = [[NSMutableArray alloc]init];
     self.CustomerId = [[NSMutableArray alloc]init];
     self.ServiceId = [[NSMutableArray alloc]init];
     self.UserId = [[NSMutableArray alloc]init];
-    
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    [self initNavigation];
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-    });
+}
+
+//初始化分段选择器
+-(void)initHTHorizontalView
+{
     UIScrollView *scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 65, 600, 40)];
     //核心：表示可滑动区域的大小    其实就是scrView中所有内容的总高度  当可滑动区域的高大于scrollView的高时，scrollView 才可以滑动
     [scrView setContentSize:CGSizeMake(0, -200)];
@@ -90,14 +73,13 @@
                       @"已回访"];
     
     [scrView addSubview:self.selectionList];
-    
-    self.customerTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 105, self.view.frame.size.width, self.view.frame.size.height-155)];
-    self.customerTable.delegate = self;
-    self.customerTable.dataSource = self;
-     [self setExtraCellLineHidden:self.customerTable];
-    
-    [self.view addSubview:self.customerTable];
-    
+}
+
+#pragma mark 下拉刷新以及上拉加载
+
+//下拉刷新
+-(void)initYiRefreshHeader
+{
     // YiRefreshHeader  头部刷新按钮的使用
     refreshHeader=[[YiRefreshHeader alloc] init];
     refreshHeader.scrollView=self.customerTable;
@@ -106,35 +88,30 @@
     refreshHeader.beginRefreshingBlock=^(){
         // 后台执行：
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
-           // sleep(2);
-           // [self analyseRequestData];
             if (customerType == nil) {
                 customerType = @"HaveRegister";
-                customerType1 = @"HaveRegister";
+                customerTypeChange = @"HaveRegister";
                 [self analyseRequestData:@"HaveRegister" index:1];
             }
             else
             {
                 [self analyseRequestData:customerType index:indexPage];
             }
-            
-           // if (self.customerAddrAry.count <= 0) {
-           //     NSLog(@"无数据");
-           // }
             dispatch_async(dispatch_get_main_queue(), ^{
                 // 主线程刷新视图
                 //[self analyseRequestData];
                 [self.customerTable reloadData];
                 [refreshHeader endRefreshing];
             });
-            
         });
-        
     };
-
     // 是否在进入该界面的时候就开始进入刷新状态
     [refreshHeader beginRefreshing];
-    
+}
+
+//上拉刷新
+-(void)initYiRefreshFooter
+{
     // YiRefreshFooter  底部刷新按钮的使用
     refreshFooter=[[YiRefreshFooter alloc] init];
     refreshFooter.scrollView=self.customerTable;
@@ -144,17 +121,17 @@
         // 后台执行：
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             //sleep(2);
-           // [self analyseRequestData];
+            // [self analyseRequestData];
             if (customerType == nil) {
                 customerType = @"HaveRegister";
-                customerType1 = @"HaveRegister";
+                customerTypeChange = @"HaveRegister";
                 [self analyseRequestData:@"HaveRegister" index:1];
             }
             else
             {
                 [self analyseRequestData:customerType index:indexPage];
             }
-
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 // 主线程刷新视图
                 [self.customerTable reloadData];
@@ -163,7 +140,91 @@
         });
     };
 }
-#pragma mark - HTHorizontalSelectionListDataSource Protocol Methods
+
+#pragma mark 绘制界面
+
+//初始化导航栏
+-(void)initNavigation
+{
+    //self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:1.0];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:239/255.0 green:185/255.0 blue:75/255.0 alpha:1.0]];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor],NSFontAttributeName:[UIFont systemFontOfSize:19.0]}];
+    //self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
+    searchBarButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"search.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(searchAction:)];
+    addCustomerBarButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"addcustomer.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(addCustomerAction:)];
+    backButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"cancle.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(cancelAction:)];
+    donebutton  = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"search.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(doneAction:)];
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:addCustomerBarButton,searchBarButton, nil];
+}
+
+//搜索功能实现
+-(void)searchAction:(id)sender
+{
+    searchField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 200, 30)];
+    searchField.borderStyle = UITextBorderStyleRoundedRect;
+    searchField.font = [UIFont systemFontOfSize:14.0f];
+    searchField.placeholder = @"关键字";
+    searchField.delegate = self;
+    searchField.returnKeyType = UIReturnKeyDone;
+    
+    self.navigationItem.rightBarButtonItems = nil;
+    self.navigationItem.titleView = searchField;
+    self.navigationItem.leftBarButtonItem = backButton;
+    self.navigationItem.rightBarButtonItem = donebutton;
+}
+
+-(void)cancelAction:(id)sender
+{
+    self.nameAry = [[NSMutableArray alloc]initWithArray:self.customerNameAry];
+    self.phoneAry = [[NSMutableArray alloc]initWithArray:self.customerPhoneAry];
+    self.addrAry = [[NSMutableArray alloc]initWithArray:self.customerAddrAry];
+    [self.customerTable reloadData];
+    [searchField resignFirstResponder];
+    self.navigationItem.titleView = nil;
+    self.navigationItem.title = @"我的客户";
+    self.navigationItem.leftBarButtonItem = nil;
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:addCustomerBarButton,searchBarButton, nil];
+}
+-(void)doneAction:(id)sender
+{
+    [searchField resignFirstResponder];
+    if (searchField.text.length <= 0) {
+        return;
+    }
+    static BOOL isIndexCount;
+    self.nameAry = [[NSMutableArray alloc]init];
+    self.phoneAry = [[NSMutableArray alloc]init];
+    self.addrAry = [[NSMutableArray alloc]init];
+    for (int i = 0; i < self.indexAry.count; i++) {
+        if ([[self.indexAry objectAtIndex:i]isEqualToString:searchField.text]) {
+            isIndexCount = YES;
+            NSInteger index = i%(self.customerAddrAry.count);
+            [self.nameAry addObject:[self.customerNameAry objectAtIndex:index]];
+            [self.phoneAry addObject:[self.customerPhoneAry objectAtIndex:index]];
+            [self.addrAry addObject:[self.customerAddrAry objectAtIndex:index]];
+        }
+    }
+    if (!isIndexCount) {
+        NSLog(@"无结果");
+    }
+    [self.customerTable reloadData];
+    
+}
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+//添加用户信息
+-(void)addCustomerAction:(id)sender
+{
+    AddNewCustomerViewController *addNewCustomerVC = [[AddNewCustomerViewController alloc]init];
+    [self presentViewController:addNewCustomerVC animated:YES completion:nil];
+}
+
+#pragma mark - 分段选择器方法实现
 
 - (NSInteger)numberOfItemsInSelectionList:(HTHorizontalSelectionList *)selectionList {
     return self.carMakes.count;
@@ -173,14 +234,18 @@
     return self.carMakes[index];
 }
 
-#pragma mark - HTHorizontalSelectionListDelegate Protocol Methods
-
 - (void)selectionList:(HTHorizontalSelectionList *)selectionList didSelectButtonWithIndex:(NSInteger)index {
     [searchField resignFirstResponder];
     /*已报备:HaveRegister  已分配:HaveDistribution 已量尺:HaveMeasure 已设计:HaveDesign
       已检查:HaveChecked   已沟通:HaveCommunicate  已复尺:HaveCheckScale  已签合同:HaveContract
       安装完成:HaveFinish   已回访:HaveVisiting
      */
+    self.customerNameAry = [[NSMutableArray alloc]init];
+    self.customerPhoneAry = [[NSMutableArray alloc]init];
+    self.customerAddrAry = [[NSMutableArray alloc]init];
+    self.CustomerId = [[NSMutableArray alloc]init];
+    self.ServiceId = [[NSMutableArray alloc]init];
+    self.UserId = [[NSMutableArray alloc]init];
     indexPage = 1;
     if ([self.carMakes[index]isEqualToString:@"已报备"]) {
         
@@ -225,92 +290,8 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-//初始化导航栏
--(void)initNavigation
-{
-    //self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:1.0];
-    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:239/255.0 green:185/255.0 blue:75/255.0 alpha:1.0]];
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor],NSFontAttributeName:[UIFont systemFontOfSize:19.0]}];
-    //self.navigationController.navigationBar.translucent = YES;
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    
-    searchBarButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"search.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(searchAction:)];
-    addCustomerBarButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"addcustomer.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(addCustomerAction:)];
-    backButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"cancle.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(cancelAction:)];
-    donebutton  = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"search.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(doneAction:)];
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:addCustomerBarButton,searchBarButton, nil];
-}
-//搜索功能实现
--(void)searchAction:(id)sender
-{
-    //self.title = @"";
-    searchField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 200, 30)];
-    searchField.borderStyle = UITextBorderStyleRoundedRect;
-    searchField.font = [UIFont systemFontOfSize:14.0f];
-    searchField.placeholder = @"关键字";
-    searchField.delegate = self;
-    searchField.returnKeyType = UIReturnKeyDone;
-    
-    self.navigationItem.rightBarButtonItems = nil;
-    self.navigationItem.titleView = searchField;
-    self.navigationItem.leftBarButtonItem = backButton;
-    self.navigationItem.rightBarButtonItem = donebutton;
-}
-
--(BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return YES;
-}
--(void)cancelAction:(id)sender
-{
-    self.nameAry = [[NSMutableArray alloc]initWithArray:self.customerNameAry];
-    self.phoneAry = [[NSMutableArray alloc]initWithArray:self.customerPhoneAry];
-    self.addrAry = [[NSMutableArray alloc]initWithArray:self.customerAddrAry];
-    [self.customerTable reloadData];
-    [searchField resignFirstResponder];
-    self.navigationItem.titleView = nil;
-    self.navigationItem.title = @"我的客户";
-    self.navigationItem.leftBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:addCustomerBarButton,searchBarButton, nil];
-}
--(void)doneAction:(id)sender
-{
-    [searchField resignFirstResponder];
-    if (searchField.text.length <= 0) {
-        return;
-    }
-    static BOOL isIndexCount;
-    self.nameAry = [[NSMutableArray alloc]init];
-    self.phoneAry = [[NSMutableArray alloc]init];
-    self.addrAry = [[NSMutableArray alloc]init];
-    for (int i = 0; i < self.indexAry.count; i++) {
-        if ([[self.indexAry objectAtIndex:i]isEqualToString:searchField.text]) {
-            isIndexCount = YES;
-            NSInteger index = i%(self.customerAddrAry.count);
-            [self.nameAry addObject:[self.customerNameAry objectAtIndex:index]];
-            [self.phoneAry addObject:[self.customerPhoneAry objectAtIndex:index]];
-            [self.addrAry addObject:[self.customerAddrAry objectAtIndex:index]];
-        }
-    }
-    if (!isIndexCount) {
-        NSLog(@"无结果");
-    }
-    [self.customerTable reloadData];
-    
-}
-//添加用户信息
--(void)addCustomerAction:(id)sender
-{
-    AddNewCustomerViewController *addNewCustomerVC = [[AddNewCustomerViewController alloc]init];
-    [self presentViewController:addNewCustomerVC animated:YES completion:nil];
-}
 #pragma mark uitabledelegate
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.nameAry.count;
@@ -368,13 +349,9 @@
 - (void)setExtraCellLineHidden: (UITableView *)tableView{
     
     UIView *view =[ [UIView alloc]init];
-    
     view.backgroundColor = [UIColor clearColor];
-    
     [tableView setTableFooterView:view];
-    
     [tableView setTableHeaderView:view];
-    
 }
 
 #pragma mark 数据请求
@@ -383,13 +360,10 @@
 {
     NSURL *url = [NSURL URLWithString:[URLApi initURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    
     request.HTTPMethod = @"POST";
     
     NSString *code = [URLApi initCode];
-    
     code = [RequestDataParse encodeToPercentEscapeString:code];
-    
     
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\",\"pageIndex\":\"%d\",\"pageSize\":\"10\",\"keyWord\":\"\",\"CustomerSchedule\":\"%@\"}&Command=Customer/GetCustomerList",code,index,customerOfType];
@@ -397,27 +371,18 @@
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
-    
     return request;
 }
+
 -(void)analyseRequestData:(NSString*)customerOfType index:(int)index
 {
-
-    if (![customerType isEqualToString:customerType1]) {
-        
-        self.customerNameAry = [[NSMutableArray alloc]init];
-        self.customerPhoneAry = [[NSMutableArray alloc]init];
-        self.customerAddrAry = [[NSMutableArray alloc]init];
-        self.CustomerId = [[NSMutableArray alloc]init];
-        self.ServiceId = [[NSMutableArray alloc]init];
-        self.UserId = [[NSMutableArray alloc]init];
-        
-        customerType1 = customerType;
+    [customerIsNullLab removeFromSuperview];
+    if (![customerType isEqualToString:customerTypeChange]) {
+        customerTypeChange = customerType;
     }
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        NSMutableURLRequest *request = [self initializtionRequest:customerOfType index:index];
     
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableURLRequest *request = [self initializtionRequest:customerOfType index:index];
         [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
          {
              NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
@@ -444,7 +409,12 @@
                  NSString *CustomerId = [relist objectForKey:@"CustomerId"];
                  NSString *ServiceId = [relist objectForKey:@"ServiceId"];
                  NSString *UserId = [relist objectForKey:@"UserId"];
-                 
+                 for (int i=0 ;i < self.customerNameAry.count;i++)
+                 {
+                     if ([[self.customerNameAry objectAtIndex:i]isEqualToString:CustomerName]&&[[self.customerPhoneAry objectAtIndex:i]isEqualToString:Mobile]&&[[self.customerAddrAry objectAtIndex:i]isEqualToString:Address]) {
+                         return;
+                     }
+                 }
                  [self.customerNameAry addObject:CustomerName];
                  [self.customerPhoneAry addObject:Mobile];
                  [self.customerAddrAry addObject:Address];
@@ -457,6 +427,13 @@
              self.nameAry = [[NSMutableArray alloc]initWithArray:self.customerNameAry];
              self.phoneAry = [[NSMutableArray alloc]initWithArray:self.customerPhoneAry];
              self.addrAry = [[NSMutableArray alloc]initWithArray:self.customerAddrAry];
+             if (self.nameAry.count <= 0) {
+                 customerIsNullLab = [[UILabel alloc]initWithFrame:CGRectMake((self.view.frame.size.width/2)-100, (self.view.frame.size.height/2)+15, 200, 30)];
+                 customerIsNullLab.text = @"没有客户信息";
+                 customerIsNullLab.font = [UIFont systemFontOfSize:17.0f];
+                 customerIsNullLab.textAlignment = NSTextAlignmentCenter;
+                 [self.view addSubview:customerIsNullLab];
+             }
              self.indexAry = [[NSMutableArray alloc]init];
              [self.indexAry addObjectsFromArray:self.customerNameAry];
              [self.indexAry addObjectsFromArray:self.customerPhoneAry];
@@ -466,4 +443,8 @@
     });
 }
 
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 @end

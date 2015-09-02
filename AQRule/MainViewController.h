@@ -1,5 +1,5 @@
 //
-//  MainViewController.h
+//  整体框架类
 //  AQRule
 //
 //  Created by 3Vjia on 15/8/1.

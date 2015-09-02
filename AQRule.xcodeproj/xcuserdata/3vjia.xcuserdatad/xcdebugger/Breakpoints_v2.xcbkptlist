@@ -9,13 +9,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AQRule/EditSpaceViewController.m"
-            timestampString = "462704812.252385"
+            filePath = "AQRule/CustomerViewController.m"
+            timestampString = "462875767.428646"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1445"
-            endingLineNumber = "1445"
-            landmarkName = "-onClickImage:"
+            startingLineNumber = "449"
+            endingLineNumber = "449"
+            landmarkName = "-didReceiveMemoryWarning"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

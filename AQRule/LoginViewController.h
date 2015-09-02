@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LoginViewController : UIViewController
+@interface LoginViewController : UIViewController<UITextFieldDelegate>
+{
+    float viewWidth;
+    float viewHeight;
+    BOOL isSecure;
+}
+@property UITextField *nameField;
+@property UITextField *pwdField;
 
+@property NSString *name;
+@property NSString *password;
 @end

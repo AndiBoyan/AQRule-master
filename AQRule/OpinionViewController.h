@@ -1,5 +1,5 @@
 //
-//  OpinionViewController.h
+//  建议或者意见类
 //  AQRule
 //
 //  Created by 3Vjia on 15/8/30.
@@ -7,8 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QRadioButton.h"
 
-@interface OpinionViewController : UIViewController
-
+@interface OpinionViewController : UIViewController<QRadioButtonDelegate,UITextViewDelegate>
+{
+    int CommunicateType;
+    UITextView *communicateTextView;
+    UILabel *placeholderLab;
+}
 @property (nonatomic,strong) NSString *ServiceId;
 @end

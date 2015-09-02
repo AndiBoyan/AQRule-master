@@ -7,16 +7,9 @@
 //
 
 #import "CustomerLocationViewController.h"
-#import <BaiduMapAPI/BMKMapView.h>
-#import <BaiduMapAPI/BMapKit.h>
 #import "NSAlertView.h"
 
-@interface CustomerLocationViewController ()<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>
-{
-    BMKGeoCodeSearch* _geocodesearch;
-    BMKGeoCodeSearch* _searcher;
-    BMKMapView* mapView;
-}
+@interface CustomerLocationViewController ()
 
 @end
 
@@ -31,14 +24,33 @@
     [self.view addSubview:mapView];
     [mapView setZoomLevel:14];
     [self initNavigation];
+    [self geocodeSearch];
 
 }
--(void)viewDidAppear:(BOOL)animated
+#pragma mark 初始化导航栏
+
+-(void)initNavigation
 {
-    // Do any additional setup after loading the view.
-    [super viewDidAppear:YES];
-    [self geocodeSearch];
+    UINavigationBar *navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 65)];
+    
+    //创建一个导航栏集合
+    UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
+    navigationItem.title = self.navTitle;
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"back.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+    navigationItem.leftBarButtonItem = leftButton;
+    [navigationBar pushNavigationItem:navigationItem animated:NO];
+    navigationBar.barStyle = UIBarStyleBlack;
+    [navigationBar setBarTintColor:[UIColor colorWithRed:239/255.0 green:185/255.0 blue:75/255.0 alpha:1.0]];
+    [navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor],NSFontAttributeName:[UIFont systemFontOfSize:19.0]}];
+    [self.view addSubview:navigationBar];
+    
 }
+-(void)back
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark 搜索服务
 
 -(void)geocodeSearch
 {
@@ -55,6 +67,7 @@
 }
 
 #pragma mark 地理编码
+
 - (void)onGetGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
 {
     if (error == 0) {
@@ -82,28 +95,4 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)initNavigation
-{
-    UINavigationBar *navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 65)];
-    
-    //创建一个导航栏集合
-    UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
-    navigationItem.title = self.navTitle;
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"back.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    navigationItem.leftBarButtonItem = leftButton;
-    [navigationBar pushNavigationItem:navigationItem animated:NO];
-    navigationBar.barStyle = UIBarStyleBlack;
-    [navigationBar setBarTintColor:[UIColor colorWithRed:239/255.0 green:185/255.0 blue:75/255.0 alpha:1.0]];
-    [navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor],NSFontAttributeName:[UIFont systemFontOfSize:19.0]}];
-    [self.view addSubview:navigationBar];
-
-}
--(void)back
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
--(void)updataLocation
-{
-    
-}
 @end

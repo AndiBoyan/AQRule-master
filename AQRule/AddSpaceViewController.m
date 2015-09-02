@@ -99,7 +99,7 @@
     
     self.addSpaceAry1 = [[NSArray alloc]initWithObjects:@"量尺类型",@"量尺时间",@"预计完成时间", nil];
     self.addSpaceAry2 = [[NSArray alloc]initWithObjects:@"空间",@"风格",@"面积(m2)",@"材料",@"布局",@"预购产品线", nil];
-    self.addSpaceDateAry = [RequestDataParse weekAry];
+    self.addSpaceDateAry = [RequestDataParse weekAry1];
     self.addSpaceHourAry = [RequestDataParse hourAry];
     self.addSpaceMinAry = [RequestDataParse minAry];
     
@@ -122,7 +122,7 @@
     btn1.frame = CGRectMake(offWidth, 5, 40, 30);
     btn1.tag = 1001;
     [btn1 setTitle:@"取消" forState:UIControlStateNormal];
-    [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(cancelView) forControlEvents:UIControlEventTouchUpInside];
     [self.dateView addSubview:btn1];
     
@@ -130,7 +130,7 @@
     btn2.frame = CGRectMake(self.view.frame.size.width-40-offWidth, 5, 40, 30);
     btn2.tag = 1002;
     [btn2 setTitle:@"确定" forState:UIControlStateNormal];
-    [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(dateChoose:) forControlEvents:UIControlEventTouchUpInside];
     [self.dateView addSubview:btn2];
     
@@ -180,31 +180,29 @@
         }
     }
 }
-
-
 #pragma mark 保存数据
-
-//去除tableView多余部分
-
 
 -(void)save
 {
+    if ((spaceMutableAry.count<=0)||(finish.length<=0)
+        ||(self.spaceLab.text.length <= 0)||(measure.length<=0)
+        ||(self.areaLab.text.length<=0)||(self.styleLab.text.length<=0)
+        ||(self.materialLab.text.length<=0)||(self.layoutLab.text.length<=0)) {
+        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"提示" message:@"您提交的信息不完整，请完善后再上传空间信息" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alert show];
+        return;
+    }
     NSString *string = @"";
     for (int i = 0; i < spaceMutableAry.count; i++) {
         string = [NSString stringWithFormat:@"%@%@",string,[spaceMutableAry objectAtIndex:i]];
     }
-    
     NSString *code = [URLApi initCode];
-     
-     code = [RequestDataParse encodeToPercentEscapeString:code];
-     NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\":%d,\"ContrlContentList\":{%@},\"RoomType\":\"两房一厅\",\"FinishTime\":\"2015-08-24 12: 00\",\"SpaceName\":\"%@\",\"MeasureTime\": \"2015-08-24 12: 00\",\"BuyWill\": \"Bedding\",\"Area\": \"%@\",\"Style\":\"%@\",\"ServiceId\":\"%@\",\"UserId\": \"%@\",\"SpaceId\":\"%@\",\"Budget\":58899,\"Material\":\"%@\",\"Layout\":\"%@\"}}&Command=MeasureSpace/AddMeasureInfo",code,MeasureType,string,self.spaceLab.text,self.areaLab.text,self.styleLab.text,self.ServiceId,self.UserId,SpaceId,self.materialLab.text,self.layoutLab.text];
+    code = [RequestDataParse encodeToPercentEscapeString:code];
+    NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\":%d,\"ContrlContentList\":{%@},\"RoomType\":\"两房一厅\",\"FinishTime\":\"%@\",\"SpaceName\":\"%@\",\"MeasureTime\": \"%@\",\"BuyWill\": \"%@\",\"Area\": \"%@\",\"Style\":\"%@\",\"ServiceId\":\"%@\",\"UserId\": \"%@\",\"SpaceId\":\"%@\",\"Budget\":58899,\"Material\":\"%@\",\"Layout\":\"%@\"}}&Command=MeasureSpace/AddMeasureInfo",code,MeasureType,string,finish,self.spaceLab.text,measure,self.procutLab.text,self.areaLab.text,self.styleLab.text,self.ServiceId,self.UserId,SpaceId,self.materialLab.text,self.layoutLab.text];
      str = [str stringByReplacingOccurrencesOfString:@"{," withString:@"{"];
-     
-     NSLog(@"%@",str);
      uptadaData = str;
     
     [self analyseUpdataCustomer];//updataCustomer
-
 }
 - (NSString *)encodeToPercentEscapeString: (NSString *) input
 {
@@ -216,6 +214,12 @@
                                                               (CFStringRef)@"!*'();:@&=+$,/?%#[]",
                                                               kCFStringEncodingUTF8));
     return outputStr;
+}
+-(void)sureSpaceInfo1:(id)sender
+{
+    [spaceView removeFromSuperview];
+    spaceModelTable.delegate = nil;
+    spaceModelTable.dataSource = nil;
 }
 -(void)sureSpaceInfo:(id)sender
 {
@@ -239,14 +243,12 @@
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     [spaceModelData replaceObjectAtIndex:textField.tag withObject:textField.text];
-    NSLog(@"%@",spaceModelData);
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     return YES;
 }
-
 
 - (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId {
     if([groupId isEqualToString:@"CustomName"])
@@ -388,7 +390,7 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     button.frame = CGRectMake(20, buttonH+25, 60, 30);
     [button setTitle:@"取消" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(radioViewCancel1:) forControlEvents:UIControlEventTouchUpInside];
     [radioView addSubview:button];
     
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -433,7 +435,7 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     button.frame = CGRectMake(20, buttonH+10, 60, 30);
     [button setTitle:@"取消" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(radioViewCancel1:) forControlEvents:UIControlEventTouchUpInside];
     [checkView addSubview:button];
     
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -443,6 +445,10 @@
     [checkView addSubview:button1];
 }
 
+-(void)radioViewCancel1:(id)sender
+{
+     [spaceRadioView removeFromSuperview];
+}
 -(void)radioViewCancel:(id)sender
 {
     if (isReflash == NO) {
@@ -488,7 +494,6 @@
         index = count;
         count += countStr.intValue;
     }
-
     for (int i = index; i <  count; i++) {
         
         [spaceModelFormat addObject:[spaceModelFormats objectAtIndex:i]];
@@ -496,7 +501,6 @@
         [spaceModelID addObject:[spaceModelIDs objectAtIndex:i]];
         
     }
-      NSLog(@"%@",spaceModelID);
     if (spaceMutableAry.count <= 0) {
         for (int i = index; i <  count; i++) {
             [spaceMutableAry addObject:@""];
@@ -600,7 +604,7 @@
                 if(indexPath.row == 0)
                 {
                     QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
-                    _radio1.frame =CGRectMake(self.view.frame.size.width-80, 5, 60, 30);
+                    _radio1.frame =CGRectMake(self.view.frame.size.width-60, 5, 50, 30);
                     _radio1.tag = 1001;
                     [_radio1 setTitle:@"复尺" forState:UIControlStateNormal];
                     [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -608,7 +612,7 @@
                     [cell.contentView addSubview:_radio1];
                     
                     QRadioButton *_radio2 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
-                    _radio2.frame = CGRectMake(self.view.frame.size.width-160, 5, 60, 30);
+                    _radio2.frame = CGRectMake(self.view.frame.size.width-120, 5, 50, 30);
                     _radio2.tag = 1001;
                     [_radio2 setTitle:@"单尺" forState:UIControlStateNormal];
                     [_radio2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -732,7 +736,7 @@
                 
                 if (indexPath.row == i) {
                     if ([[spaceModelDatas objectAtIndex:indexPath.row] isEqualToString:@"text;"]) {
-                        UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(self.view.frame.size.width-190, 7.5, 145, 25)];
+                        UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(self.view.frame.size.width-210, 7.5, 145, 25)];
                         field.tag = indexPath.row;
                         field.delegate = self;
                         field.borderStyle = UITextBorderStyleRoundedRect;
@@ -741,7 +745,6 @@
                     else if ([[[spaceModelDatas objectAtIndex:indexPath.row]substringToIndex:8] isEqualToString:@"checkbox"])
                     {
                         NSString *string = [[spaceModelDatas objectAtIndex:indexPath.row]substringFromIndex:9];
-                        NSLog(@"%@",string);
                         NSMutableArray *ary = [[NSMutableArray alloc]init];
                         NSInteger length = string.length;
                         int j = 0;
@@ -755,7 +758,7 @@
                         [ary addObject:[string substringFromIndex:j]];
                         NSInteger count = ary.count;
                         
-                        if (count > 5) {
+                        if (count >= 5) {
                             count = 4;
                         }
                         for (int i = 0; i < count; i++) {
@@ -805,9 +808,15 @@
             {
                 UIButton *button =[UIButton buttonWithType:UIButtonTypeRoundedRect];
                 button.frame = CGRectMake(15, 5, 40, 30);
-                [button setTitle:@"确定" forState:UIControlStateNormal];
-                [button addTarget:self action:@selector(sureSpaceInfo:) forControlEvents:UIControlEventTouchUpInside];
+                [button setTitle:@"取消" forState:UIControlStateNormal];
+                [button addTarget:self action:@selector(sureSpaceInfo1:) forControlEvents:UIControlEventTouchUpInside];
                 [cell.contentView addSubview:button];
+                
+                UIButton *button1 =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+                button1.frame = CGRectMake(self.view.frame.size.width-95, 5, 40, 30);
+                [button1 setTitle:@"确定" forState:UIControlStateNormal];
+                [button1 addTarget:self action:@selector(sureSpaceInfo:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.contentView addSubview:button1];
             }
         }
         return cell;
@@ -1402,6 +1411,12 @@
              
              if (JSON != nil) {
                  NSLog(@"上传成功");
+                 if (_images.count<=0) {
+                     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"上传成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                     [alert show];
+                     [self dismissViewControllerAnimated:YES completion:nil];
+                     return;
+                 }
                  MeasureId = JSON;
                  UIImage *img = [_images objectAtIndex:0];
                  [self updataImage:[self encodeToPercentEscapeString:[self image2DataURL:img]]];
@@ -1442,7 +1457,6 @@
         imageData = UIImageJPEGRepresentation(img, 1.0f);
         mimeType = @"image/jpeg";
     }
-    
     //return [NSString stringWithFormat:@"data:%@;base64,%@", mimeType,
      //[imageData base64EncodedStringWithOptions: 0]];
     return [NSString stringWithFormat:@"%@",[imageData base64EncodedStringWithOptions:0]];
@@ -1461,7 +1475,6 @@
     
     NSData *loginData = [loginStr dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
-    
     return request;
 }
 
@@ -1475,10 +1488,17 @@
          {
              //将得到的NSData数据转换成NSString
              NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             NSLog(@"%@",[RequestDataParse newJsonStr:str]);
              
-             //将数据变成标准的json数据
-             NSLog(@"%@",str);
+             NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
              
+             NSString *ErrorMessage = [dic objectForKey:@"ErrorMessage"];
+             if ([ErrorMessage isEqualToString:@""]) {
+                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"空间信息添加成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                 [alert show];
+                 [self dismissViewControllerAnimated:YES completion:nil];
+             }
          }];
     });
 }
@@ -1486,7 +1506,6 @@
 #pragma mark 图片查看器
 
 //图片数组绘制
-
 -(void)imageShow:(NSMutableArray*)imageAry inView:(UIScrollView*)scrolView
 {
     int contentSize = 300;
@@ -1548,7 +1567,7 @@
     else
     {
         EditImageViewController *VC = [[EditImageViewController alloc]init];
-        NSString *title = [NSString stringWithFormat:@"%ld/%ld",img.tag-1000,(unsigned long)_images.count];
+        NSString *title = [NSString stringWithFormat:@"%ld/%ld",(unsigned long)(img.tag-1000),(unsigned long)_images.count];
         VC.image = img.image;
         VC.navTitle = title;
         [self presentViewController:VC animated:YES completion:nil];
@@ -1701,68 +1720,8 @@
     NSString *subString = [self.addSpaceHourAry objectAtIndex:(subRow%[self.addSpaceHourAry count])];
     NSString *thrString = [self.addSpaceMinAry objectAtIndex:(threeRow%[self.addSpaceMinAry count])];
     
-    NSString *str1 = [firstString substringToIndex:6];
-    NSString *str2 = [firstString substringWithRange:NSMakeRange(7, 2)];
-    if ([str2 isEqualToString:@"今天"]) {
-        NSDate *now = [NSDate date];
-        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSUInteger unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
-        NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
-        NSInteger week = [dateComponent weekday];
-        if (week == 1) {
-            str2 = @"周日";
-        }
-        else if (week == 2) {
-            str2 = @"周一";
-        }
-        else if (week == 3) {
-            str2 = @"周二";
-        }
-        else if (week == 4) {
-            str2 = @"周三";
-        }
-        else if (week == 5) {
-            str2 = @"周四";
-        }
-        else if (week == 6) {
-            str2 = @"周五";
-        }
-        else if (week == 7) {
-            str2 = @"周六";
-        }
-        
-    }else if ([str2 isEqualToString:@"明天"])
-    {
-        NSDate *now = [NSDate date];
-        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSUInteger unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
-        NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
-        NSInteger week = [dateComponent weekday]+1;
-        if (week == 1) {
-            str2 = @"周日";
-        }
-        else if (week == 2) {
-            str2 = @"周一";
-        }
-        else if (week == 3) {
-            str2 = @"周二";
-        }
-        else if (week == 4) {
-            str2 = @"周三";
-        }
-        else if (week == 5) {
-            str2 = @"周四";
-        }
-        else if (week == 6) {
-            str2 = @"周五";
-        }
-        else if (week == 7) {
-            str2 = @"周六";
-        }
-        
-    }
-    NSString *str3 = [NSString stringWithFormat:@"%@:%@",[subString substringToIndex:2],[thrString substringToIndex:2]];
-    NSString *string = [NSString stringWithFormat:@"%@ %@ %@>",str1,str2,str3];
+    NSString *str3 = [NSString stringWithFormat:@"%@:%@:00",[subString substringToIndex:2],[thrString substringToIndex:2]];
+    NSString *string = [NSString stringWithFormat:@"%@ %@",firstString,str3];
     if (typeOfTime == 1) {
         self.measureLab.text = string;
         measure = string;
@@ -1794,5 +1753,4 @@
                          [self.dateView removeFromSuperview];
                      }];
 }
-
 @end

@@ -7,34 +7,13 @@
 //
 
 #import "AddNewCustomerViewController.h"
-#import "HZAreaPickerView.h"
-#import "QRadioButton.h"
+
 #import "RequestDataParse.h"
 #import "URLApi.h"
 
-@interface AddNewCustomerViewController ()<UITableViewDataSource,UITableViewDelegate,
-                                          HZAreaPickerDelegate,UITextFieldDelegate,
-                                          QRadioButtonDelegate>
+@interface AddNewCustomerViewController ()
 
-@property UITableView *customerTable;
-@property NSArray *customerAry1;
-@property NSArray *customerAry2;
-@property UILabel *areaLab;
-@property UITextField *nameField;
-@property UITextField *phoneField;
-@property UITextField *addrField;
-@property UITextField *markField;
-@property UIView *AreaView;
-@property NSString *customerName;
-@property NSString *customerPhone;
-@property NSString *customerProvice;
-@property NSString *customerCity;
-@property NSString *customerArea;
-@property NSString *customerAddr;
-@property NSString *customerNote;
-@property int sex;
 
-@property (strong, nonatomic) HZAreaPickerView *locatePicker;
 
 @end
 
@@ -57,7 +36,7 @@
     self.locatePicker = [[HZAreaPickerView alloc] initWithStyle:HZAreaPickerWithStateAndCityAndDistrict delegate:self];
     self.locatePicker.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.customerAry1 = [[NSArray alloc]initWithObjects:@"姓名",@"手机号", nil];
-    self.customerAry2 = [[NSArray alloc]initWithObjects:@"所在区域",@"详细地址",@"备注", nil];
+    self.customerAry2 = [[NSArray alloc]initWithObjects:@"所在区域",@"详细地址", nil];
     [self initNavigation];
 }
 
@@ -75,7 +54,7 @@
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
     [navigationItem setTitle:@"新增客户"];
     UIBarButtonItem *leftButton =[[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"back.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"上传" style:UIBarButtonItemStylePlain target:self action:@selector(updata)];    //把导航栏集合添加入导航栏中，设置动画关闭
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"上传" style:UIBarButtonItemStylePlain target:self action:@selector(addNewCustomer)];    //把导航栏集合添加入导航栏中，设置动画关闭
     rightButton.tintColor = [UIColor blackColor];
     navigationItem.leftBarButtonItem = leftButton;
     navigationItem.rightBarButtonItem = rightButton;
@@ -88,21 +67,20 @@
 
 -(void)back
 {
-    //[self dismissViewControllerAnimated:YES completion:nil];
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"是否放弃上传客户信息" delegate:self cancelButtonTitle:@"放弃" otherButtonTitles:@"继续填写", nil];
     alert.tag = 1000;
     [alert show];
 }
 
--(void)updata
+-(void)addNewCustomer
 {
-   /* if ((self.customerName.length <= 0)||(self.customerPhone.length <= 0)||(self.customerProvice.length <= 0)||
-        (self.customerCity.length <= 0)||(self.customerArea.length <= 0)||(self.customerAddr.length <= 0)) {
+    if ((self.nameField.text.length <= 0)||(self.phoneField.text.length <= 0)||(self.customerProvice.length <= 0)||
+        (self.customerCity.length <= 0)||(self.addrField.text.length <= 0)) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"上传的信息不完整，请完善后重新上传" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         alert.tag = 1001;
         [alert show];
         return;
-    }*/
+    }
     [self analyseRequestData];
 }
 
@@ -139,19 +117,20 @@
                 self.nameField = [[UITextField alloc]initWithFrame:CGRectMake(80, 6, 120, 30)];
                 self.nameField.borderStyle = UITextBorderStyleNone;
                 self.nameField.tag = 1000+indexPath.row;
+                self.nameField.font = [UIFont systemFontOfSize:14.0f];
                 self.nameField.textAlignment = NSTextAlignmentRight;
                 self.nameField.returnKeyType = UIReturnKeyDone;
                 self.nameField.delegate = self;
                 [cell.contentView addSubview:self.nameField];
                 QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
-                _radio1.frame =CGRectMake(self.view.frame.size.width-120, 5, 60, 30);
+                _radio1.frame =CGRectMake(self.view.frame.size.width-100, 5, 50, 30);
                 [_radio1 setTitle:@"先生" forState:UIControlStateNormal];
                 [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 [_radio1.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
                 [cell.contentView addSubview:_radio1];
                 
                 QRadioButton *_radio2 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
-                _radio2.frame = CGRectMake(self.view.frame.size.width-60, 5, 50, 30);
+                _radio2.frame = CGRectMake(self.view.frame.size.width-50, 5, 50, 30);
                 [_radio2 setTitle:@"女士" forState:UIControlStateNormal];
                 [_radio2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 [_radio2.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
@@ -163,6 +142,7 @@
                 self.phoneField = [[UITextField alloc]initWithFrame:CGRectMake(80, 6, 120, 30)];
                 self.phoneField.borderStyle = UITextBorderStyleNone;
                 self.phoneField.tag = 1000+indexPath.row;
+                self.phoneField.font = [UIFont systemFontOfSize:14.0f];
                 self.phoneField.textAlignment = NSTextAlignmentRight;
                 self.phoneField.returnKeyType = UIReturnKeyDone;
                 self.phoneField.delegate = self;
@@ -172,28 +152,33 @@
         }
         else
         {
-            cell.textLabel.text = [self.customerAry2 objectAtIndex:indexPath.row];
+
             if (indexPath.row == 0) {
+                //location
+                UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(15, 10, 15, 18)];
+                img.image = [UIImage imageNamed:@"location.png"];
+                [cell.contentView addSubview:img];
+                
+                UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(40, 10, 150, 20)];
+                lab.text = [self.customerAry2 objectAtIndex:indexPath.row];
+                lab.font = [UIFont systemFontOfSize:14.0f];
+                lab.textAlignment = NSTextAlignmentLeft;
+                [cell.contentView addSubview:lab];
+                
                 self.areaLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 200, 20)];
                 self.areaLab.font = [UIFont systemFontOfSize:12.0f];
-                self.areaLab.textAlignment = NSTextAlignmentCenter;
+                self.areaLab.textAlignment = NSTextAlignmentRight;
                 [cell.contentView addSubview:self.areaLab];
             }
             else if (indexPath.row == 1)
             {
+                cell.textLabel.text = [self.customerAry2 objectAtIndex:indexPath.row];
                 self.addrField = [[UITextField alloc]initWithFrame:CGRectMake(self.view.frame.size.width-220, 5, 200, 30)];
                 self.addrField.borderStyle = UITextBorderStyleNone;
                 self.addrField.delegate = self;
                 self.addrField.textAlignment = NSTextAlignmentRight;
+                self.addrField.font = [UIFont systemFontOfSize:14.0f];
                 [cell.contentView addSubview:self.addrField];
-            }
-            else
-            {
-                self.markField = [[UITextField alloc]initWithFrame:CGRectMake(self.view.frame.size.width-220, 5, 200, 30)];
-                self.markField.borderStyle = UITextBorderStyleNone;
-                self.markField.delegate = self;
-                self.markField.textAlignment = NSTextAlignmentRight;
-                [cell.contentView addSubview:self.markField];
             }
         }
     }
@@ -202,12 +187,11 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ((indexPath.section == 1)&&(indexPath.row == 0)) {
+        [self.nameField resignFirstResponder];
+        [self.phoneField resignFirstResponder];
         [self.addrField resignFirstResponder];
         [self.markField resignFirstResponder];
         [self showView:self.view];
-    }
-    if ((indexPath.section == 1)&&(indexPath.row == 1)) {
-        
     }
 }
 
@@ -311,17 +295,12 @@
 {
     NSURL *url = [NSURL URLWithString:[URLApi initURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    
     request.HTTPMethod = @"POST";
-    
     NSString *code = [URLApi initCode];
-    
     code = [RequestDataParse encodeToPercentEscapeString:code];
     
     NSString *string = [NSString stringWithFormat:
-                        @"Params={\"authCode\":\"%@\",\"CustomerName\":\"%@\",\"Sex\":%d,\"Mobile\":\"%@\",\"Province\":\"%@\",\"City\":\"%@\",\"CArea\":\"%@\",\"Adress\":\"%@\"}&Command=Customer/CreateCustomer",code,self.nameField.text,self.sex,self.phoneField.text,self.customerProvice,self.customerCity,self.addrField.text,self.addrField.text];
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
-    
+                        @"Params={\"authCode\":\"%@\",\"CustomerName\":\"%@\",\"Sex\":%d,\"Mobile\":\"%@\",\"Province\":\"%@\",\"City\":\"%@\",\"CArea\":\"%@\",\"Adress\":\"%@\"}&Command=Customer/CreateCustomer",code,self.nameField.text,self.sex,self.phoneField.text,self.customerProvice,self.customerCity,self.customerArea,self.addrField.text];
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
     
@@ -330,28 +309,23 @@
 -(void)analyseRequestData
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
         NSMutableURLRequest *request = [self initializtionRequest];
-        
         [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
          {
              NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-             NSLog(@"%@",[RequestDataParse newJsonStr:str]);
-             
              NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
              NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
-             NSLog(@"%@",dic);
              NSString *ErrorMessage = [dic objectForKey:@"ErrorMessage"];
              if ([ErrorMessage isEqualToString:@""]) {
-                 NSLog(@"添加客户成功");
+                 
+                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"添加客户成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                 [alert show];
                  [self dismissViewControllerAnimated:YES completion:nil];
              }
              else
              {
                  UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"手机号码已存在" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                  [alert show];
-                 
-                 NSLog(@"手机号码已存在");
              }
          }];
     });

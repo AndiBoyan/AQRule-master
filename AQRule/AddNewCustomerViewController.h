@@ -7,7 +7,30 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HZAreaPickerView.h"
+#import "QRadioButton.h"
 
-@interface AddNewCustomerViewController : UIViewController
+@interface AddNewCustomerViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,
+                                                           HZAreaPickerDelegate,UITextFieldDelegate,
+                                                           QRadioButtonDelegate>
 
+@property UITableView *customerTable;
+@property NSArray *customerAry1;
+@property NSArray *customerAry2;
+@property UILabel *areaLab;
+@property UITextField *nameField;
+@property UITextField *phoneField;
+@property UITextField *addrField;
+@property UITextField *markField;
+@property UIView *AreaView;
+@property NSString *customerName;
+@property NSString *customerPhone;
+@property NSString *customerProvice;
+@property NSString *customerCity;
+@property NSString *customerArea;
+@property NSString *customerAddr;
+@property NSString *customerNote;
+@property int sex;
+
+@property (strong, nonatomic) HZAreaPickerView *locatePicker;
 @end

@@ -69,13 +69,9 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 @property UIPickerView *picker;
 @property UIView *dateView;
 
-
-
 @end
 
 @implementation EditSpaceViewController
-
-
 
 - (void)viewDidLoad {
     _images = [[NSMutableArray alloc]init];
@@ -91,7 +87,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     
     self.addSpaceAry1 = [[NSArray alloc]initWithObjects:@"量尺类型",@"量尺时间",@"预计完成时间", nil];
     self.addSpaceAry2 = [[NSArray alloc]initWithObjects:@"空间",@"风格",@"面积(m2)",@"材料",@"布局",@"预购产品线", nil];
-    self.addSpaceDateAry = [RequestDataParse weekAry];
+    self.addSpaceDateAry = [RequestDataParse weekAry1];
     self.addSpaceHourAry = [RequestDataParse hourAry];
     self.addSpaceMinAry = [RequestDataParse minAry];
     
@@ -114,7 +110,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     btn1.frame = CGRectMake(offWidth, 5, 40, 30);
     btn1.tag = 1001;
     [btn1 setTitle:@"取消" forState:UIControlStateNormal];
-    [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(cancelView) forControlEvents:UIControlEventTouchUpInside];
     [self.dateView addSubview:btn1];
     
@@ -122,7 +118,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     btn2.frame = CGRectMake(self.view.frame.size.width-40-offWidth, 5, 40, 30);
     btn2.tag = 1002;
     [btn2 setTitle:@"确定" forState:UIControlStateNormal];
-    [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(dateChoose:) forControlEvents:UIControlEventTouchUpInside];
     [self.dateView addSubview:btn2];
     
@@ -143,7 +139,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
     [navigationItem setTitle:@"编辑空间"];
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"back.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(save)];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"上传" style:UIBarButtonItemStylePlain target:self action:@selector(save)];
     rightButton.tintColor = [UIColor blackColor];
     navigationItem.leftBarButtonItem = leftButton;
     navigationItem.rightBarButtonItem = rightButton;
@@ -159,11 +155,10 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 
 -(void)back
 {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"是否放弃添加" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"是否放弃编辑" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     alert.tag = 2001;
     [alert show];
 }
-
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.tag == 2001) {
@@ -176,11 +171,16 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 
 #pragma mark 保存数据
 
-//去除tableView多余部分
-
-
 -(void)save
 {
+    if ((spaceMutableAry.count<=0)||(self.finish.length<=0)
+        ||(self.spaceLab.text.length <= 0)||(self.measure.length<=0)
+        ||(self.areaLab.text.length<=0)||(self.styleLab.text.length<=0)
+        ||(self.materialLab.text.length<=0)||(self.layoutLab.text.length<=0)) {
+        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"提示" message:@"您提交的信息不完整，请完善后再上传空间信息" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alert show];
+        return;
+    }
     NSString *string = @"";
     for (int i = 0; i < spaceMutableAry.count; i++) {
         string = [NSString stringWithFormat:@"%@%@",string,[spaceMutableAry objectAtIndex:i]];
@@ -189,14 +189,19 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     NSString *code = [URLApi initCode];
     
     code = [RequestDataParse encodeToPercentEscapeString:code];
-    NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\":%d,\"ContrlContentList\":{%@},\"RoomType\":\"两房一厅\",\"FinishTime\":\"2015-08-24 12: 00\",\"SpaceName\":\"%@\",\"MeasureTime\": \"2015-08-24 12: 00\",\"BuyWill\": \"Bedding\",\"Area\": \"%@\",\"Style\":\"%@\",\"ServiceId\":\"%@\",\"UserId\": \"%@\",\"SpaceId\":\"%@\",\"Budget\":58899,\"Material\":\"%@\",\"Layout\":\"%@\"}}&Command=MeasureSpace/AddMeasureInfo",code,self.MeasureType,string,self.spaceLab.text,self.areaLab.text,self.styleLab.text,self.ServiceId,self.UserId,self.MeasureId,self.materialLab.text,self.layoutLab.text];
+    NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\":%d,\"ContrlContentList\":{%@},\"RoomType\":\"两房一厅\",\"FinishTime\":\"%@\",\"SpaceName\":\"%@\",\"MeasureTime\": \"%@\",\"BuyWill\": \"Bedding\",\"Area\": \"%@\",\"Style\":\"%@\",\"ServiceId\":\"%@\",\"UserId\": \"%@\",\"SpaceId\":\"%@\",\"Budget\":58899,\"Material\":\"%@\",\"Layout\":\"%@\"}}&Command=MeasureSpace/EditMeasureInfo",code,self.MeasureType,string,self.finish,self.spaceLab.text,self.areaLab.text,self.styleLab.text,self.measure,self.ServiceId,self.UserId,self.MeasureId,self.materialLab.text,self.layoutLab.text];
     str = [str stringByReplacingOccurrencesOfString:@"{," withString:@"{"];
     
     NSLog(@"%@",str);
     uptadaData = str;
     [self analyseUpdataCustomer];//updataCustomer
 }
-
+-(void)sureSpaceInfo1:(id)sender
+{
+    [spaceView removeFromSuperview];
+    spaceModelTable.delegate = nil;
+    spaceModelTable.dataSource = nil;
+}
 -(void)sureSpaceInfo:(id)sender
 {
     upDatasSring = @"";
@@ -219,7 +224,6 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     [spaceModelData replaceObjectAtIndex:textField.tag withObject:textField.text];
-    NSLog(@"%@",spaceModelData);
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -330,7 +334,13 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     spaceRadioView.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
     [self.view addSubview:spaceRadioView];
     
-    UIView *radioView = [[UIView alloc]initWithFrame:CGRectMake(45, (spaceRadioView.frame.size.height-(radioAry.count+2)*30)/2, spaceRadioView.frame.size.width-90, (radioAry.count+2)*30)];
+    UIScrollView *radioView;
+    
+    
+    radioView = [[UIScrollView alloc]initWithFrame:CGRectMake(45, (spaceRadioView.frame.size.height-(radioAry.count+2)*15)/2, spaceRadioView.frame.size.width-90, (radioAry.count+5)*15)];
+    
+    radioView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:1.0f];
+    
     
     radioView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:1.0f];
     [spaceRadioView addSubview:radioView];
@@ -344,32 +354,32 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     float fristH = 1/2*(spaceRadioView.frame.size.height)-1/2*(radioAry.count)*30+25;
     
     for (int i = 0; i < radioAry.count; i++) {
-        
+        int row = i/2;
+        int col = i%2;
         QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:groupID];
-        _radio1.frame =CGRectMake(20, fristH+30*i, 200, 30);
+        _radio1.frame =CGRectMake(100*col+15, fristH+30*row, 100, 30);
         _radio1.tag = 1002;
         [_radio1 setTitle:[radioAry objectAtIndex:i] forState:UIControlStateNormal];
         [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_radio1.titleLabel setFont:[UIFont systemFontOfSize:13.0f]];
+        [_radio1.titleLabel setFont:[UIFont systemFontOfSize:12.0f]];
         [radioView addSubview:_radio1];
         if (i == 0) {
             [_radio1 setChecked:YES];
         }
     }
-    float buttonH = fristH+30*(radioAry.count)-10;
+    float buttonH = fristH+15*(radioAry.count)-10;
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame = CGRectMake(20, buttonH+10, 60, 30);
+    button.frame = CGRectMake(20, buttonH+25, 60, 30);
     [button setTitle:@"取消" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(radioViewCancel1:) forControlEvents:UIControlEventTouchUpInside];
     [radioView addSubview:button];
     
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button1.frame = CGRectMake(radioView.frame.size.width-80, buttonH+10, 60, 30);
+    button1.frame = CGRectMake(radioView.frame.size.width-80, buttonH+25, 60, 30);
     [button1 setTitle:@"确定" forState:UIControlStateNormal];
     [button1 addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
     [radioView addSubview:button1];
-    
 }
 
 -(void)checkView:(NSArray *)checkAry tag:(int)tag
@@ -406,7 +416,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     button.frame = CGRectMake(20, buttonH+10, 60, 30);
     [button setTitle:@"取消" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(radioViewCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(radioViewCancel1:) forControlEvents:UIControlEventTouchUpInside];
     [checkView addSubview:button];
     
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -416,7 +426,10 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     [checkView addSubview:button1];
     
 }
-
+-(void)radioViewCancel1:(id)sender
+{
+    [spaceRadioView removeFromSuperview];
+}
 -(void)radioViewCancel:(id)sender
 {
     if (isReflash == NO) {
@@ -571,7 +584,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                 if(indexPath.row == 0)
                 {
                     QRadioButton *_radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
-                    _radio1.frame =CGRectMake(self.view.frame.size.width-80, 5, 60, 30);
+                    _radio1.frame =CGRectMake(self.view.frame.size.width-60, 5, 50, 30);
                     _radio1.tag = 1001;
                     [_radio1 setTitle:@"复尺" forState:UIControlStateNormal];
                     [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -579,7 +592,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                     [cell.contentView addSubview:_radio1];
                     
                     QRadioButton *_radio2 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
-                    _radio2.frame = CGRectMake(self.view.frame.size.width-160, 5, 60, 30);
+                    _radio2.frame = CGRectMake(self.view.frame.size.width-120, 5, 50, 30);
                     _radio2.tag = 1001;
                     [_radio2 setTitle:@"单尺" forState:UIControlStateNormal];
                     [_radio2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -775,9 +788,15 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
             {
                 UIButton *button =[UIButton buttonWithType:UIButtonTypeRoundedRect];
                 button.frame = CGRectMake(15, 5, 40, 30);
-                [button setTitle:@"确定" forState:UIControlStateNormal];
-                [button addTarget:self action:@selector(sureSpaceInfo:) forControlEvents:UIControlEventTouchUpInside];
+                [button setTitle:@"取消" forState:UIControlStateNormal];
+                [button addTarget:self action:@selector(sureSpaceInfo1:) forControlEvents:UIControlEventTouchUpInside];
                 [cell.contentView addSubview:button];
+                
+                UIButton *button1 =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+                button1.frame = CGRectMake(self.view.frame.size.width-95, 5, 40, 30);
+                [button1 setTitle:@"确定" forState:UIControlStateNormal];
+                [button1 addTarget:self action:@selector(sureSpaceInfo:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.contentView addSubview:button1];
             }
         }
         return cell;
@@ -803,7 +822,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
             if (indexPath.row == 0) {
                 //空间
                 isReflash = YES;
-                [self analyseModelListData];
+                //[self analyseModelListData];
             }
             else if (indexPath.row == 1)
             {
@@ -1442,7 +1461,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     else
     {
         EditImageViewController *VC = [[EditImageViewController alloc]init];
-        NSString *title = [NSString stringWithFormat:@"%ld/%ld",img.tag-1000,(unsigned long)_images.count];
+        NSString *title = [NSString stringWithFormat:@"%ld/%ld",(unsigned long)(img.tag-1000),(unsigned long)_images.count];
         VC.image = img.image;
         VC.navTitle = title;
         [self presentViewController:VC animated:YES completion:nil];
@@ -1589,69 +1608,9 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     NSString *firstString = [self.addSpaceDateAry objectAtIndex:(firstRow%[self.addSpaceDateAry count])];
     NSString *subString = [self.addSpaceHourAry objectAtIndex:(subRow%[self.addSpaceHourAry count])];
     NSString *thrString = [self.addSpaceMinAry objectAtIndex:(threeRow%[self.addSpaceMinAry count])];
-    
-    NSString *str1 = [firstString substringToIndex:6];
-    NSString *str2 = [firstString substringWithRange:NSMakeRange(7, 2)];
-    if ([str2 isEqualToString:@"今天"]) {
-        NSDate *now = [NSDate date];
-        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSUInteger unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
-        NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
-        NSInteger week = [dateComponent weekday];
-        if (week == 1) {
-            str2 = @"周日";
-        }
-        else if (week == 2) {
-            str2 = @"周一";
-        }
-        else if (week == 3) {
-            str2 = @"周二";
-        }
-        else if (week == 4) {
-            str2 = @"周三";
-        }
-        else if (week == 5) {
-            str2 = @"周四";
-        }
-        else if (week == 6) {
-            str2 = @"周五";
-        }
-        else if (week == 7) {
-            str2 = @"周六";
-        }
-        
-    }else if ([str2 isEqualToString:@"明天"])
-    {
-        NSDate *now = [NSDate date];
-        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSUInteger unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
-        NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
-        NSInteger week = [dateComponent weekday]+1;
-        if (week == 1) {
-            str2 = @"周日";
-        }
-        else if (week == 2) {
-            str2 = @"周一";
-        }
-        else if (week == 3) {
-            str2 = @"周二";
-        }
-        else if (week == 4) {
-            str2 = @"周三";
-        }
-        else if (week == 5) {
-            str2 = @"周四";
-        }
-        else if (week == 6) {
-            str2 = @"周五";
-        }
-        else if (week == 7) {
-            str2 = @"周六";
-        }
-        
-    }
-    NSString *str3 = [NSString stringWithFormat:@"%@:%@",[subString substringToIndex:2],[thrString substringToIndex:2]];
-    NSString *string = [NSString stringWithFormat:@"%@ %@ %@>",str1,str2,str3];
+
+    NSString *str3 = [NSString stringWithFormat:@"%@:%@:00",[subString substringToIndex:2],[thrString substringToIndex:2]];
+    NSString *string = [NSString stringWithFormat:@"%@ %@",firstString,str3];
     if (typeOfTime == 1) {
         self.measureLab.text = string;
         self.measure = string;

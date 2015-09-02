@@ -11,16 +11,7 @@
 #import "URLApi.h"
 #import "NSAlertView.h"
 
-@interface CustomerInfoListViewController ()<UITableViewDataSource,UITableViewDelegate>
-
-@property UITableView *customerInfoListTable;
-@property NSArray *customerBaseAry;
-@property NSArray *customerIntentionAry;
-@property NSArray *customerRoomAry;
-
-@property NSMutableArray *baseAry;
-@property NSMutableArray *intentionAry;
-@property NSMutableArray *roomAry;
+@interface CustomerInfoListViewController ()
 
 @end
 
@@ -48,6 +39,9 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark 初始化导航栏
+
 -(void)initNavigation
 {
     UINavigationBar *navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 65)];
@@ -67,6 +61,9 @@
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+#pragma mark UITableView
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 3;
@@ -110,15 +107,16 @@
     }
     return cell;
 }
+
+#pragma mark 客户详细信息数据请求
+
 -(NSMutableURLRequest*)initializtionRequest
 {
     NSURL *url = [NSURL URLWithString:[URLApi initURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    
     request.HTTPMethod = @"POST";
     
     NSString *code = [URLApi initCode];
-    
     code = [RequestDataParse encodeToPercentEscapeString:code];
     
     NSString *string = [NSString stringWithFormat:
@@ -127,9 +125,9 @@
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
-    
     return request;
 }
+
 -(void)analyseRequestData
 {
     self.baseAry = [[NSMutableArray alloc]init];

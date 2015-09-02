@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CustomerInfoListViewController : UIViewController
+@interface CustomerInfoListViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 {
     NSString *name;
     NSString *phone1;
@@ -37,5 +37,12 @@
 
 @property NSString* CustomerId;
 @property NSString* ServiceId;
+@property UITableView *customerInfoListTable;
+@property NSArray *customerBaseAry;
+@property NSArray *customerIntentionAry;
+@property NSArray *customerRoomAry;
 
+@property NSMutableArray *baseAry;
+@property NSMutableArray *intentionAry;
+@property NSMutableArray *roomAry;
 @end

@@ -13,23 +13,15 @@
 #import "URLApi.h"
 #import "userSingletion.h"
 
-@interface LoginViewController ()<UITextFieldDelegate>
-{
-    float viewWidth;
-    float viewHeight;
-    BOOL isSecure;
-}
-@property UITextField *nameField;
-@property UITextField *pwdField;
-
-@property NSString *name;
-@property NSString *password;
+@interface LoginViewController ()
 
 @end
 
 @implementation LoginViewController
 
+
 - (void)viewDidLoad {
+
     isSecure = YES;
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
@@ -40,7 +32,10 @@
   
     [self initNavigation];
 }
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -64,8 +59,7 @@
 {
     
     UIImageView *logoImgView = [[UIImageView alloc]initWithFrame:CGRectMake(-40+viewWidth/2, 110, 80, 80)];
-    logoImgView.backgroundColor = [UIColor greenColor];
-    logoImgView.image = [UIImage imageNamed:@""];
+    logoImgView.image = [UIImage imageNamed:@"logo"];
     [self.view addSubview:logoImgView];
     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:logoImgView.bounds  byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(10, 10)];
     CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
@@ -86,15 +80,16 @@
     UILabel *phoneLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 5, 80, 30)];
     phoneLab.text = @"手机号";
     phoneLab.textAlignment = NSTextAlignmentLeft;
-    phoneLab.font = [UIFont systemFontOfSize:17.0f];
+    phoneLab.font = [UIFont systemFontOfSize:14.0f];
     [phoneview addSubview:phoneLab];
     
-    UITextField *phoneField = [[UITextField alloc]initWithFrame:CGRectMake(80, 5, viewWidth-160, 30)];
-    phoneField.delegate = self;
-    phoneField.tag = 1000;
-    phoneField.textAlignment = NSTextAlignmentCenter;
-    phoneField.font = [UIFont systemFontOfSize:14.0f];
-    [phoneview addSubview:phoneField];
+    self.nameField = [[UITextField alloc]initWithFrame:CGRectMake(80, 5, viewWidth-160, 30)];
+    self.nameField.delegate = self;
+    self.nameField.tag = 1000;
+    self.nameField.textAlignment = NSTextAlignmentRight;
+    self.nameField.keyboardType = UIKeyboardTypeNamePhonePad;
+    self.nameField.font = [UIFont systemFontOfSize:14.0f];
+    [phoneview addSubview:self.nameField];
     
     UIView *psdview = [[UIView alloc]initWithFrame:CGRectMake(0, 331, viewWidth, 40)];
     psdview.backgroundColor = [UIColor whiteColor];
@@ -103,20 +98,20 @@
     UILabel *psdLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 5, 80, 30)];
     psdLab.text = @"密码";
     psdLab.textAlignment = NSTextAlignmentLeft;
-    psdLab.font = [UIFont systemFontOfSize:17.0f];
+    psdLab.font = [UIFont systemFontOfSize:14.0f];
     [psdview addSubview:psdLab];
     
     self.pwdField = [[UITextField alloc]initWithFrame:CGRectMake(80, 5, viewWidth-160, 30)];
     self.pwdField.delegate = self;
     self.pwdField.tag = 1001;
     self.pwdField.secureTextEntry = YES;
-    self.pwdField.textAlignment = NSTextAlignmentCenter;
+    self.pwdField.textAlignment = NSTextAlignmentRight;
     self.pwdField.font = [UIFont systemFontOfSize:14.0f];
     [psdview addSubview:self.pwdField];
     
     UIButton *secureButton = [UIButton buttonWithType:UIButtonTypeCustom];
     //secureButton.backgroundColor = [UIColor redColor];
-    secureButton.frame = CGRectMake(250, 5, 40, 30);
+    secureButton.frame = CGRectMake(self.view.frame.size.width-60, 5, 40, 30);
     [secureButton setImage:[[UIImage imageNamed:@"secure.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     [secureButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [secureButton addTarget:self action:@selector(secureTextEntry) forControlEvents:UIControlEventTouchUpInside];
@@ -150,10 +145,8 @@
 #pragma mark 用户登录
 
 -(void)login
-{
-    self.name = @"oppeinadmin";//self.nameField.text;
-    self.password = @"op123456";//self.pwdField.text;
-    if ((self.name.length <= 0)&&(self.password <= 0)) {
+{//oppeinadmin //op123456
+    if ((self.nameField.text.length <= 0)||(self.pwdField.text.length <= 0)) {
         [NSAlertView alert:@"用户名或者密码为空"];
         return;
     }
@@ -209,6 +202,7 @@
              }];
     });
 }
+
 //http://oppein.3weijia.com/oppein.axds?Params={"authCode":"login","username":"oppeinadmin","pwd":"op123456"}&Command=Login/Login
 -(NSMutableURLRequest*)initializtionRequest
 {
@@ -217,7 +211,7 @@
     
     request.HTTPMethod = @"POST";
     
-    NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"login\",\"username\":\"%@\",\"pwd\":\"%@\"}&Command=Login/Login",self.name,self.password];
+    NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"login\",\"username\":\"%@\",\"pwd\":\"%@\"}&Command=Login/Login",self.nameField.text,self.pwdField.text];
     
     NSData *loginData = [loginStr dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];

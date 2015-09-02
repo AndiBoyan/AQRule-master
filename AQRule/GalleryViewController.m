@@ -163,8 +163,7 @@
 }
 
 - (void)gridViewCellWasTouched:(JSGridViewCell *)gridViewCell {
-    NSLog(@"row : %ld, column : %ld", (long)gridViewCell.row, gridViewCell.column);
+    NSLog(@"row : %ld, column : %ld", (long)gridViewCell.row, (long)gridViewCell.column);
 }
-
 
 @end

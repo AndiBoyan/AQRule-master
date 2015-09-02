@@ -93,6 +93,24 @@
     }
     return ary;
 }
+
++(NSMutableArray*)weekAry1
+{
+    NSMutableArray *ary = [[NSMutableArray alloc]init];
+    NSDate *now = [NSDate date];
+    NSDate *date;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    NSTimeInterval  interval = 24*60*60*1;
+    [dateFormatter setDateFormat:@"YYYY-MM-dd"];
+    date = now;
+    for (int i = 0; i < 30; i++) {
+        NSString *str = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:date]];
+        [ary addObject:str];
+        date = [date dateByAddingTimeInterval:+interval];
+    }
+    return ary;
+}
+
 //小时
 +(NSMutableArray*)hourAry
 {

@@ -125,11 +125,11 @@
         
         UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 70, 70)];
         img.tag = 1001+i;
-        /*img.userInteractionEnabled=YES;
-        UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
-        [img addGestureRecognizer:singleTap];*/
+        img.userInteractionEnabled=YES;
+       /* UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
+        [img addGestureRecognizer:singleTap];
         img.image = [imageAry objectAtIndex:i];
-        [view addSubview:img];
+        [view addSubview:img];*/
     }
 }
 
@@ -233,7 +233,8 @@
              if ([buyString isEqualToString:@""]) {
                  buyString = @"无";
              }
-             [self.tagAry3 addObject:buyString];
+              NSString *BuyWill = [JSON objectForKey:@"BuyWill"];
+             [self.tagAry3 addObject:BuyWill];
              NSArray *FileList = [JSON objectForKey:@"FileList"];
              for (id filelist in FileList) {
                  NSString *FileFullPath = [filelist objectForKey:@"FileFullPath"];
@@ -247,7 +248,6 @@
              }
             
              //购买意向
-             NSString *BuyWill = [JSON objectForKey:@"BuyWill"];
              
              NSDictionary *AppCustomModel = [JSON objectForKey:@"AppCustomModel"];
              NSArray *ContrlInfos = [AppCustomModel objectForKey:@"ContrlInfos"];
@@ -256,9 +256,9 @@
                  NSLog(@"%@",GroupName);
                  [self.tagAry2 addObject:GroupName];
              }
-             NSLog(@"%@",BuyWill);
-             NSString *buywillString = [NSString stringWithFormat:@"购买意向:%@",BuyWill];
-             [self.tagAry2 addObject:buywillString];
+             //NSLog(@"%@",BuyWill);
+             //NSString *buywillString = [NSString stringWithFormat:@"购买意向:%@",BuyWill];
+             //[self.tagAry2 addObject:buywillString];
              [self initView];
         }];
     });

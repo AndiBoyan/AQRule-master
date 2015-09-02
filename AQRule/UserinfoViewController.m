@@ -10,22 +10,18 @@
 #import "LoginViewController.h"
 #import "userSingletion.h"
 
-@interface UserinfoViewController ()<UITableViewDataSource,UITableViewDelegate>
-
-@property UITableView *userInfoTable;
-@property NSArray *userInfoAry1;
-@property NSArray *userInfoAry2;
+@interface UserinfoViewController ()
 
 @end
 
 @implementation UserinfoViewController
 
 - (void)viewDidLoad {
+    
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:239/255.0 green:185/255.0 blue:75/255.0 alpha:1.0]];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor],NSFontAttributeName:[UIFont systemFontOfSize:19.0]}];
-
-    //self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.userInfoTable =[[UITableView alloc]initWithFrame:CGRectMake(0, -40, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];

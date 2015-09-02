@@ -23,11 +23,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    /*
-     CustomerViewController : 我的客户
-     GalleryViewController  : 图库
-     UserinfoViewController : 我
-     */
     
     CustomerViewController *customerVC = [[CustomerViewController alloc]init];
     GalleryViewController *galleryVC = [[GalleryViewController alloc]init];
@@ -57,17 +52,6 @@
                                          imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     self.viewControllers = [NSArray arrayWithObjects:customerNav,galleryNav,userinfoNav,nil];
-
-    //self.tabBar.tintColor = [UIColor blackColor];
-    //UIView *bgView = [[UIView alloc] initWithFrame:self.tabBar.bounds];
-    //bgView.backgroundColor = [UIColor colorWithRed:0.2f green:0.6 blue:0.2f alpha:1.0f];
-    //[self.tabBar insertSubview:bgView atIndex:0];
-    //self.tabBar.opaque = YES;
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:YES];
 }
 
 - (void)didReceiveMemoryWarning {
