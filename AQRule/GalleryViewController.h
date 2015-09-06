@@ -12,6 +12,7 @@
 
 @interface GalleryViewController : UIViewController
 {
+    
 @private
     JSGridView *_gridView;
 
@@ -21,6 +22,8 @@
     NSMutableArray *_leftArray;
     NSMutableArray *_rightArray;
     NSInteger _loadCount;
+    
+    UIView *examineView;
 BOOL _isLoading;
 }
 

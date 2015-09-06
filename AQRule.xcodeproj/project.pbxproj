@@ -11,7 +11,6 @@
 		3092C3761B60BDC000BDF274 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3092C3751B60BDC000BDF274 /* AppDelegate.m */; };
 		3092C37E1B60BDC000BDF274 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3092C37D1B60BDC000BDF274 /* Images.xcassets */; };
 		3092C38D1B60BDC000BDF274 /* AQRuleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3092C38C1B60BDC000BDF274 /* AQRuleTests.m */; };
-		3092C3981B60BE8800BDF274 /* CustomerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3092C3971B60BE8800BDF274 /* CustomerViewController.m */; };
 		3092C39B1B60BEC800BDF274 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3092C39A1B60BEC800BDF274 /* GalleryViewController.m */; };
 		3092C39E1B60BF2800BDF274 /* UserinfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3092C39D1B60BF2800BDF274 /* UserinfoViewController.m */; };
 		3092C3A41B60CA2A00BDF274 /* AddNewCustomerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3092C3A31B60CA2A00BDF274 /* AddNewCustomerViewController.m */; };
@@ -59,6 +58,7 @@
 		9F43423F1B9302F50028532B /* OpinionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F43423E1B9302F50028532B /* OpinionViewController.m */; };
 		9F4DD9BB1B93F751001DE3E4 /* userSingletion.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DD9BA1B93F751001DE3E4 /* userSingletion.m */; };
 		9F5543ED1B6C9D880002ACD4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F5543EC1B6C9D880002ACD4 /* MainViewController.m */; };
+		9F65A1D11B9BDF7A006962DB /* CustomerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3092C3971B60BE8800BDF274 /* CustomerViewController.m */; };
 		9F70B1291B69B536001FC86D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F70B1281B69B536001FC86D /* LoginViewController.m */; };
 		9F7781961B6328E000174524 /* JSGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781951B6328E000174524 /* JSGridViewCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9F7781991B63292300174524 /* JSGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781981B63292300174524 /* JSGridView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -716,6 +716,7 @@
 				3092C3A41B60CA2A00BDF274 /* AddNewCustomerViewController.m in Sources */,
 				9F7781F71B6371C900174524 /* RuleInfoViewController.m in Sources */,
 				9F3BC38E1B70A55B00E972F8 /* HTHorizontalSelectionListScrollView.m in Sources */,
+				9F65A1D11B9BDF7A006962DB /* CustomerViewController.m in Sources */,
 				9FA2CDF21B7884A200209BDC /* NSAlertView.m in Sources */,
 				9F5543ED1B6C9D880002ACD4 /* MainViewController.m in Sources */,
 				9F43423F1B9302F50028532B /* OpinionViewController.m in Sources */,
@@ -736,7 +737,6 @@
 				9F70B1291B69B536001FC86D /* LoginViewController.m in Sources */,
 				9F90E87D1B72F0CA00A0CBF9 /* RequestDataParse.m in Sources */,
 				30FEDA641B61E2F0008D6FAD /* CustomerInfoListViewController.m in Sources */,
-				3092C3981B60BE8800BDF274 /* CustomerViewController.m in Sources */,
 				9F3C3F431B79DCDF00B8A1B6 /* ImageExamine.m in Sources */,
 				9F3BC38D1B70A55B00E972F8 /* HTHorizontalSelectionList.m in Sources */,
 				3092C3731B60BDBF00BDF274 /* main.m in Sources */,

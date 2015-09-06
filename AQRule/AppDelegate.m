@@ -20,7 +20,6 @@
 @end
 
 @implementation AppDelegate
-//oppein.3weijia.com/UpFile/C00000173/CRM/CRM_ScaleSpace/201508/00000321/2f4e6070-2f1b-4e36-a603-5e51b7a8f67b.png
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.

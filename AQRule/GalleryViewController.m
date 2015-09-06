@@ -7,6 +7,7 @@
 //
 
 #import "GalleryViewController.h"
+#import "ImageExamine.h"
 
 #define  kOnceLoadingCount 40
 
@@ -15,7 +16,7 @@
     float cellImageWidth;
 }
 @end
-//"00000028"
+
 
 @implementation GalleryViewController
 @synthesize gridView = _gridView;
@@ -50,6 +51,10 @@
     [self addTableViewData];
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    [examineView removeFromSuperview];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -82,7 +87,6 @@
             [_rightArray addObject:info];
         }
     }
-    //NSLog(@"l = %@r = %@",_leftArray,_rightArray);
     [_gridView reloadData];
 }
 
@@ -144,7 +148,7 @@
     imageView.frame = CGRectMake(5, 5, cellImageWidth, height);
     NSInteger i = (row*2+column)%[_images count];
     if (row*2+column == _images.count) {
-        i = _images.count-1;
+        i =0;
     }
     imageView.image = [_images objectAtIndex:i];
     
@@ -163,7 +167,42 @@
 }
 
 - (void)gridViewCellWasTouched:(JSGridViewCell *)gridViewCell {
-    NSLog(@"row : %ld, column : %ld", (long)gridViewCell.row, (long)gridViewCell.column);
+    
+    examineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+
+    [self.view addSubview:examineView];
+    examineView.backgroundColor = [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.0f];
+    UIImage *image = [_images objectAtIndex:(gridViewCell.row*2+gridViewCell.column)%11];
+    float w = self.view.frame.size.width-40;
+    float h = (w*image.size.height)/image.size.width;
+    
+    UIImageView *imageExamine = [[UIImageView alloc]initWithFrame:CGRectMake(20, (self.view.frame.size.height-h)/2, w, h)];
+    imageExamine.image = image;
+    [examineView addSubview:imageExamine];
+    UIBezierPath *maskPath1 = [UIBezierPath bezierPathWithRoundedRect:imageExamine.bounds  byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(10, 10)];
+    CAShapeLayer *maskLayer1 = [[CAShapeLayer alloc] init];
+    maskLayer1.frame = imageExamine.bounds;
+    maskLayer1.path = maskPath1.CGPath;
+    imageExamine.layer.mask = maskLayer1;
+    
+    UIButton *closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    closeBtn.frame = CGRectMake(self.view.frame.size.width-50, (self.view.frame.size.height-h)/2, 30, 30);
+    
+    [closeBtn setImage:[[UIImage imageNamed:@"delete_img"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    
+    [closeBtn addTarget:self action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];
+    [examineView addSubview:closeBtn];
+    
 }
 
+-(void)close:(id)sender
+{
+    [UIView animateWithDuration:0.3
+                     animations:^{
+                         examineView.alpha = 0.0f;
+                     }
+                     completion:^(BOOL finished){
+                         [examineView removeFromSuperview];
+                     }];
+}
 @end

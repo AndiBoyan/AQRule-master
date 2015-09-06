@@ -127,9 +127,9 @@
         img.tag = 1001+i;
         img.userInteractionEnabled=YES;
        /* UITapGestureRecognizer *singleTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClickImage:)];
-        [img addGestureRecognizer:singleTap];
+        [img addGestureRecognizer:singleTap];*/
         img.image = [imageAry objectAtIndex:i];
-        [view addSubview:img];*/
+        [view addSubview:img];
     }
 }
 

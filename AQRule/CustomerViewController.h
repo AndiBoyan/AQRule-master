@@ -13,7 +13,7 @@
 #import "HTHorizontalSelectionList.h"
 
 @interface CustomerViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,
-                                    UITableViewDataSource,UITableViewDelegate,HTHorizontalSelectionListDelegate, HTHorizontalSelectionListDataSource>
+                                    UITableViewDataSource,UITableViewDelegate,HTHorizontalSelectionListDelegate, HTHorizontalSelectionListDataSource,UIActionSheetDelegate>
 {
     UIBarButtonItem *searchBarButton;//搜索客户按钮
     UIBarButtonItem *addCustomerBarButton;//添加客户按钮
@@ -30,12 +30,12 @@
     NSString *customerTypeChange;//客户类型是否改变
     
     int indexPage;//页码
+    NSInteger deleteIndex;
 }
-@property UITableView *customerTable;
 
+@property UITableView *customerTable;
 @property (nonatomic, strong) HTHorizontalSelectionList *selectionList;
 @property (nonatomic, strong) NSArray *carMakes;
-
 @property NSMutableArray *nameAry;
 @property NSMutableArray *phoneAry;
 @property NSMutableArray *addrAry;

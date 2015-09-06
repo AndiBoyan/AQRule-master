@@ -281,11 +281,13 @@
     [super touchesBegan:touches withEvent:event];
    
 }
+
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     return YES;
 }
+
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     [self cancelAreaView];
@@ -298,7 +300,7 @@
     request.HTTPMethod = @"POST";
     NSString *code = [URLApi initCode];
     code = [RequestDataParse encodeToPercentEscapeString:code];
-    
+    //NSString *area = [NSString stringWithFormat:@"%@%@%@%@",self.customerProvice,self.customerCity,self.customerArea,self.addrField.text];
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\",\"CustomerName\":\"%@\",\"Sex\":%d,\"Mobile\":\"%@\",\"Province\":\"%@\",\"City\":\"%@\",\"CArea\":\"%@\",\"Adress\":\"%@\"}&Command=Customer/CreateCustomer",code,self.nameField.text,self.sex,self.phoneField.text,self.customerProvice,self.customerCity,self.customerArea,self.addrField.text];
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
@@ -306,6 +308,7 @@
     
     return request;
 }
+
 -(void)analyseRequestData
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -324,7 +327,7 @@
              }
              else
              {
-                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"手机号码已存在" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"添加客户失败" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                  [alert show];
              }
          }];

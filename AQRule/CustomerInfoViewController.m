@@ -241,15 +241,15 @@
     else
     {
         //短信
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请选择短信模板" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"发送", nil];
-        alert.tag = 1001;
-        [alert show];
+        UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:@"选择短信模板" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"模板一",@"模板二",@"模板三", nil];
+        [sheet showInView:self.view];
+        
     }
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSString *phoneStr = [NSString stringWithFormat:@"tel://%@",self.phone];
-    NSString *smsStr = [NSString stringWithFormat:@"sms://%@",self.phone];
+    //NSString *smsStr = [NSString stringWithFormat:@"sms://%@",self.phone];
     if((alertView.tag == 1000)&&(buttonIndex == 1))
     {
         //拨打电话
@@ -257,9 +257,72 @@
     }
     else if ((alertView.tag == 1001)&&(buttonIndex == 1))
     {
-        //发送短信
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:smsStr]];
+        [self sendSms:@"模板一"];
     }
+    else if ((alertView.tag == 1002)&&(buttonIndex == 1))
+    {
+        [self sendSms:@"模板二"];
+    }
+    else if ((alertView.tag == 10032222)&&(buttonIndex == 1))
+    {
+        [self sendSms:@"模板三"];
+    }
+}
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"选择模板一" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alert.tag = 1001;
+        [alert show];
+    }
+    else if (buttonIndex == 1)
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"选择模板二" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alert.tag = 1002;
+        [alert show];
+    }
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"选择模板三" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alert.tag = 1003;
+        [alert show];
+    }
+}
+-(void)sendSms:(NSString*)sms
+{
+    if([MFMessageComposeViewController canSendText])
+    {
+        MFMessageComposeViewController *mc = [[MFMessageComposeViewController alloc] init];
+        //设置委托
+        mc.messageComposeDelegate = self;
+        //短信内容
+        mc.body = sms;
+        //短信接收者，可设置多个
+        mc.recipients = [NSArray arrayWithObjects:self.phone,nil];
+        
+        [self presentViewController:mc animated:YES completion:nil];
+    }
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"错误"
+                                                        message:@"当前设备不支持发送短信"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"确定"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+
+}
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    if (result == MessageComposeResultCancelled)
+        NSLog(@"Message cancelled");
+    else if (result == MessageComposeResultSent)
+        NSLog(@"Message sent");
+    else
+    NSLog(@"Message failed");
+
 }
 
 #pragma mark 获取客户的量尺信息

@@ -33,4 +33,5 @@
 @property int sex;
 
 @property (strong, nonatomic) HZAreaPickerView *locatePicker;
+
 @end

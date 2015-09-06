@@ -45,4 +45,5 @@
 @property NSMutableArray *baseAry;
 @property NSMutableArray *intentionAry;
 @property NSMutableArray *roomAry;
+
 @end

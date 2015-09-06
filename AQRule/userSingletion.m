@@ -27,4 +27,5 @@ static userSingletion *instance = nil;
     }
     return  self;
 }
+
 @end

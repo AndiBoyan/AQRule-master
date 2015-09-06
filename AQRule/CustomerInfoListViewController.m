@@ -199,9 +199,6 @@
              NSLog(@"%@%@%@",self.baseAry,self.intentionAry,self.roomAry);
              [self.customerInfoListTable reloadData];
          }];
-
-
     });
-   
 }
 @end

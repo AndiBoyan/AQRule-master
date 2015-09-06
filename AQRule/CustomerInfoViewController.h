@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 
-@interface CustomerInfoViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface CustomerInfoViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,
+                                                         MFMessageComposeViewControllerDelegate,UIActionSheetDelegate>
 {
     UILabel *infoLab;
     UIButton *infoBtn;
