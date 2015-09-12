@@ -10,12 +10,14 @@
 #import "MainViewController.h"
 #import "LoginViewController.h"
 #import <BaiduMapAPI/BMapKit.h>
+#import "RequestDataParse.h"
+#import "userSingletion.h"
+#import "URLApi.h"
 
 @interface AppDelegate ()<BMKGeneralDelegate>
 
 {
     BMKMapManager* _mapManager;
-    BOOL A;
 }
 @end
 
@@ -24,8 +26,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
 
-    A = NO;
-    _mapManager = [[BMKMapManager alloc]init];
+       _mapManager = [[BMKMapManager alloc]init];
     BOOL ret = [_mapManager start:@"XXG8pSHWP0O34GLaAxY1nuKe" generalDelegate:self];
     
     if (!ret) {
@@ -35,12 +36,15 @@
     
     MainViewController *mainVc = [[MainViewController alloc]init];
     LoginViewController *loginVC = [[LoginViewController alloc]init];
-    if (A) {
-        self.window.rootViewController = mainVc;
+    
+    NSUserDefaults *userDefaultes = [NSUserDefaults standardUserDefaults];
+    NSArray *array = [userDefaultes arrayForKey:@"login"];
+    if (array.count <= 0) {
+        self.window.rootViewController = loginVC;
     }
     else
     {
-        self.window.rootViewController = loginVC;
+        self.window.rootViewController = mainVc;
     }
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

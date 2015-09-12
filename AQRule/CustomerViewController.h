@@ -30,7 +30,9 @@
     NSString *customerTypeChange;//客户类型是否改变
     
     int indexPage;//页码
+    BOOL isFlash;
     NSInteger deleteIndex;
+    UIScrollView *scrView;
 }
 
 @property UITableView *customerTable;

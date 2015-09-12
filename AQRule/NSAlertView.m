@@ -48,8 +48,6 @@
         transition.subtype = kCAGravityTopLeft;
     }
         
-    
-    
     [view.layer addAnimation:transition forKey:nil];
 }
 @end

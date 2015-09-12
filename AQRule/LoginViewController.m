@@ -57,8 +57,22 @@
 
 -(void)initView
 {
+    NSUserDefaults *userDefaultes = [NSUserDefaults standardUserDefaults];
+    NSArray *array = [userDefaultes arrayForKey:@"login"];
+    NSString *name;
+    NSString *pwd;
     
-    UIImageView *logoImgView = [[UIImageView alloc]initWithFrame:CGRectMake(-40+viewWidth/2, 110, 80, 80)];
+    if (array.count <= 0) {
+        name = @"";
+        pwd = @"";
+    }
+    else
+    {
+        
+        name = [array objectAtIndex:0];
+        pwd = [array objectAtIndex:1];
+    }
+    logoImgView = [[UIImageView alloc]initWithFrame:CGRectMake(-40+viewWidth/2, 110, 80, 80)];
     logoImgView.image = [UIImage imageNamed:@"logo"];
     [self.view addSubview:logoImgView];
     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:logoImgView.bounds  byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(10, 10)];
@@ -67,13 +81,13 @@
     maskLayer.path = maskPath.CGPath;
     logoImgView.layer.mask = maskLayer;
     
-    UILabel *logoLab = [[UILabel alloc]initWithFrame:CGRectMake(-40+viewWidth/2, 210, 80, 40)];
+    logoLab = [[UILabel alloc]initWithFrame:CGRectMake(-40+viewWidth/2, 210, 80, 40)];
     logoLab.text = @"易量尺";
     logoLab.textAlignment = NSTextAlignmentCenter;
     logoLab.font = [UIFont systemFontOfSize:16.0f];
     [self.view addSubview:logoLab];
     
-    UIView *phoneview = [[UIView alloc]initWithFrame:CGRectMake(0, 290, viewWidth, 40)];
+    phoneview = [[UIView alloc]initWithFrame:CGRectMake(0, 290, viewWidth, 40)];
     phoneview.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:phoneview];
     
@@ -86,12 +100,13 @@
     self.nameField = [[UITextField alloc]initWithFrame:CGRectMake(80, 5, viewWidth-160, 30)];
     self.nameField.delegate = self;
     self.nameField.tag = 1000;
+    self.nameField.text = name;
     self.nameField.textAlignment = NSTextAlignmentRight;
-    self.nameField.keyboardType = UIKeyboardTypeNamePhonePad;
+    self.nameField.keyboardType = UIKeyboardTypeDefault;
     self.nameField.font = [UIFont systemFontOfSize:14.0f];
     [phoneview addSubview:self.nameField];
     
-    UIView *psdview = [[UIView alloc]initWithFrame:CGRectMake(0, 331, viewWidth, 40)];
+    psdview = [[UIView alloc]initWithFrame:CGRectMake(0, 331, viewWidth, 40)];
     psdview.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:psdview];
     
@@ -104,7 +119,9 @@
     self.pwdField = [[UITextField alloc]initWithFrame:CGRectMake(80, 5, viewWidth-160, 30)];
     self.pwdField.delegate = self;
     self.pwdField.tag = 1001;
+    self.pwdField.text = pwd;
     self.pwdField.secureTextEntry = YES;
+    self.pwdField.returnKeyType = UIReturnKeyDone;
     self.pwdField.textAlignment = NSTextAlignmentRight;
     self.pwdField.font = [UIFont systemFontOfSize:14.0f];
     [psdview addSubview:self.pwdField];
@@ -117,9 +134,9 @@
     [secureButton addTarget:self action:@selector(secureTextEntry) forControlEvents:UIControlEventTouchUpInside];
     [psdview addSubview:secureButton];
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.backgroundColor = [UIColor colorWithRed:103/255.0 green:149/255.0 blue:221/255.0 alpha:1.0];
-    button.frame = CGRectMake(25, 410, viewWidth-50, 40);
+    button.frame = CGRectMake(25, 390, viewWidth-50, 40);
     [button setTitle:@"登录" forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
@@ -137,11 +154,46 @@
     isSecure = !isSecure;
     self.pwdField.secureTextEntry = isSecure;
 }
+#pragma mark 键盘处理
+//开始编辑输入框的时候，软键盘出现，执行此事件
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    int pointY;
+    if (textField == self.nameField) {
+        pointY = 295;
+    }
+    else
+        pointY = 336;
+    int offset = pointY + 100 - (self.view.frame.size.height - 216.0);//键盘高度216
+    
+    NSTimeInterval animationDuration = 0.30f;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    
+    //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
+    if(offset > 0)
+        self.view.frame = CGRectMake(0.0f, -offset, self.view.frame.size.width, self.view.frame.size.height);
+    
+    [UIView commitAnimations];
+}
+
+//当用户按下return键或者按回车键，keyboard消失
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     return YES;
 }
+
+//输入框编辑完成以后，将视图恢复到原始状态
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    NSTimeInterval animationDuration = 0.30f;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    self.view.frame =CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    [UIView commitAnimations];
+}
+
 #pragma mark 用户登录
 
 -(void)login
@@ -178,9 +230,18 @@
                      //登陆成功
                      NSString *Mobile = [JSON objectForKey:@"Mobile"];
                      NSString *RealName = [JSON objectForKey:@"RealName"];
+                     
+                     NSArray *arr = [[NSArray alloc]initWithObjects:Mobile,RealName, nil];
+                     NSUserDefaults *userDefaul = [NSUserDefaults standardUserDefaults];
+                     [userDefaul setObject:arr forKey:@"userInfo"];
+                     
                      userSingletion *user = [userSingletion inituserSingletion];
                      user.name = RealName;
                      user.phone = Mobile;
+                     
+                     NSArray *array = [[NSArray alloc]initWithObjects:self.nameField.text,self.pwdField.text, nil];
+                     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+                     [userDefault setObject:array forKey:@"login"];
                      
                      NSString *AuthCode = [JSON objectForKey:@"AuthCode"];
                      

@@ -153,14 +153,15 @@
     EditSpaceViewController *vc = [[EditSpaceViewController alloc]init];
     vc.UserId =self.UserId;
     vc.ServiceId =self.ServiceId;
-    vc.MeasureType = Measure;
-    vc.measure = [self.tagAry3 objectAtIndex:1];
-    vc.finish = [self.tagAry3 objectAtIndex:2];
+    vc.spaceId = self.spaceId;
+   // vc.MeasureType = Measure;
+   // vc.measure = [self.tagAry3 objectAtIndex:1];
+   // vc.finish = [self.tagAry3 objectAtIndex:2];
     vc.MeasureId = self.MeasureId;
-    vc.modelType = [self.tagAry3 objectAtIndex:3];
-    vc.styleLabStr = [self.tagAry3 objectAtIndex:4];
-    vc.areaLabStr = [self.tagAry3 objectAtIndex:5];
-    vc.procutLabStr = [self.tagAry3 objectAtIndex:6];
+    //vc.modelType = [self.tagAry3 objectAtIndex:3];
+   // vc.styleLabStr = [self.tagAry3 objectAtIndex:4];
+   // vc.areaLabStr = [self.tagAry3 objectAtIndex:5];
+   // vc.procutLabStr = [self.tagAry3 objectAtIndex:6];
     [self presentViewController:vc animated:YES completion:nil];
 }
 -(NSMutableURLRequest*)initializtionRequest

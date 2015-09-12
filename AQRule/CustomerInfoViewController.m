@@ -142,7 +142,7 @@
                img.image = [UIImage imageNamed:@"location.png"];
                [cell.contentView addSubview:img];
                
-               UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(40, 10, 150, 20)];
+               UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(40, 10, self.view.frame.size.width-50, 20)];
                lab.text = [self.customerAry1 objectAtIndex:indexPath.row-1];
                lab.font = [UIFont systemFontOfSize:14.0f];
                lab.textAlignment = NSTextAlignmentLeft;
@@ -221,6 +221,7 @@
     {
         RuleInfoViewController *ruleInfoVC = [[RuleInfoViewController alloc]init];
         ruleInfoVC.MeasureId =[self.customerAry4 objectAtIndex:indexPath.row];
+        ruleInfoVC.spaceId = [self.customerAry5 objectAtIndex:indexPath.row];
         ruleInfoVC.ServiceId = self.ServiceId;
         ruleInfoVC.UserId = self.UserId;
         [self presentViewController:ruleInfoVC animated:YES completion:nil];
@@ -355,8 +356,10 @@
     self.customerAry2 = [[NSMutableArray alloc]init];
     self.customerAry3 = [[NSMutableArray alloc]init];
     self.customerAry4 = [[NSMutableArray alloc]init];
+    self.customerAry5 = [[NSMutableArray alloc]init];
     self.isUpdataAry = [[NSMutableArray alloc]init];
-    
+    [infoLab removeFromSuperview];
+    [infoBtn removeFromSuperview];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         NSMutableURLRequest *request = [self initializtionRequest];
@@ -374,12 +377,14 @@
                  NSString *HouseType = [relist objectForKey:@"SpaceName"];
                  NSString *Style = [relist objectForKey:@"Style"];
                  NSString *MeasureId = [relist objectForKey:@"MeasureId"];
+                 NSString *SpaceId = [relist objectForKey:@"SpaceId"];
                  NSNumber *ISUpload = [relist objectForKey:@"ISUpload"];
                  //NSLog(@"%d",[ISUpload integerValue]);
                  NSString *str = [NSString stringWithFormat:@"%@-%@",HouseType,Style];
                  [self.customerAry2 addObject:CreateDate];
                  [self.customerAry3 addObject:str];
                  [self.customerAry4 addObject:MeasureId];
+                 [self.customerAry5 addObject:SpaceId];
                  [self.isUpdataAry addObject:ISUpload];
              }
              if(self.customerAry2.count <= 0)
@@ -398,8 +403,7 @@
                  
                  return;
              }
-             [infoLab removeFromSuperview];
-             [infoBtn removeFromSuperview];
+
              [self.customerTable reloadData];
          }];
     });

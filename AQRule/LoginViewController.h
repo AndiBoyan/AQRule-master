@@ -13,6 +13,12 @@
     float viewWidth;
     float viewHeight;
     BOOL isSecure;
+    
+    UIImageView *logoImgView;
+    UILabel *logoLab;
+    UIView *phoneview;
+    UIView *psdview;
+    UIButton *button;
 }
 @property UITextField *nameField;
 @property UITextField *pwdField;

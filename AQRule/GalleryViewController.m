@@ -14,6 +14,7 @@
 @interface GalleryViewController ()<JSGridViewDataSource, JSGridViewDelegate> {
     NSArray *_images;
     float cellImageWidth;
+    NSArray *name;
 }
 @end
 
@@ -37,17 +38,29 @@
     _loadCount = 11;
     _isLoading = NO;
     _images = [[NSArray alloc] initWithObjects:
-               [UIImage imageNamed:@"0.jpeg"],
-               [UIImage imageNamed:@"1.jpeg"],
-               [UIImage imageNamed:@"2.jpeg"],
-               [UIImage imageNamed:@"3.jpeg"],
-               [UIImage imageNamed:@"4.jpeg"],
-               [UIImage imageNamed:@"5.jpeg"],
-               [UIImage imageNamed:@"6.jpeg"],
-               [UIImage imageNamed:@"7.jpeg"],
-               [UIImage imageNamed:@"8.jpeg"],
-               [UIImage imageNamed:@"9.jpeg"],
-               [UIImage imageNamed:@"10.jpeg"], nil];
+               [UIImage imageNamed:@"粉色公主房.jpg"],
+               [UIImage imageNamed:@"粉色系现代厨房.jpg"],
+               [UIImage imageNamed:@"黑白调.jpg"],
+               [UIImage imageNamed:@"简约黄白.jpg"],
+               [UIImage imageNamed:@"精装现代卧室.jpg"],
+               [UIImage imageNamed:@"卡布其诺.jpg"],
+               [UIImage imageNamed:@"蓝色静谧.jpg"],
+               [UIImage imageNamed:@"蓝天白云.jpg"],
+               [UIImage imageNamed:@"美式厨风.jpg"],
+               [UIImage imageNamed:@"品味现代.jpg"],
+               [UIImage imageNamed:@"秋之白华.jpg"],
+               [UIImage imageNamed:@"少女情怀.jpg"],
+               //[UIImage imageNamed:@"现代绿色 吧台 厨房.jpg"],
+               //[UIImage imageNamed:@"现代生活.jpg"],
+               //[UIImage imageNamed:@"悠闲生活.jpg"],
+               [UIImage imageNamed:@"中灰色调.jpg"],
+               [UIImage imageNamed:@"中庸之道.jpg"],
+               nil];
+    name = [[NSArray alloc]initWithObjects:@"粉色公主房",@"粉色系现代厨房",@"黑白调",@"简约黄白",@"精装现代卧室",@"卡布其诺",@"蓝色静谧",@"蓝天白云",@"美式厨风",@"品味现代",@"秋之白华",@"少女情怀",
+            //@"现代绿色 吧台 厨房",
+           // @"现代生活",
+           // @"悠闲生活",
+            @"中灰色调",@"中庸之道", nil];
     [self addTableViewData];
 }
 
@@ -117,7 +130,7 @@
 - (void)gridView:(JSGridView *)gridView scrolledToEdge:(JSGridViewEdge)edge {
     if (edge == JSGridViewEdgeBottom) {
         //        _isLoading = YES;
-        [self addTableViewData];
+        //[self addTableViewData];
     }
 }
 - (JSGridViewCell *)gridView:(JSGridView *)gridView viewForRow:(NSInteger)row column:(NSInteger)column {
@@ -147,15 +160,16 @@
     float height = [[oneDic objectForKey:@"usingHeight"] floatValue];
     imageView.frame = CGRectMake(5, 5, cellImageWidth, height);
     NSInteger i = (row*2+column)%[_images count];
-    if (row*2+column == _images.count) {
-        i =0;
-    }
+    /*if (row*2+column == _images.count) {
+        i =_images.count-1;
+    }*/
     imageView.image = [_images objectAtIndex:i];
     
     UILabel *lab = (UILabel*)[cell viewWithTag:60];
     lab.frame = CGRectMake(5, height-25, cellImageWidth, 30);
     lab.textAlignment = NSTextAlignmentCenter ;
-    lab.text = [NSString stringWithFormat:@"%ld",(long)i];
+    lab.font = [UIFont systemFontOfSize:10.0f];
+    lab.text = [name objectAtIndex:i];
     
     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:lab.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(5, 5)];
     CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
@@ -172,7 +186,10 @@
 
     [self.view addSubview:examineView];
     examineView.backgroundColor = [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.0f];
-    UIImage *image = [_images objectAtIndex:(gridViewCell.row*2+gridViewCell.column)%11];
+    UIImage *image = [_images objectAtIndex:(gridViewCell.row*2+gridViewCell.column)%(_images.count)];
+    if (gridViewCell.row*2+gridViewCell.column == _images.count) {
+        image = [_images objectAtIndex:_images.count-1];
+    }
     float w = self.view.frame.size.width-40;
     float h = (w*image.size.height)/image.size.width;
     
@@ -205,4 +222,8 @@
                          [examineView removeFromSuperview];
                      }];
 }
+
+/*
+ http://oppein.3weijia.com/oppein.axds?Params={"authCode":"pdBcFCMd%2FhDHg35Ng2rQP0XIPlS41Shj3c43Qspi8DngGEhVFljYARtivajLMruUE9rEu8pmpkY7LbQ6V63Z5C6XaIYvKT1bJ59Qd2ifWogbMAYX6C6NulnW8ed6oF2301prbC%2BomUKBlk5av4c8qgvFa1za%2FQ3HB02gJhEPmjA%3D"}&Command=Customer/AddCommunicateInfo
+ */
 @end

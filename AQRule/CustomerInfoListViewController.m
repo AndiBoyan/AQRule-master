@@ -147,9 +147,8 @@
              NSDictionary *JSON = [dic objectForKey:@"JSON"];
              NSDictionary *CustomeInfo = [JSON objectForKey:@"CustomeInfo"];
              name = [CustomeInfo objectForKey:@"CustomerName"];
-             NSLog(@"name=%@",name);
              [self.baseAry addObject:name];
-             NSLog(@"base = %@",self.baseAry);
+             
              phone1 = [CustomeInfo objectForKey:@"Mobile"];
              [self.baseAry addObject:phone1];
              phone2 = [CustomeInfo objectForKey:@"NMobile"];
@@ -161,42 +160,59 @@
              [self.baseAry addObject:email];
              qq = [CustomerService objectForKey:@"QQ"];
              [self.baseAry addObject:qq];
-             addr = [CustomeInfo objectForKey:@"Address"];
+             
+             NSString *Province = [CustomeInfo objectForKey:@"Province"];
+             NSString *City = [CustomeInfo objectForKey:@"City"];
+             NSString *CArea = [CustomeInfo objectForKey:@"CArea"];
+             NSString *Address = [CustomeInfo objectForKey:@"Address"];
+             
+             addr = [NSString stringWithFormat:@"%@%@%@%@",Province,City,CArea,Address];
              [self.baseAry addObject:addr];
+             
+             customerSource = [CustomerService objectForKey:@"CustomerSource"];
+             [self.intentionAry addObject:customerSource];
              
              customerType = [CustomerService objectForKey:@"CustomerType"];
              [self.intentionAry addObject:customerType];
-             customerSource = [CustomerService objectForKey:@"CustomerSource"];
-             [self.intentionAry addObject:customerSource];
-             shoppingGuide = [CustomerService objectForKey:@"FollowPerson"];
+           
+             shoppingGuide = [CustomerService objectForKey:@"SalesPerson"];
              [self.intentionAry addObject:shoppingGuide];
              
              designer = [CustomerService objectForKey:@"Designer"];
              [self.intentionAry addObject:designer];
+             
              decDesigner = [CustomerService objectForKey:@"AllianceDesigner"];
              [self.intentionAry addObject:decDesigner];
-             salesman = [CustomerService objectForKey:@"SalesPerson"];
+             
+             salesman = [CustomerService objectForKey:@"Promoter"];
              [self.intentionAry addObject:salesman];
-             budgetCoust = @"111";//[CustomerService objectForKey:@"Budget"];
+             
+             NSNumber *Budget = [CustomerService objectForKey:@"Budget"];
+             budgetCoust = [NSString stringWithFormat:@"%.1f",[Budget floatValue]];
              [self.intentionAry addObject:budgetCoust];
              
              budgetTime = @"";//[CustomerService objectForKey:@"MeasueTime"];
              [self.intentionAry addObject:budgetTime];
-             budgetProducts = @"";
+             budgetProducts = [CustomerService objectForKey:@"BuyWill"];
              [self.intentionAry addObject:budgetProducts];
+             
              
              roomType = [CustomerService objectForKey:@"HouseType"];
              [self.roomAry addObject:roomType];
+             
              roomApart = [CustomerService objectForKey:@"RoomType"];
              [self.roomAry addObject:roomApart];
-             price = @"111";//[CustomerService objectForKey:@"SquarePrice"];
+             
+             NSNumber *p = [CustomerService objectForKey:@"SquarePrice"];
+             price = [NSString stringWithFormat:@"%.1f",[p floatValue]];
              [self.roomAry addObject:price];
-             deliveryTime = @"";//[CustomerService objectForKey:@"HaveContractTime"];
+             
+             deliveryTime = @"";//[CustomerService objectForKey:@"GetHouseTime"];
              [self.roomAry addObject:deliveryTime];
+             
              property = [CustomerService objectForKey:@"HousesName"];
              [self.roomAry addObject:property];
              
-             NSLog(@"%@%@%@",self.baseAry,self.intentionAry,self.roomAry);
              [self.customerInfoListTable reloadData];
          }];
     });

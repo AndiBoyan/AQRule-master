@@ -13,5 +13,6 @@
 @property NSString *MeasureId;
 @property NSString *ServiceId;
 @property NSString *UserId;
+@property NSString *spaceId;
 
 @end

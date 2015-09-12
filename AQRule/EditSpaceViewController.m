@@ -59,6 +59,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     
     NSMutableArray *spaceMutableAry;
     NSInteger spaceIndex;
+    NSMutableArray *modelUpdataAry;
 }
 @property NSArray *addSpaceAry1;
 @property NSArray *addSpaceAry2;
@@ -86,7 +87,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     [self initNavigation];
     
     self.addSpaceAry1 = [[NSArray alloc]initWithObjects:@"量尺类型",@"量尺时间",@"预计完成时间", nil];
-    self.addSpaceAry2 = [[NSArray alloc]initWithObjects:@"空间",@"风格",@"面积(m2)",@"材料",@"布局",@"预购产品线", nil];
+    self.addSpaceAry2 = [[NSArray alloc]initWithObjects:@"空间",@"户型",@"预算",@"风格",@"面积(m2)",@"材料",@"布局",@"预购产品线", nil];
     self.addSpaceDateAry = [RequestDataParse weekAry1];
     self.addSpaceHourAry = [RequestDataParse hourAry];
     self.addSpaceMinAry = [RequestDataParse minAry];
@@ -122,6 +123,8 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     [btn2 addTarget:self action:@selector(dateChoose:) forControlEvents:UIControlEventTouchUpInside];
     [self.dateView addSubview:btn2];
     
+    [self analyseRequestData];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -139,7 +142,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
     [navigationItem setTitle:@"编辑空间"];
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"back.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"上传" style:UIBarButtonItemStylePlain target:self action:@selector(save)];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(save)];
     rightButton.tintColor = [UIColor blackColor];
     navigationItem.leftBarButtonItem = leftButton;
     navigationItem.rightBarButtonItem = rightButton;
@@ -166,6 +169,13 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
             [self dismissViewControllerAnimated:YES completion:nil];
         }
     }
+    else
+    {
+        if (buttonIndex == 1) {
+            UITextField *tf=[alertView textFieldAtIndex:0];
+            self.budgetLab.text = tf.text;
+        }
+    }
 }
 
 
@@ -173,14 +183,6 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 
 -(void)save
 {
-    if ((spaceMutableAry.count<=0)||(self.finish.length<=0)
-        ||(self.spaceLab.text.length <= 0)||(self.measure.length<=0)
-        ||(self.areaLab.text.length<=0)||(self.styleLab.text.length<=0)
-        ||(self.materialLab.text.length<=0)||(self.layoutLab.text.length<=0)) {
-        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"提示" message:@"您提交的信息不完整，请完善后再上传空间信息" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alert show];
-        return;
-    }
     NSString *string = @"";
     for (int i = 0; i < spaceMutableAry.count; i++) {
         string = [NSString stringWithFormat:@"%@%@",string,[spaceMutableAry objectAtIndex:i]];
@@ -189,7 +191,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     NSString *code = [URLApi initCode];
     
     code = [RequestDataParse encodeToPercentEscapeString:code];
-    NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\":%d,\"ContrlContentList\":{%@},\"RoomType\":\"两房一厅\",\"FinishTime\":\"%@\",\"SpaceName\":\"%@\",\"MeasureTime\": \"%@\",\"BuyWill\": \"Bedding\",\"Area\": \"%@\",\"Style\":\"%@\",\"ServiceId\":\"%@\",\"UserId\": \"%@\",\"SpaceId\":\"%@\",\"Budget\":58899,\"Material\":\"%@\",\"Layout\":\"%@\"}}&Command=MeasureSpace/EditMeasureInfo",code,self.MeasureType,string,self.finish,self.spaceLab.text,self.areaLab.text,self.styleLab.text,self.measure,self.ServiceId,self.UserId,self.MeasureId,self.materialLab.text,self.layoutLab.text];
+    NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\":%d,\"ContrlContentList\":{%@},\"RoomType\":\"%@\",\"FinishTime\":\"%@\",\"SpaceName\":\"%@\",\"MeasureTime\": \"%@\",\"BuyWill\": \"Bedding\",\"Area\": \"%@\",\"Style\":\"%@\",\"ServiceId\":\"%@\",\"UserId\": \"%@\",\"SpaceId\":\"%@\",\"Budget\":%d,\"Material\":\"%@\",\"Layout\":\"%@\"}}&Command=MeasureSpace/EditMeasureInfo",code,self.MeasureType,string,self.houseLab.text,self.finish,self.spaceLab.text,self.measure,self.areaLab.text,self.styleLab.text,self.ServiceId,self.UserId,self.spaceId,self.budgetLab.text.intValue,self.materialLab.text,self.layoutLab.text];
     str = [str stringByReplacingOccurrencesOfString:@"{," withString:@"{"];
     
     NSLog(@"%@",str);
@@ -224,6 +226,20 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     [spaceModelData replaceObjectAtIndex:textField.tag withObject:textField.text];
+    
+    if (spaceIndex == 0) {
+        [modelUpdataAry replaceObjectAtIndex:textField.tag withObject:textField.text];
+    }
+    else
+    {
+        int count=0;
+        for (int i = 0; i < spaceIndex; i++) {
+            NSString *countStr = [spaceModelAllDataCount objectAtIndex:i];
+            count += countStr.intValue;
+        }
+        [modelUpdataAry replaceObjectAtIndex:textField.tag+count withObject:textField.text];
+    }
+
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -231,11 +247,11 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     return YES;
 }
 
-
 - (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId {
     if([groupId isEqualToString:@"CustomName"])
     {
         self.modelType = radio.titleLabel.text;
+        return;
     }
     //@"Style"
     else if ([groupId isEqualToString:@"Style"])
@@ -259,7 +275,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
         return;
     }
     else if (radio.tag == 1001) {
-        if ([radio.titleLabel.text isEqualToString:@"单尺"]) {
+        if ([radio.titleLabel.text isEqualToString:@"初尺"]) {
             self.MeasureType = 0;
         }
         else
@@ -273,7 +289,23 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
         
         return;
     }
+    if (radio.titleLabel.text == nil) {
+        return;
+    }
     [spaceModelData replaceObjectAtIndex:radio.tag withObject:radio.titleLabel.text];
+    
+    if (spaceIndex == 0) {
+        [modelUpdataAry replaceObjectAtIndex:radio.tag withObject:radio.titleLabel.text];
+    }
+    else
+    {
+        int count=0;
+        for (int i = 0; i < spaceIndex; i++) {
+            NSString *countStr = [spaceModelAllDataCount objectAtIndex:i];
+            count += countStr.intValue;
+        }
+        [modelUpdataAry replaceObjectAtIndex:radio.tag+count withObject:radio.titleLabel.text];
+    }
 }
 
 - (void)didSelectedCheckBox:(QCheckBox *)checkbox checked:(BOOL)checked {
@@ -293,6 +325,11 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
         {
             str = [str stringByReplacingOccurrencesOfString:checkbox.titleLabel.text withString:@""];
             str = [str stringByReplacingOccurrencesOfString:@";;" withString:@""];
+            if (str.length>=1) {
+                if ([[str substringToIndex:1]isEqualToString:@";"]) {
+                    str = [str substringFromIndex:1];
+                }
+            }
         }
         self.procutLab.text = str;
         return;
@@ -309,6 +346,19 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                 str = [NSString stringWithFormat:@"%@;%@",str,checkbox.titleLabel.text];
             }
             [spaceModelData replaceObjectAtIndex:checkbox.tag withObject:str];
+            if (spaceIndex == 0) {
+                [modelUpdataAry replaceObjectAtIndex:checkbox.tag withObject:str];
+            }
+            else
+            {
+                int count=0;
+                for (int i = 0; i < spaceIndex; i++) {
+                    NSString *countStr = [spaceModelAllDataCount objectAtIndex:i];
+                    count += countStr.intValue;
+                }
+                [modelUpdataAry replaceObjectAtIndex:checkbox.tag+count withObject:str];
+            }
+
         }
         else
         {
@@ -323,12 +373,24 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
             }
             
             [spaceModelData replaceObjectAtIndex:checkbox.tag withObject:str];
+            if (spaceIndex == 0) {
+                [modelUpdataAry replaceObjectAtIndex:checkbox.tag withObject:str];
+            }
+            else
+            {
+                int count=0;
+                for (int i = 0; i < spaceIndex; i++) {
+                    NSString *countStr = [spaceModelAllDataCount objectAtIndex:i];
+                    count += countStr.intValue;
+                }
+                [modelUpdataAry replaceObjectAtIndex:checkbox.tag+count withObject:str];
+            }
         }
     }
 }
 
 
--(void)radioView:(NSArray *)radioAry groupID:(NSString*)groupID title:(NSString*)title
+-(void)radioView:(NSArray *)radioAry groupID:(NSString*)groupID title:(NSString*)title select:(NSString*)select
 {
     spaceRadioView = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
     spaceRadioView.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
@@ -363,8 +425,8 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
         [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_radio1.titleLabel setFont:[UIFont systemFontOfSize:12.0f]];
         [radioView addSubview:_radio1];
-        if (i == 0) {
-            [_radio1 setChecked:YES];
+        if ([select isEqualToString:_radio1.titleLabel.text]) {
+            _radio1.checked = YES;
         }
     }
     float buttonH = fristH+15*(radioAry.count)-10;
@@ -384,6 +446,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 
 -(void)checkView:(NSArray *)checkAry tag:(int)tag
 {
+    NSArray *array = [self StringToArray:self.procutLab.text];
     spaceRadioView = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
     spaceRadioView.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
     [self.view addSubview:spaceRadioView];
@@ -410,6 +473,11 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
         [_check1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_check1.titleLabel setFont:[UIFont systemFontOfSize:13.0f]];
         [checkView addSubview:_check1];
+        for (int i = 0; i < array.count; i++) {
+            if ([_check1.titleLabel.text isEqualToString:[array objectAtIndex:i]]) {
+                _check1.selected = YES;
+            }
+        }
     }
     float buttonH = fristH+30*(checkAry.count)-10;
     
@@ -445,7 +513,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
         if ([key isEqualToString:self.modelType]) {
             value = [modelDic objectForKey:key];
             SpaceId = value;
-            [self analyseModelData:value];
+            //[self analyseModelData:value];
         }
     }
     [spaceRadioView removeFromSuperview];
@@ -552,6 +620,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     else
         return 1;
 }
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == addingSpaceTable) {
@@ -594,12 +663,18 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                     QRadioButton *_radio2 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
                     _radio2.frame = CGRectMake(self.view.frame.size.width-120, 5, 50, 30);
                     _radio2.tag = 1001;
-                    [_radio2 setTitle:@"单尺" forState:UIControlStateNormal];
+                    [_radio2 setTitle:@"初尺" forState:UIControlStateNormal];
                     [_radio2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                     [_radio2.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
                     [cell.contentView addSubview:_radio2];
-                    [_radio1 setChecked:YES];
-                    
+                    NSLog(@"%d",self.MeasureType);
+                    if ( self.MeasureType == 1) {
+                       [_radio1 setChecked:YES];
+                    }
+                    else
+                    {
+                        [_radio2 setChecked:YES];
+                    }
                 }
                 else if(indexPath.row == 1)
                 {
@@ -622,8 +697,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                     {
                         self.finishLab.text = @"未设置";
                     }
-                    else
-                    {
+                    else{
                         self.finishLab.text = self.finish;
                     }
                     self.finishLab.font = [UIFont systemFontOfSize:14.0f];
@@ -643,13 +717,29 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                 }
                 else if (indexPath.row == 1)
                 {
+                    self.houseLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
+                    self.houseLab.textAlignment = NSTextAlignmentRight;
+                    self.houseLab.font = [UIFont systemFontOfSize:14.0f];
+                    self.houseLab.text = self.houseLabStr;
+                    [cell.contentView addSubview:self.houseLab];
+                }
+                else if (indexPath.row == 2)
+                {
+                    self.budgetLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
+                    self.budgetLab.textAlignment = NSTextAlignmentRight;
+                    self.budgetLab.font = [UIFont systemFontOfSize:14.0f];
+                    self.budgetLab.text = self.budgetLabStr;
+                    [cell.contentView addSubview:self.budgetLab];
+                }
+                else if (indexPath.row == 3)
+                {
                     self.styleLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.styleLab.textAlignment = NSTextAlignmentRight;
                     self.styleLab.font = [UIFont systemFontOfSize:14.0f];
                     self.styleLab.text = self.styleLabStr;
                     [cell.contentView addSubview:self.styleLab];
                 }
-                else if (indexPath.row == 2)
+                else if (indexPath.row == 4)
                 {
                     self.areaLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.areaLab.textAlignment = NSTextAlignmentRight;
@@ -657,21 +747,23 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                     self.areaLab.text = self.areaLabStr;
                     [cell.contentView addSubview:self.areaLab];
                 }
-                else if (indexPath.row == 3)
+                else if (indexPath.row == 5)
                 {
                     self.materialLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.materialLab.textAlignment = NSTextAlignmentRight;
                     self.materialLab.font = [UIFont systemFontOfSize:14.0f];
+                    self.materialLab.text = self.materialStr;
                     [cell.contentView addSubview:self.materialLab];
                 }
-                else if (indexPath.row == 4)
+                else if (indexPath.row == 6)
                 {
                     self.layoutLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.layoutLab.textAlignment = NSTextAlignmentRight;
                     self.layoutLab.font = [UIFont systemFontOfSize:14.0f];
+                    self.layoutLab.text = self.layoutStr;
                     [cell.contentView addSubview:self.layoutLab];
                 }
-                else if (indexPath.row == 5)
+                else if (indexPath.row == 7)
                 {
                     self.procutLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.procutLab.textAlignment = NSTextAlignmentRight;
@@ -718,10 +810,27 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                 }
                 
                 if (indexPath.row == i) {
+                    int count = 0;
+                    int index = 0;
+                    
+                    NSMutableArray *arr = [[NSMutableArray alloc]init];
+                    
+                    for (int i = 0; i <= spaceIndex; i++) {
+                        NSString *countStr= [spaceModelAllDataCount objectAtIndex:i];
+                        index = count;
+                        count += countStr.intValue;
+                    }
+                    
+                    for (int i = index; i <  count; i++) {
+                        [arr addObject:[modelUpdataAry objectAtIndex:i]];
+                    }
+                   
                     if ([[spaceModelDatas objectAtIndex:indexPath.row] isEqualToString:@"text;"]) {
                         UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(self.view.frame.size.width-190, 7.5, 145, 25)];
                         field.tag = indexPath.row;
                         field.delegate = self;
+                        field.font = [UIFont systemFontOfSize:12.0f];
+                        field.text = [arr objectAtIndex:indexPath.row];
                         field.borderStyle = UITextBorderStyleRoundedRect;
                         [cell.contentView addSubview:field];
                     }
@@ -742,6 +851,9 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                         [ary addObject:[string substringFromIndex:j]];
                         NSInteger count = ary.count;
                         
+                        if (count >= 5) {
+                            count = 4;
+                        }
                         for (int i = 0; i < count; i++) {
                             QCheckBox *_check1 = [[QCheckBox alloc] initWithDelegate:self];
                             _check1.tag = indexPath.row;
@@ -750,6 +862,14 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                             [_check1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                             [_check1.titleLabel setFont:[UIFont boldSystemFontOfSize:10.0f]];
                             [cell.contentView addSubview:_check1];
+                            
+                            NSArray *arrayCheck = [self StringToArray:[arr objectAtIndex:indexPath.row]];
+                            for (int i = 0; i < arrayCheck.count; i++) {
+                                if ([_check1.titleLabel.text isEqualToString:[arrayCheck objectAtIndex:i]]) {
+                                    _check1.selected = YES;
+                                }
+                            }
+
                         }
                     }
                     else
@@ -822,29 +942,47 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
             if (indexPath.row == 0) {
                 //空间
                 isReflash = YES;
-                //[self analyseModelListData];
+               // [self analyseModelListData];
             }
-            else if (indexPath.row == 1)
+            else if (indexPath.row ==1)
+            {
+                //户型
+                [self analyseHouseData];
+            }
+            else if (indexPath.row ==2)
+            {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"客户预算" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+                alert.tag = 999;
+                [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+                UITextField * txt = [[UITextField alloc] init];
+                txt.backgroundColor = [UIColor whiteColor];
+                txt.keyboardType = UIKeyboardTypePhonePad;
+                txt.frame = CGRectMake(alert.center.x+65,alert.center.y+48, 150,23);
+                [alert addSubview:txt];
+                [alert show];
+
+            }
+            else if (indexPath.row == 3)
             {
                 //风格
                 [self analyseRoomStyleData];
             }
-            else if (indexPath.row == 2)
+            else if (indexPath.row == 4)
             {
                 //面积
                 [self analyseRoomAreasData];
             }
-            else if (indexPath.row == 3)
+            else if (indexPath.row == 5)
             {
                 //材料
                 [self analyseRoomMaterialsData];
             }
-            else if (indexPath.row == 4)
+            else if (indexPath.row == 6)
             {
                 //布局
                 [self analyseRoomLayoutsData];
             }
-            else if (indexPath.row == 5)
+            else if (indexPath.row == 7)
             {
                 //预购产品线
                 [self analyseProductLineData];
@@ -867,9 +1005,201 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
         
     }
 }
+-(NSMutableArray*)StringToArray:(NSString*)string
+{
+    if (string == nil) {
+        return nil;
+    }
+    NSMutableArray *ary = [[NSMutableArray alloc]init];
+    NSInteger length = string.length;
+    int j = 0;
+    for (int i = 0; i < length; i++) {
+        NSString *str = [string substringWithRange:NSMakeRange(i, 1)];
+        if ([str isEqualToString:@";"]) {
+            [ary addObject:[string substringWithRange:NSMakeRange(j, i-j)]];
+            j = i+1;
+        }
+    }
+    [ary addObject:[string substringFromIndex:j]];
+    return ary;
+}
 
 
 #pragma mark 网络请求以及数据解析
+#pragma mark 户型
+-(void)analyseHouseData
+{
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSMutableURLRequest *request = [self getRoomStyle];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+         {
+             NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             
+             str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+             
+             NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
+             
+             NSDictionary *JSON = [dic objectForKey:@"JSON"];
+             NSArray *Style = [JSON objectForKey:@"HouseType"];
+             NSLog(@"%@",Style);
+             [self radioView:Style groupID:@"HouseType" title:@"户型" select:self.styleLab.text];
+         }];
+    });
+}
+
+#pragma mark 获取空间模板信息
+
+-(NSMutableURLRequest*)initializtionRequest
+{
+    NSURL *url = [NSURL URLWithString:[URLApi initURL]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"POST";
+    
+    NSString *code = [URLApi initCode];
+    
+    
+    code = [RequestDataParse encodeToPercentEscapeString:code];
+    
+    
+    NSString *string = [NSString stringWithFormat:
+                        @"Params={\"authCode\":\"%@\",\"MeasureId\":\"%@\"}&Command=MeasureSpace/GetMeasureInfo",code,self.MeasureId];
+    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    
+    NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:loginData];
+    return request;
+}
+-(void)analyseRequestData
+{
+    self.spaceModel = [[NSMutableArray alloc]init];
+    
+    spaceModelAllData = [[NSMutableArray alloc]init];
+    spaceModelAllDataCount = [[NSMutableArray alloc]init];
+    spaceModelIDs = [[NSMutableArray alloc]init];
+    spaceModelFormats = [[NSMutableArray alloc]init];
+    modelUpdataAry = [[NSMutableArray alloc]init];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSMutableURLRequest *request = [self initializtionRequest];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+         {
+             NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             NSLog(@"%@",[RequestDataParse newJsonStr:str]);
+             NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
+             NSDictionary *JSON = [dic objectForKey:@"JSON"];
+             NSNumber *MeasureType = [JSON objectForKey:@"MeasureType"];
+             NSInteger type = [MeasureType integerValue];
+             if (type == 0) {
+                 self.MeasureType = 0;
+             }
+             else
+             {
+                 self.MeasureType = 1;
+             }
+             self.measure = [JSON objectForKey:@"MeasureTime"];
+             self.finish = [JSON objectForKey:@"FinishTime"];
+             
+             self.modelType = [JSON objectForKey:@"SpaceName"];
+             self.styleLabStr = [JSON objectForKey:@"Style"];
+             self.areaLabStr = [JSON objectForKey:@"Area"];
+             self.materialStr = [JSON objectForKey:@"Material"];
+             self.layoutStr = [JSON objectForKey:@"Layout"];
+             self.procutLabStr = [JSON objectForKey:@"BuyWill"];
+             NSNumber *budget = [JSON objectForKey:@"Budget"];
+             self.budgetLabStr = [NSString stringWithFormat:@"%.1f",[budget floatValue]];
+             self.houseLabStr = [JSON objectForKey:@"RoomType"];
+             NSArray *FileList = [JSON objectForKey:@"FileList"];
+             for (id filelist in FileList) {
+                 NSString *FileFullPath = [filelist objectForKey:@"FileFullPath"];
+                 NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://oppein.3weijia.com%@",FileFullPath]];
+                 NSData *resultData = [NSData dataWithContentsOfURL:url];
+                 
+                 UIImage *img = [UIImage imageWithData:resultData];
+                 if (img) {
+                     [_images addObject:img];
+                 }
+             }
+             
+             NSDictionary *AppCustomModel = [JSON objectForKey:@"AppCustomModel"];
+             NSArray *ContrlInfos = [AppCustomModel objectForKey:@"ContrlInfos"];
+             int count;
+             for (id ContrlInfo in ContrlInfos) {
+                 count = 0;
+                 NSString *GroupName = [ContrlInfo objectForKey:@"GroupName"];
+                 [self.spaceModel addObject:GroupName];
+                 NSArray *ContrlContainers = [ContrlInfo objectForKey:@"ContrlContainer"];
+                
+                 for (id ContrlContainer in ContrlContainers) {
+                    
+                     NSString *Text = [ContrlContainer objectForKey:@"Text"];
+                     NSString *ControlType = [ContrlContainer objectForKey:@"ControlType"];
+                     NSString *DefaultValue = [ContrlContainer objectForKey:@"DefaultValue"];
+                     NSString *Id = [ContrlContainer objectForKey:@"Id"];
+                     [spaceModelFormats addObject:Text];
+                     [spaceModelIDs addObject:Id];
+                     [spaceModelAllData addObject:[NSString stringWithFormat:@"%@;%@",ControlType,DefaultValue]];
+                    // [modelUpdataAry addObject:DefaultValue];
+                     count++;
+                 }
+                 [spaceModelAllDataCount addObject:[NSString stringWithFormat:@"%d",count]];
+             }
+             NSDictionary *ContrlContentList = [JSON objectForKey:@"ContrlContentList"];
+             NSArray *keys;
+             keys = [ContrlContentList allKeys];
+             for (int i = 0; i < keys.count; i++) {
+                 id key = [keys objectAtIndex:i];
+                 [modelUpdataAry addObject:[ContrlContentList objectForKey:key]];
+             }
+             NSLog(@"%@",modelUpdataAry);
+             for (int i = 0; i < self.spaceModel.count; i++) {
+                 
+                 spaceModelFormat = [[NSMutableArray alloc]init];
+                 spaceModelDatas = [[NSMutableArray alloc]init];
+                 spaceModelID = [[NSMutableArray alloc]init];
+                 
+                 int count = 0;
+                 int index = 0;
+                 
+                 for (int k = 0; k <= i; k++) {
+                     NSString *countStr= [spaceModelAllDataCount objectAtIndex:k];
+                     index = count;
+                     count += countStr.intValue;
+                 }
+                 
+                 for (int i = index; i <  count; i++) {
+                     [spaceModelFormat addObject:[spaceModelFormats objectAtIndex:i]];
+                     [spaceModelDatas addObject:[spaceModelAllData objectAtIndex:i]];
+                     [spaceModelID addObject:[spaceModelIDs objectAtIndex:i]];
+                }
+                 if (spaceMutableAry.count <= 0) {
+                     for (int i = index; i <  count; i++) {
+                         [spaceMutableAry addObject:@""];
+                     }
+                 }
+                 upDatasSring = @"";
+                 for (int j = 0; j < spaceModelFormat.count; j++) {
+                     if ([[spaceModelDatas objectAtIndex:i]isEqualToString:@"text;"]) {
+                         upDatasSring = [NSString stringWithFormat:@"%@,\"txt_%@\":\"%@\"",upDatasSring,[spaceModelID objectAtIndex:j],[spaceModelData objectAtIndex:j]];
+                     }
+                     else
+                     {
+                         upDatasSring = [NSString stringWithFormat:@"%@,\"rdo_%@\":\"%@\"",upDatasSring,[spaceModelID objectAtIndex:j],[spaceModelData objectAtIndex:j]];
+                     }
+                     
+                 }
+                 [spaceMutableAry replaceObjectAtIndex:i withObject:upDatasSring ];
+             }
+             [addingSpaceTable reloadData];
+         }];
+    });
+}
 
 #pragma mark 获取空间模板列表
 /*
@@ -937,7 +1267,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                  [radioAry addObject:CustomName];
                  [modelDic setObject:ModelId forKey:CustomName];
              }
-             [self radioView:radioAry groupID:@"CustomName" title:@"空间模板"];
+             [self radioView:radioAry groupID:@"CustomName" title:@"空间模板" select:self.spaceLab.text];
          }];
     });
 }
@@ -1014,7 +1344,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
  */
 //网络请求
 
--(NSMutableURLRequest*)getCustomModel:(NSString*)model
+/*-(NSMutableURLRequest*)getCustomModel:(NSString*)model
 {
     NSURL *url = [NSURL URLWithString:[URLApi initURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -1047,7 +1377,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     spaceModelAllDataCount = [[NSMutableArray alloc]init];
     spaceModelIDs = [[NSMutableArray alloc]init];
     spaceModelFormats = [[NSMutableArray alloc]init];
-    
+    modelUpdataAry = [[NSMutableArray alloc]init];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -1078,6 +1408,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
                      [spaceModelFormats addObject:Text];
                      [spaceModelIDs addObject:Id];
                      [spaceModelAllData addObject:[NSString stringWithFormat:@"%@;%@",ControlType,DefaultValue]];
+                     [modelUpdataAry addObject:@""];
                      count++;
                  }
                  [spaceModelAllDataCount addObject:[NSString stringWithFormat:@"%d",count]];
@@ -1087,7 +1418,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     });
     
 }
-
+*/
 #pragma mark 获取空间风格
 /*
  方法描述：获取空间模板
@@ -1142,7 +1473,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
              NSDictionary *JSON = [dic objectForKey:@"JSON"];
              NSArray *Style = [JSON objectForKey:@"Style"];
              NSLog(@"%@",Style);
-             [self radioView:Style groupID:@"Style" title:@"风格"];
+             [self radioView:Style groupID:@"Style" title:@"风格" select:self.styleLab.text];
          }];
     });
 }
@@ -1203,8 +1534,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
              {
                  if ([[type objectForKey:@"RoomName"]isEqualToString:self.modelType]) {
                      NSArray *array = [type objectForKey:@"Areas"];
-                     NSLog(@"%@",array);
-                     [self radioView:array groupID:@"array" title:@"面积"];
+                     [self radioView:array groupID:@"array" title:@"面积" select:self.areaLab.text];
                  }
              }
          }];
@@ -1266,8 +1596,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
              {
                  if ([[type objectForKey:@"RoomName"]isEqualToString:self.modelType]) {
                      NSArray *array = [type objectForKey:@"Materials"];
-                     NSLog(@"%@",array);
-                     [self radioView:array groupID:@"Materials" title:@"材料"];
+                     [self radioView:array groupID:@"Materials" title:@"材料" select:self.materialLab.text];
                  }
              }
          }];
@@ -1330,8 +1659,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
              {
                  if ([[type objectForKey:@"RoomName"]isEqualToString:self.modelType]) {
                      NSArray *array = [type objectForKey:@"Layouts"];
-                     NSLog(@"%@",array);
-                     [self radioView:array groupID:@"Layouts" title:@"布局"];
+                     [self radioView:array groupID:@"Layouts" title:@"布局" select:self.layoutLab.text];
                  }
              }
          }];
@@ -1372,7 +1700,6 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
 
 -(void)analyseUpdataCustomer
 {
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         NSMutableURLRequest *request = [self updataCustomer];
@@ -1387,12 +1714,11 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
              NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
              NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
              
-             NSString *JSON = [dic objectForKey:@"JSON"];
-             if (JSON != nil) {
+             NSString *ErrorMessage = [dic objectForKey:@"ErrorMessage"];
+             if (ErrorMessage == nil) {
                  NSLog(@"上传成功");
                  [self dismissViewControllerAnimated:YES completion:nil];
              }
-             
          }];
     });
 }

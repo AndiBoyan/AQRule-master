@@ -37,6 +37,7 @@
 
 @property NSString* CustomerId;
 @property NSString* ServiceId;
+@property NSString *spaceId;
 @property UITableView *customerInfoListTable;
 @property NSArray *customerBaseAry;
 @property NSArray *customerIntentionAry;

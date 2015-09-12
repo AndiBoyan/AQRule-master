@@ -13,6 +13,13 @@
 #import "URLApi.h"
 
 @interface CustomerViewController ()
+{
+    NSInteger carMakesIndex;
+    NSArray *carMakes1;
+}
+
+@property (nonatomic, strong) UISwipeGestureRecognizer *leftSwipeGestureRecognizer;
+@property (nonatomic, strong) UISwipeGestureRecognizer *rightSwipeGestureRecognizer;
 
 @end
 
@@ -20,6 +27,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    isFlash = NO;
     [self initData];
     [self initNavigation];
     [self initHTHorizontalView];
@@ -30,11 +38,115 @@
     [self setExtraCellLineHidden:self.customerTable];
     [self.view addSubview:self.customerTable];
     
-    
+
     [self initYiRefreshHeader];
     [self initYiRefreshFooter];
+    
+    self.leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
+    self.rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
+    
+    self.leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+    self.rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    
+    [self.view addGestureRecognizer:self.leftSwipeGestureRecognizer];
+    [self.view addGestureRecognizer:self.rightSwipeGestureRecognizer];
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+
+    if([customerType isEqualToString:@"HaveRegister"]&&(isFlash == YES))
+    {
+        self.customerNameAry = [[NSMutableArray alloc]init];
+        self.customerPhoneAry = [[NSMutableArray alloc]init];
+        self.customerAddrAry = [[NSMutableArray alloc]init];
+        self.CustomerId = [[NSMutableArray alloc]init];
+        self.ServiceId = [[NSMutableArray alloc]init];
+        self.UserId = [[NSMutableArray alloc]init];
+        indexPage = 1;
+        [self analyseRequestData:@"HaveRegister" index:1 keyWord:@""];
+        isFlash = NO;
+    }
+    float pt = self.view.frame.size.width/320;
+    if (carMakesIndex <= 2) {
+        [scrView setContentOffset:CGPointMake(0, -64) animated:NO];
+    }
+    else if ((carMakesIndex >=3)&&(carMakesIndex <= 6))
+    {
+        [scrView setContentOffset:CGPointMake((carMakesIndex-2)*55, -64) animated:NO];
+    }
+    else
+    {
+        [scrView setContentOffset:CGPointMake(340/pt, -64) animated:NO];
+    }
+    
+    self.selectionList.selectedButtonIndex = carMakesIndex;
+    [self.selectionList reloadData];
+
+}
+
+- (void)handleSwipes:(UISwipeGestureRecognizer *)sender
+{
+    float pt = self.view.frame.size.width/320;
+    if (sender.direction == UISwipeGestureRecognizerDirectionLeft) {
+        self.customerNameAry = [[NSMutableArray alloc]init];
+        self.customerPhoneAry = [[NSMutableArray alloc]init];
+        self.customerAddrAry = [[NSMutableArray alloc]init];
+        self.CustomerId = [[NSMutableArray alloc]init];
+        self.ServiceId = [[NSMutableArray alloc]init];
+        self.UserId = [[NSMutableArray alloc]init];
+        indexPage = 1;
+        carMakesIndex++;
+        [self.selectionList reloadData];
+        if (carMakesIndex > carMakes1.count-1) {
+            carMakesIndex = carMakes1.count-1;
+        }
+        if (carMakesIndex <= 2) {
+            [scrView setContentOffset:CGPointMake(0, -64) animated:YES];
+        }
+        else if ((carMakesIndex >=3)&&(carMakesIndex <= 6))
+        {
+            [scrView setContentOffset:CGPointMake((carMakesIndex-2)*55, -64) animated:YES];
+        }
+        else
+        {
+            [scrView setContentOffset:CGPointMake(340/pt, -64) animated:YES];
+        }
+        self.selectionList.selectedButtonIndex = carMakesIndex;
+        [self.selectionList reloadData];
+        [self analyseRequestData:[carMakes1 objectAtIndex:carMakesIndex] index:1 keyWord:@""];
+    }
+    
+    if (sender.direction == UISwipeGestureRecognizerDirectionRight) {
+        self.customerNameAry = [[NSMutableArray alloc]init];
+        self.customerPhoneAry = [[NSMutableArray alloc]init];
+        self.customerAddrAry = [[NSMutableArray alloc]init];
+        self.CustomerId = [[NSMutableArray alloc]init];
+        self.ServiceId = [[NSMutableArray alloc]init];
+        self.UserId = [[NSMutableArray alloc]init];
+        indexPage = 1;
+        carMakesIndex--;
+        [self.selectionList reloadData];
+        if (carMakesIndex < 0) {
+            carMakesIndex = 0;
+        }
+        if (carMakesIndex <= 2) {
+            [scrView setContentOffset:CGPointMake(0, -64) animated:YES];
+        }
+        else if ((carMakesIndex >=3)&&(carMakesIndex <= 6))
+        {
+            [scrView setContentOffset:CGPointMake((carMakesIndex-2)*55, -64) animated:YES];
+        }
+        else
+        {
+            [scrView setContentOffset:CGPointMake(340/pt, -64) animated:YES];
+        }
+
+        self.selectionList.selectedButtonIndex = carMakesIndex;
+        [self.selectionList reloadData];
+        [self analyseRequestData:[carMakes1 objectAtIndex:carMakesIndex] index:1 keyWord:@""];
+    }
+}
 #pragma mark 初始化
 
 //初始化数组
@@ -46,17 +158,29 @@
     self.CustomerId = [[NSMutableArray alloc]init];
     self.ServiceId = [[NSMutableArray alloc]init];
     self.UserId = [[NSMutableArray alloc]init];
+    carMakesIndex = 0;
+    
+    carMakes1 = @[@"HaveRegister",
+                  @"HaveDistribution",
+                  @"HaveMeasure",
+                  @"HaveDesign",
+                  @"HaveChecked",
+                  @"HaveCommunicate",
+                  @"HaveCheckScale",
+                  @"HaveContract",
+                  @"HaveFinish",
+                  @"HaveVisiting"];
 }
 
 //初始化分段选择器
 -(void)initHTHorizontalView
 {
-    UIScrollView *scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 65, 600, 40)];
+    scrView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 65, 600, 40)];
     //核心：表示可滑动区域的大小    其实就是scrView中所有内容的总高度  当可滑动区域的高大于scrollView的高时，scrollView 才可以滑动
     [scrView setContentSize:CGSizeMake(0, -200)];
     [self.view addSubview:scrView];
-    
-    self.selectionList = [[HTHorizontalSelectionList alloc] initWithFrame:CGRectMake(0, -66, self.view.frame.size.width, 40)];
+    float pt = self.view.frame.size.width/320;
+    self.selectionList = [[HTHorizontalSelectionList alloc] initWithFrame:CGRectMake(0, -66, 670*pt, 40)];
     self.selectionList.delegate = self;
     self.selectionList.dataSource = self;
     self.selectionList.backgroundColor = [UIColor colorWithRed:232/255.0 green:230/255.0 blue:226/255.0 alpha:1.0f];
@@ -214,6 +338,7 @@
 //添加用户信息
 -(void)addCustomerAction:(id)sender
 {
+    isFlash = YES;
     AddNewCustomerViewController *addNewCustomerVC = [[AddNewCustomerViewController alloc]init];
     [self presentViewController:addNewCustomerVC animated:YES completion:nil];
 }
@@ -234,6 +359,7 @@
       已检查:HaveChecked   已沟通:HaveCommunicate  已复尺:HaveCheckScale  已签合同:HaveContract
       安装完成:HaveFinish   已回访:HaveVisiting
      */
+    float pt = self.view.frame.size.width/320;
     self.customerNameAry = [[NSMutableArray alloc]init];
     self.customerPhoneAry = [[NSMutableArray alloc]init];
     self.customerAddrAry = [[NSMutableArray alloc]init];
@@ -241,46 +367,66 @@
     self.ServiceId = [[NSMutableArray alloc]init];
     self.UserId = [[NSMutableArray alloc]init];
     indexPage = 1;
+    [self.selectionList reloadData];
     if ([self.carMakes[index]isEqualToString:@"已报备"]) {
-        
+        carMakesIndex = 0;
         customerType  = @"HaveRegister";
         [self analyseRequestData:@"HaveRegister" index:indexPage keyWord:@""];
+        [scrView setContentOffset:CGPointMake(0, -64) animated:YES];
     }
     else if ([self.carMakes[index]isEqualToString:@"已分配"]) {
+        carMakesIndex = 1;
         customerType  = @"HaveDistribution";
         [self analyseRequestData:@"HaveDistribution" index:indexPage keyWord:@""];
+        [scrView setContentOffset:CGPointMake(0, -64) animated:YES];
     }
     else if ([self.carMakes[index]isEqualToString:@"已量尺"]) {
+        carMakesIndex = 2;
         customerType  = @"HaveMeasure";
         [self analyseRequestData:@"HaveMeasure" index:indexPage keyWord:@""];
+        [scrView setContentOffset:CGPointMake(0, -64) animated:YES];
     }
     else if ([self.carMakes[index]isEqualToString:@"已设计"]) {
+        carMakesIndex = 3;
         customerType  = @"HaveDesign";
         [self analyseRequestData:@"HaveDesign" index:indexPage keyWord:@""];
+        [scrView setContentOffset:CGPointMake(55, -64) animated:YES];
     }
     else if ([self.carMakes[index]isEqualToString:@"已检查"]) {
+        carMakesIndex = 4;
         customerType  = @"HaveChecked";
         [self analyseRequestData:@"HaveChecked" index:indexPage keyWord:@""];
+        [scrView setContentOffset:CGPointMake(110, -64) animated:YES];
     }
     else if ([self.carMakes[index]isEqualToString:@"已沟通"]) {
+        carMakesIndex = 5;
         customerType  = @"HaveCommunicate";
         [self analyseRequestData:@"HaveCommunicate" index:indexPage keyWord:@""];
+        [scrView setContentOffset:CGPointMake(165, -64) animated:YES];
     }
     else if ([self.carMakes[index]isEqualToString:@"已复尺"]) {
+        carMakesIndex = 6;
         customerType  = @"HaveCheckScale";
         [self analyseRequestData:@"HaveCheckScale" index:indexPage keyWord:@""];
+        [scrView setContentOffset:CGPointMake(220, -64) animated:YES];
     }
     else if ([self.carMakes[index]isEqualToString:@"已签合同"]) {
+        carMakesIndex = 7;
         customerType  = @"HaveContract";
         [self analyseRequestData:@"HaveContract" index:indexPage keyWord:@""];
+        [scrView setContentOffset:CGPointMake(340/pt, -64) animated:YES];
     }
     else if ([self.carMakes[index]isEqualToString:@"安装完成"]) {
+        carMakesIndex = 8;
         customerType  = @"HaveFinish";
         [self analyseRequestData:@"HaveFinish" index:indexPage keyWord:@""];
+        [scrView setContentOffset:CGPointMake(340/pt, -64) animated:YES];
     }
     else if ([self.carMakes[index]isEqualToString:@"已回访"]) {
+        carMakesIndex = 9;
         customerType  = @"HaveVisiting";
         [self analyseRequestData:@"HaveVisiting" index:indexPage keyWord:@""];
+        [scrView setContentOffset:CGPointMake(340/pt, -64) animated:YES];
     }
 }
 
@@ -446,7 +592,7 @@
                  [self.ServiceId addObject:ServiceId];
                  [self.CustomerId addObject:CustomerId];
                  [self.UserId addObject:UserId];
-    
+                 [self.customerTable reloadData];
              }
         
              if (self.customerNameAry.count <= 0) {
@@ -456,7 +602,7 @@
                  customerIsNullLab.textAlignment = NSTextAlignmentCenter;
                  [self.view addSubview:customerIsNullLab];
              }
-            [self.customerTable reloadData];
+             [self.customerTable reloadData];
          }];
     });
 }

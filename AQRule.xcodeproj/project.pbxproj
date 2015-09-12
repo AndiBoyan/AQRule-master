@@ -58,21 +58,38 @@
 		9F43423F1B9302F50028532B /* OpinionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F43423E1B9302F50028532B /* OpinionViewController.m */; };
 		9F4DD9BB1B93F751001DE3E4 /* userSingletion.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DD9BA1B93F751001DE3E4 /* userSingletion.m */; };
 		9F5543ED1B6C9D880002ACD4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F5543EC1B6C9D880002ACD4 /* MainViewController.m */; };
+		9F58FD421B9ED3B40011AE2F /* 120.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F58FD391B9ED3B40011AE2F /* 120.png */; };
+		9F58FD431B9ED3B40011AE2F /* 152.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F58FD3A1B9ED3B40011AE2F /* 152.png */; };
+		9F58FD441B9ED3B40011AE2F /* 180.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F58FD3B1B9ED3B40011AE2F /* 180.png */; };
+		9F58FD451B9ED3B40011AE2F /* 29.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F58FD3C1B9ED3B40011AE2F /* 29.png */; };
+		9F58FD461B9ED3B40011AE2F /* 40.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F58FD3D1B9ED3B40011AE2F /* 40.png */; };
+		9F58FD471B9ED3B40011AE2F /* 58.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F58FD3E1B9ED3B40011AE2F /* 58.png */; };
+		9F58FD481B9ED3B40011AE2F /* 76.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F58FD3F1B9ED3B40011AE2F /* 76.png */; };
+		9F58FD491B9ED3B40011AE2F /* 87.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F58FD401B9ED3B40011AE2F /* 87.png */; };
+		9F58FD4A1B9ED3B40011AE2F /* icon80.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F58FD411B9ED3B40011AE2F /* icon80.png */; };
 		9F65A1D11B9BDF7A006962DB /* CustomerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3092C3971B60BE8800BDF274 /* CustomerViewController.m */; };
+		9F66D8071BA3C21B00A87AB3 /* 单身公寓.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7F41BA3C21B00A87AB3 /* 单身公寓.jpg */; };
+		9F66D8081BA3C21B00A87AB3 /* 粉色公主房.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7F51BA3C21B00A87AB3 /* 粉色公主房.jpg */; };
+		9F66D8091BA3C21B00A87AB3 /* 粉色系现代厨房.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7F61BA3C21B00A87AB3 /* 粉色系现代厨房.jpg */; };
+		9F66D80A1BA3C21B00A87AB3 /* 黑白调.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7F71BA3C21B00A87AB3 /* 黑白调.jpg */; };
+		9F66D80B1BA3C21B00A87AB3 /* 简约黄白.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7F81BA3C21B00A87AB3 /* 简约黄白.jpg */; };
+		9F66D80C1BA3C21B00A87AB3 /* 精装现代卧室.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7F91BA3C21B00A87AB3 /* 精装现代卧室.jpg */; };
+		9F66D80D1BA3C21B00A87AB3 /* 卡布其诺.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7FA1BA3C21B00A87AB3 /* 卡布其诺.jpg */; };
+		9F66D80E1BA3C21B00A87AB3 /* 蓝色静谧.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7FB1BA3C21B00A87AB3 /* 蓝色静谧.jpg */; };
+		9F66D80F1BA3C21B00A87AB3 /* 蓝天白云.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7FC1BA3C21B00A87AB3 /* 蓝天白云.jpg */; };
+		9F66D8101BA3C21B00A87AB3 /* 美式厨风.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7FD1BA3C21B00A87AB3 /* 美式厨风.jpg */; };
+		9F66D8111BA3C21B00A87AB3 /* 品味现代.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7FE1BA3C21B00A87AB3 /* 品味现代.jpg */; };
+		9F66D8121BA3C21B00A87AB3 /* 秋之白华.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D7FF1BA3C21B00A87AB3 /* 秋之白华.jpg */; };
+		9F66D8131BA3C21B00A87AB3 /* 少女情怀.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D8001BA3C21B00A87AB3 /* 少女情怀.jpg */; };
+		9F66D8141BA3C21B00A87AB3 /* 现代绿色 吧台 厨房.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D8011BA3C21B00A87AB3 /* 现代绿色 吧台 厨房.jpg */; };
+		9F66D8151BA3C21B00A87AB3 /* 现代生活.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D8021BA3C21B00A87AB3 /* 现代生活.jpg */; };
+		9F66D8161BA3C21B00A87AB3 /* 阳光角落.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D8031BA3C21B00A87AB3 /* 阳光角落.jpg */; };
+		9F66D8171BA3C21B00A87AB3 /* 悠闲生活.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D8041BA3C21B00A87AB3 /* 悠闲生活.jpg */; };
+		9F66D8181BA3C21B00A87AB3 /* 中灰色调.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D8051BA3C21B00A87AB3 /* 中灰色调.jpg */; };
+		9F66D8191BA3C21B00A87AB3 /* 中庸之道.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9F66D8061BA3C21B00A87AB3 /* 中庸之道.jpg */; };
 		9F70B1291B69B536001FC86D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F70B1281B69B536001FC86D /* LoginViewController.m */; };
 		9F7781961B6328E000174524 /* JSGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781951B6328E000174524 /* JSGridViewCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9F7781991B63292300174524 /* JSGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781981B63292300174524 /* JSGridView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9F7781A51B632C9400174524 /* 0.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F77819A1B632C9400174524 /* 0.jpeg */; };
-		9F7781A61B632C9400174524 /* 1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F77819B1B632C9400174524 /* 1.jpeg */; };
-		9F7781A71B632C9400174524 /* 2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F77819C1B632C9400174524 /* 2.jpeg */; };
-		9F7781A81B632C9400174524 /* 3.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F77819D1B632C9400174524 /* 3.jpeg */; };
-		9F7781A91B632C9400174524 /* 4.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F77819E1B632C9400174524 /* 4.jpeg */; };
-		9F7781AA1B632C9400174524 /* 5.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F77819F1B632C9400174524 /* 5.jpeg */; };
-		9F7781AB1B632C9400174524 /* 6.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F7781A01B632C9400174524 /* 6.jpeg */; };
-		9F7781AC1B632C9400174524 /* 7.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F7781A11B632C9400174524 /* 7.jpeg */; };
-		9F7781AD1B632C9400174524 /* 8.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F7781A21B632C9400174524 /* 8.jpeg */; };
-		9F7781AE1B632C9400174524 /* 9.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F7781A31B632C9400174524 /* 9.jpeg */; };
-		9F7781AF1B632C9400174524 /* 10.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9F7781A41B632C9400174524 /* 10.jpeg */; };
 		9F7781E91B63669A00174524 /* area.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F7781E81B63669A00174524 /* area.plist */; };
 		9F7781F01B6366DC00174524 /* HZAreaPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F7781EC1B6366DC00174524 /* HZAreaPickerView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9F7781F11B6366DC00174524 /* HZAreaPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F7781ED1B6366DC00174524 /* HZAreaPickerView.xib */; };
@@ -203,23 +220,40 @@
 		9F4DD9BA1B93F751001DE3E4 /* userSingletion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userSingletion.m; sourceTree = "<group>"; };
 		9F5543EB1B6C9D880002ACD4 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		9F5543EC1B6C9D880002ACD4 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		9F58FD391B9ED3B40011AE2F /* 120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 120.png; sourceTree = "<group>"; };
+		9F58FD3A1B9ED3B40011AE2F /* 152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 152.png; sourceTree = "<group>"; };
+		9F58FD3B1B9ED3B40011AE2F /* 180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 180.png; sourceTree = "<group>"; };
+		9F58FD3C1B9ED3B40011AE2F /* 29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 29.png; sourceTree = "<group>"; };
+		9F58FD3D1B9ED3B40011AE2F /* 40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 40.png; sourceTree = "<group>"; };
+		9F58FD3E1B9ED3B40011AE2F /* 58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 58.png; sourceTree = "<group>"; };
+		9F58FD3F1B9ED3B40011AE2F /* 76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 76.png; sourceTree = "<group>"; };
+		9F58FD401B9ED3B40011AE2F /* 87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 87.png; sourceTree = "<group>"; };
+		9F58FD411B9ED3B40011AE2F /* icon80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon80.png; sourceTree = "<group>"; };
+		9F66D7F41BA3C21B00A87AB3 /* 单身公寓.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "单身公寓.jpg"; sourceTree = "<group>"; };
+		9F66D7F51BA3C21B00A87AB3 /* 粉色公主房.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "粉色公主房.jpg"; sourceTree = "<group>"; };
+		9F66D7F61BA3C21B00A87AB3 /* 粉色系现代厨房.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "粉色系现代厨房.jpg"; sourceTree = "<group>"; };
+		9F66D7F71BA3C21B00A87AB3 /* 黑白调.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "黑白调.jpg"; sourceTree = "<group>"; };
+		9F66D7F81BA3C21B00A87AB3 /* 简约黄白.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "简约黄白.jpg"; sourceTree = "<group>"; };
+		9F66D7F91BA3C21B00A87AB3 /* 精装现代卧室.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "精装现代卧室.jpg"; sourceTree = "<group>"; };
+		9F66D7FA1BA3C21B00A87AB3 /* 卡布其诺.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "卡布其诺.jpg"; sourceTree = "<group>"; };
+		9F66D7FB1BA3C21B00A87AB3 /* 蓝色静谧.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "蓝色静谧.jpg"; sourceTree = "<group>"; };
+		9F66D7FC1BA3C21B00A87AB3 /* 蓝天白云.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "蓝天白云.jpg"; sourceTree = "<group>"; };
+		9F66D7FD1BA3C21B00A87AB3 /* 美式厨风.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "美式厨风.jpg"; sourceTree = "<group>"; };
+		9F66D7FE1BA3C21B00A87AB3 /* 品味现代.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "品味现代.jpg"; sourceTree = "<group>"; };
+		9F66D7FF1BA3C21B00A87AB3 /* 秋之白华.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "秋之白华.jpg"; sourceTree = "<group>"; };
+		9F66D8001BA3C21B00A87AB3 /* 少女情怀.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "少女情怀.jpg"; sourceTree = "<group>"; };
+		9F66D8011BA3C21B00A87AB3 /* 现代绿色 吧台 厨房.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "现代绿色 吧台 厨房.jpg"; sourceTree = "<group>"; };
+		9F66D8021BA3C21B00A87AB3 /* 现代生活.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "现代生活.jpg"; sourceTree = "<group>"; };
+		9F66D8031BA3C21B00A87AB3 /* 阳光角落.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "阳光角落.jpg"; sourceTree = "<group>"; };
+		9F66D8041BA3C21B00A87AB3 /* 悠闲生活.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "悠闲生活.jpg"; sourceTree = "<group>"; };
+		9F66D8051BA3C21B00A87AB3 /* 中灰色调.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "中灰色调.jpg"; sourceTree = "<group>"; };
+		9F66D8061BA3C21B00A87AB3 /* 中庸之道.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "中庸之道.jpg"; sourceTree = "<group>"; };
 		9F70B1271B69B536001FC86D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		9F70B1281B69B536001FC86D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		9F7781941B6328E000174524 /* JSGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSGridViewCell.h; sourceTree = "<group>"; };
 		9F7781951B6328E000174524 /* JSGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSGridViewCell.m; sourceTree = "<group>"; };
 		9F7781971B63292300174524 /* JSGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSGridView.h; sourceTree = "<group>"; };
 		9F7781981B63292300174524 /* JSGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSGridView.m; sourceTree = "<group>"; };
-		9F77819A1B632C9400174524 /* 0.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 0.jpeg; sourceTree = "<group>"; };
-		9F77819B1B632C9400174524 /* 1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpeg; sourceTree = "<group>"; };
-		9F77819C1B632C9400174524 /* 2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpeg; sourceTree = "<group>"; };
-		9F77819D1B632C9400174524 /* 3.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpeg; sourceTree = "<group>"; };
-		9F77819E1B632C9400174524 /* 4.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 4.jpeg; sourceTree = "<group>"; };
-		9F77819F1B632C9400174524 /* 5.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 5.jpeg; sourceTree = "<group>"; };
-		9F7781A01B632C9400174524 /* 6.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 6.jpeg; sourceTree = "<group>"; };
-		9F7781A11B632C9400174524 /* 7.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 7.jpeg; sourceTree = "<group>"; };
-		9F7781A21B632C9400174524 /* 8.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 8.jpeg; sourceTree = "<group>"; };
-		9F7781A31B632C9400174524 /* 9.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 9.jpeg; sourceTree = "<group>"; };
-		9F7781A41B632C9400174524 /* 10.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 10.jpeg; sourceTree = "<group>"; };
 		9F7781E81B63669A00174524 /* area.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = area.plist; sourceTree = "<group>"; };
 		9F7781EB1B6366DC00174524 /* HZAreaPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZAreaPickerView.h; sourceTree = "<group>"; };
 		9F7781EC1B6366DC00174524 /* HZAreaPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZAreaPickerView.m; sourceTree = "<group>"; };
@@ -444,20 +478,44 @@
 			path = HTHorizontalSelectionList;
 			sourceTree = "<group>";
 		};
+		9F58FD381B9ED3B40011AE2F /* icon */ = {
+			isa = PBXGroup;
+			children = (
+				9F58FD391B9ED3B40011AE2F /* 120.png */,
+				9F58FD3A1B9ED3B40011AE2F /* 152.png */,
+				9F58FD3B1B9ED3B40011AE2F /* 180.png */,
+				9F58FD3C1B9ED3B40011AE2F /* 29.png */,
+				9F58FD3D1B9ED3B40011AE2F /* 40.png */,
+				9F58FD3E1B9ED3B40011AE2F /* 58.png */,
+				9F58FD3F1B9ED3B40011AE2F /* 76.png */,
+				9F58FD401B9ED3B40011AE2F /* 87.png */,
+				9F58FD411B9ED3B40011AE2F /* icon80.png */,
+			);
+			path = icon;
+			sourceTree = "<group>";
+		};
 		9F7781931B6328BE00174524 /* GallerySDK */ = {
 			isa = PBXGroup;
 			children = (
-				9F77819A1B632C9400174524 /* 0.jpeg */,
-				9F77819B1B632C9400174524 /* 1.jpeg */,
-				9F77819C1B632C9400174524 /* 2.jpeg */,
-				9F77819D1B632C9400174524 /* 3.jpeg */,
-				9F77819E1B632C9400174524 /* 4.jpeg */,
-				9F77819F1B632C9400174524 /* 5.jpeg */,
-				9F7781A01B632C9400174524 /* 6.jpeg */,
-				9F7781A11B632C9400174524 /* 7.jpeg */,
-				9F7781A21B632C9400174524 /* 8.jpeg */,
-				9F7781A31B632C9400174524 /* 9.jpeg */,
-				9F7781A41B632C9400174524 /* 10.jpeg */,
+				9F66D7F41BA3C21B00A87AB3 /* 单身公寓.jpg */,
+				9F66D7F51BA3C21B00A87AB3 /* 粉色公主房.jpg */,
+				9F66D7F61BA3C21B00A87AB3 /* 粉色系现代厨房.jpg */,
+				9F66D7F71BA3C21B00A87AB3 /* 黑白调.jpg */,
+				9F66D7F81BA3C21B00A87AB3 /* 简约黄白.jpg */,
+				9F66D7F91BA3C21B00A87AB3 /* 精装现代卧室.jpg */,
+				9F66D7FA1BA3C21B00A87AB3 /* 卡布其诺.jpg */,
+				9F66D7FB1BA3C21B00A87AB3 /* 蓝色静谧.jpg */,
+				9F66D7FC1BA3C21B00A87AB3 /* 蓝天白云.jpg */,
+				9F66D7FD1BA3C21B00A87AB3 /* 美式厨风.jpg */,
+				9F66D7FE1BA3C21B00A87AB3 /* 品味现代.jpg */,
+				9F66D7FF1BA3C21B00A87AB3 /* 秋之白华.jpg */,
+				9F66D8001BA3C21B00A87AB3 /* 少女情怀.jpg */,
+				9F66D8011BA3C21B00A87AB3 /* 现代绿色 吧台 厨房.jpg */,
+				9F66D8021BA3C21B00A87AB3 /* 现代生活.jpg */,
+				9F66D8031BA3C21B00A87AB3 /* 阳光角落.jpg */,
+				9F66D8041BA3C21B00A87AB3 /* 悠闲生活.jpg */,
+				9F66D8051BA3C21B00A87AB3 /* 中灰色调.jpg */,
+				9F66D8061BA3C21B00A87AB3 /* 中庸之道.jpg */,
 				9F7781941B6328E000174524 /* JSGridViewCell.h */,
 				9F7781951B6328E000174524 /* JSGridViewCell.m */,
 				9F7781971B63292300174524 /* JSGridView.h */,
@@ -494,6 +552,7 @@
 		9F90E87E1B7338EB00A0CBF9 /* image */ = {
 			isa = PBXGroup;
 			children = (
+				9F58FD381B9ED3B40011AE2F /* icon */,
 				9F3A64BD1B95AFC5006427AF /* launchImage640x960.png */,
 				9F3A64BE1B95AFC5006427AF /* launchImage640x1136.png */,
 				9F3A64BF1B95AFC5006427AF /* launchImage750x1334.png */,
@@ -624,69 +683,86 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F58FD4A1B9ED3B40011AE2F /* icon80.png in Resources */,
 				9F3A64C31B95AFC5006427AF /* launchImage640x1136.png in Resources */,
-				9F7781AE1B632C9400174524 /* 9.jpeg in Resources */,
-				9F7781AB1B632C9400174524 /* 6.jpeg in Resources */,
+				9F58FD471B9ED3B40011AE2F /* 58.png in Resources */,
 				9F7AB6081B919BC7004CCBA3 /* search@2x.png in Resources */,
 				9F43423A1B92E6AC0028532B /* editrule@3x.png in Resources */,
 				9F7AB6421B91ACFD004CCBA3 /* second_normal@3x.png in Resources */,
 				9F7AB6391B91ACFD004CCBA3 /* addcustomer@3x.png in Resources */,
+				9F58FD491B9ED3B40011AE2F /* 87.png in Resources */,
+				9F66D8161BA3C21B00A87AB3 /* 阳光角落.jpg in Resources */,
+				9F58FD441B9ED3B40011AE2F /* 180.png in Resources */,
 				9F7AB6441B91ACFD004CCBA3 /* third_normal@3x.png in Resources */,
 				9F7AB63C1B91ACFD004CCBA3 /* first_normal@3x.png in Resources */,
 				9F7AB6231B919C8A004CCBA3 /* back@2x.png in Resources */,
 				9F3A64C61B95AFC5006427AF /* launchImage2208x1242.png in Resources */,
 				9F383C981B8417FC009E867C /* checkbox1_checked.png in Resources */,
 				9F7AB62B1B919E94004CCBA3 /* location@2x.png in Resources */,
-				9F7781AF1B632C9400174524 /* 10.jpeg in Resources */,
+				9F66D8141BA3C21B00A87AB3 /* 现代绿色 吧台 厨房.jpg in Resources */,
 				9F806FF41B68BBA7001AB039 /* radio_unchecked@2x.png in Resources */,
 				9F383C991B8417FC009E867C /* checkbox1_checked@2x.png in Resources */,
+				9F66D8131BA3C21B00A87AB3 /* 少女情怀.jpg in Resources */,
+				9F66D8091BA3C21B00A87AB3 /* 粉色系现代厨房.jpg in Resources */,
 				9F7AB63D1B91ACFD004CCBA3 /* first_selected@3x.png in Resources */,
 				9F3A64C51B95AFC5006427AF /* launchImage1242x2208.png in Resources */,
+				9F58FD481B9ED3B40011AE2F /* 76.png in Resources */,
 				9F4342261B9296060028532B /* secure@3x.png in Resources */,
-				9F7781A61B632C9400174524 /* 1.jpeg in Resources */,
 				9F3A64BA1B95836C006427AF /* logo.png in Resources */,
 				9F3A64C41B95AFC5006427AF /* launchImage750x1334.png in Resources */,
-				9F7781AD1B632C9400174524 /* 8.jpeg in Resources */,
 				30FEDA611B61DCB2008D6FAD /* mapapi.bundle in Resources */,
 				9F7AB63B1B91ACFD004CCBA3 /* cancle@3x.png in Resources */,
+				9F66D8101BA3C21B00A87AB3 /* 美式厨风.jpg in Resources */,
+				9F66D80E1BA3C21B00A87AB3 /* 蓝色静谧.jpg in Resources */,
 				9F7AB63A1B91ACFD004CCBA3 /* back@3x.png in Resources */,
 				9F4342391B92E6AC0028532B /* editrule@2x.png in Resources */,
+				9F66D8171BA3C21B00A87AB3 /* 悠闲生活.jpg in Resources */,
 				9F7AB6281B919D70004CCBA3 /* message@2x.png in Resources */,
+				9F66D80F1BA3C21B00A87AB3 /* 蓝天白云.jpg in Resources */,
 				9F3A64C21B95AFC5006427AF /* launchImage640x960.png in Resources */,
-				9F7781AA1B632C9400174524 /* 5.jpeg in Resources */,
 				9F90E8831B7338EB00A0CBF9 /* delete_img.png in Resources */,
-				9F7781A71B632C9400174524 /* 2.jpeg in Resources */,
 				9F4342251B9296060028532B /* secure@2x.png in Resources */,
 				9F4342291B929D1F0028532B /* Camera@2x.png in Resources */,
 				9F7AB63F1B91ACFD004CCBA3 /* message@3x.png in Resources */,
+				9F66D8071BA3C21B00A87AB3 /* 单身公寓.jpg in Resources */,
+				9F58FD451B9ED3B40011AE2F /* 29.png in Resources */,
 				9F3A64BC1B9587D2006427AF /* opinion.png in Resources */,
+				9F58FD421B9ED3B40011AE2F /* 120.png in Resources */,
 				9F43423B1B92E6AC0028532B /* editText@2x.png in Resources */,
 				9F7AB6251B919CC1004CCBA3 /* cancle@2x.png in Resources */,
 				9F8FF7FF1B75DCC40068BE6B /* second_normal@2x.png in Resources */,
 				9F7AB6451B91ACFD004CCBA3 /* third_selected@3x.png in Resources */,
+				9F66D80D1BA3C21B00A87AB3 /* 卡布其诺.jpg in Resources */,
+				9F66D8081BA3C21B00A87AB3 /* 粉色公主房.jpg in Resources */,
+				9F66D8111BA3C21B00A87AB3 /* 品味现代.jpg in Resources */,
 				9F4342381B92E6AC0028532B /* editDelete@3x.png in Resources */,
-				9F7781AC1B632C9400174524 /* 7.jpeg in Resources */,
 				9F7AB6431B91ACFD004CCBA3 /* second_selected@3x.png in Resources */,
 				9F8FF8051B75DCC40068BE6B /* third_selected@2x.png in Resources */,
 				9F4342371B92E6AC0028532B /* editDelete@2x.png in Resources */,
+				9F66D8191BA3C21B00A87AB3 /* 中庸之道.jpg in Resources */,
 				9F806FF11B68BBA7001AB039 /* radio_checked.png in Resources */,
 				9F3BC37C1B704F2200E972F8 /* down@2x.png in Resources */,
+				9F66D80A1BA3C21B00A87AB3 /* 黑白调.jpg in Resources */,
 				9F43423C1B92E6AC0028532B /* editText@3x.png in Resources */,
+				9F58FD461B9ED3B40011AE2F /* 40.png in Resources */,
+				9F66D80B1BA3C21B00A87AB3 /* 简约黄白.jpg in Resources */,
 				9F806FF31B68BBA7001AB039 /* radio_unchecked.png in Resources */,
 				9F7781F11B6366DC00174524 /* HZAreaPickerView.xib in Resources */,
 				9F8FF7FD1B75DCC40068BE6B /* first_selected@2x.png in Resources */,
 				9F7AB63E1B91ACFD004CCBA3 /* location@3x.png in Resources */,
 				9F7AB6411B91ACFD004CCBA3 /* search@3x.png in Resources */,
 				9F7AB6291B919D70004CCBA3 /* phone@2x.png in Resources */,
+				9F66D8121BA3C21B00A87AB3 /* 秋之白华.jpg in Resources */,
 				9F8FF8031B75DCC40068BE6B /* third_normal@2x.png in Resources */,
-				9F7781A51B632C9400174524 /* 0.jpeg in Resources */,
 				9F8FF8011B75DCC40068BE6B /* second_selected@2x.png in Resources */,
 				9F7AB6401B91ACFD004CCBA3 /* phone@3x.png in Resources */,
 				9F7781E91B63669A00174524 /* area.plist in Resources */,
-				9F7781A81B632C9400174524 /* 3.jpeg in Resources */,
+				9F66D8181BA3C21B00A87AB3 /* 中灰色调.jpg in Resources */,
 				9F383C9B1B8417FC009E867C /* checkbox1_unchecked@2x.png in Resources */,
 				9F8FF7FB1B75DCC40068BE6B /* first_normal@2x.png in Resources */,
-				9F7781A91B632C9400174524 /* 4.jpeg in Resources */,
+				9F58FD431B9ED3B40011AE2F /* 152.png in Resources */,
+				9F66D8151BA3C21B00A87AB3 /* 现代生活.jpg in Resources */,
+				9F66D80C1BA3C21B00A87AB3 /* 精装现代卧室.jpg in Resources */,
 				9F806FF21B68BBA7001AB039 /* radio_checked@2x.png in Resources */,
 				9F43422A1B929D1F0028532B /* Camera@3x.png in Resources */,
 				9F383C9A1B8417FC009E867C /* checkbox1_unchecked.png in Resources */,

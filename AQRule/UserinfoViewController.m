@@ -30,7 +30,15 @@
     [self.view addSubview:self.userInfoTable];
     
     self.userInfoAry1 = [[NSArray alloc]initWithObjects:@"姓名",@"手机号", nil];
-    self.userInfoAry2 = [[NSArray alloc]initWithObjects:[userSingletion inituserSingletion].name,[userSingletion inituserSingletion].phone, nil];
+    NSUserDefaults *userDefaultes = [NSUserDefaults standardUserDefaults];
+    NSArray *array = [userDefaultes arrayForKey:@"userInfo"];
+    if (array.count <= 0) {
+          self.userInfoAry2 = [[NSArray alloc]initWithObjects:@"",@"", nil];
+    }
+    else
+    {
+          self.userInfoAry2 = [[NSArray alloc]initWithObjects:[array objectAtIndex:0],[array objectAtIndex:1], nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

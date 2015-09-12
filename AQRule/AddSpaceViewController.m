@@ -55,12 +55,15 @@
     
     NSMutableDictionary *modelDic;//记录空间类型与modelId对应的字典
     
+    NSMutableArray *modelUpdataAry;
+    
     UIView *spaceView;
     
     UIView *spaceRadioView;
     
     NSMutableArray *spaceMutableAry;
     NSInteger spaceIndex;
+    UIBarButtonItem *rightButton;
 }
 @property NSArray *addSpaceAry1;
 @property NSArray *addSpaceAry2;
@@ -79,6 +82,8 @@
 @property UILabel *materialLab;
 @property UILabel *layoutLab;
 @property UILabel *procutLab;
+@property UILabel *houseLab;
+@property UILabel *budgetLab;
 @end
 
 @implementation AddSpaceViewController
@@ -98,7 +103,7 @@
     [self initNavigation];
     
     self.addSpaceAry1 = [[NSArray alloc]initWithObjects:@"量尺类型",@"量尺时间",@"预计完成时间", nil];
-    self.addSpaceAry2 = [[NSArray alloc]initWithObjects:@"空间",@"风格",@"面积(m2)",@"材料",@"布局",@"预购产品线", nil];
+    self.addSpaceAry2 = [[NSArray alloc]initWithObjects:@"空间",@"户型",@"预算",@"风格",@"面积(m2)",@"材料",@"布局",@"预购产品线", nil];
     self.addSpaceDateAry = [RequestDataParse weekAry1];
     self.addSpaceHourAry = [RequestDataParse hourAry];
     self.addSpaceMinAry = [RequestDataParse minAry];
@@ -151,7 +156,7 @@
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];
     [navigationItem setTitle:@"新增空间"];
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"back.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(save)];
+    rightButton = [[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(save)];
     rightButton.tintColor = [UIColor blackColor];
     navigationItem.leftBarButtonItem = leftButton;
     navigationItem.rightBarButtonItem = rightButton;
@@ -179,11 +184,19 @@
             [self dismissViewControllerAnimated:YES completion:nil];
         }
     }
+   else
+   {
+       if (buttonIndex == 1) {
+           UITextField *tf=[alertView textFieldAtIndex:0];
+           self.budgetLab.text = tf.text;
+       }
+   }
 }
 #pragma mark 保存数据
 
 -(void)save
 {
+    rightButton = [[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:nil];
     if ((spaceMutableAry.count<=0)||(finish.length<=0)
         ||(self.spaceLab.text.length <= 0)||(measure.length<=0)
         ||(self.areaLab.text.length<=0)||(self.styleLab.text.length<=0)
@@ -198,7 +211,7 @@
     }
     NSString *code = [URLApi initCode];
     code = [RequestDataParse encodeToPercentEscapeString:code];
-    NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\":%d,\"ContrlContentList\":{%@},\"RoomType\":\"两房一厅\",\"FinishTime\":\"%@\",\"SpaceName\":\"%@\",\"MeasureTime\": \"%@\",\"BuyWill\": \"%@\",\"Area\": \"%@\",\"Style\":\"%@\",\"ServiceId\":\"%@\",\"UserId\": \"%@\",\"SpaceId\":\"%@\",\"Budget\":58899,\"Material\":\"%@\",\"Layout\":\"%@\"}}&Command=MeasureSpace/AddMeasureInfo",code,MeasureType,string,finish,self.spaceLab.text,measure,self.procutLab.text,self.areaLab.text,self.styleLab.text,self.ServiceId,self.UserId,SpaceId,self.materialLab.text,self.layoutLab.text];
+    NSString *str = [NSString stringWithFormat:@"Params={\"authCode\": \"%@\",\"MeasureInfo\":{\"MeasureType\":%d,\"ContrlContentList\":{%@},\"RoomType\":\"%@\",\"FinishTime\":\"%@\",\"SpaceName\":\"%@\",\"MeasureTime\": \"%@\",\"BuyWill\": \"%@\",\"Area\": \"%@\",\"Style\":\"%@\",\"ServiceId\":\"%@\",\"UserId\": \"%@\",\"SpaceId\":\"%@\",\"Budget\":%d,\"Material\":\"%@\",\"Layout\":\"%@\"}}&Command=MeasureSpace/AddMeasureInfo",code,MeasureType,string,self.houseLab.text,finish,self.spaceLab.text,measure,self.procutLab.text,self.areaLab.text,self.styleLab.text,self.ServiceId,self.UserId,SpaceId,self.budgetLab.text.intValue,self.materialLab.text,self.layoutLab.text];
      str = [str stringByReplacingOccurrencesOfString:@"{," withString:@"{"];
      uptadaData = str;
     
@@ -243,6 +256,20 @@
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     [spaceModelData replaceObjectAtIndex:textField.tag withObject:textField.text];
+    
+    if (spaceIndex == 0) {
+        [modelUpdataAry replaceObjectAtIndex:textField.tag withObject:textField.text];
+    }
+    else
+    {
+        int count=0;
+        for (int i = 0; i < spaceIndex; i++) {
+            NSString *countStr = [spaceModelAllDataCount objectAtIndex:i];
+            count += countStr.intValue;
+        }
+        [modelUpdataAry replaceObjectAtIndex:textField.tag+count withObject:textField.text];
+    }
+
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -254,11 +281,18 @@
     if([groupId isEqualToString:@"CustomName"])
     {
         modelType = radio.titleLabel.text;
+        self.spaceLab.text = modelType;
+        return;
     }
     //@"Style"
     else if ([groupId isEqualToString:@"Style"])
     {
         self.styleLab.text = radio.titleLabel.text;
+        return;
+    }
+    else if ([groupId isEqualToString:@"HouseType"])
+    {
+        self.houseLab.text = radio.titleLabel.text;
         return;
     }
     else if ([groupId isEqualToString:@"array"])
@@ -277,7 +311,7 @@
         return;
     }
     else if (radio.tag == 1001) {
-        if ([radio.titleLabel.text isEqualToString:@"单尺"]) {
+        if ([radio.titleLabel.text isEqualToString:@"初尺"]) {
             MeasureType = 0;
         }
         else
@@ -291,7 +325,21 @@
         
         return;
     }
+    
     [spaceModelData replaceObjectAtIndex:radio.tag withObject:radio.titleLabel.text];
+    
+    if (spaceIndex == 0) {
+        [modelUpdataAry replaceObjectAtIndex:radio.tag withObject:radio.titleLabel.text];
+    }
+    else
+    {
+        int count=0;
+        for (int i = 0; i < spaceIndex; i++) {
+            NSString *countStr = [spaceModelAllDataCount objectAtIndex:i];
+            count += countStr.intValue;
+        }
+        [modelUpdataAry replaceObjectAtIndex:radio.tag+count withObject:radio.titleLabel.text];
+    }
 }
 
 - (void)didSelectedCheckBox:(QCheckBox *)checkbox checked:(BOOL)checked {
@@ -311,6 +359,11 @@
         {
             str = [str stringByReplacingOccurrencesOfString:checkbox.titleLabel.text withString:@""];
             str = [str stringByReplacingOccurrencesOfString:@";;" withString:@""];
+            if (str.length>=1) {
+                if ([[str substringToIndex:1]isEqualToString:@";"]) {
+                    str = [str substringFromIndex:1];
+                }
+            }
         }
         self.procutLab.text = str;
         return;
@@ -327,6 +380,18 @@
                 str = [NSString stringWithFormat:@"%@;%@",str,checkbox.titleLabel.text];
             }
             [spaceModelData replaceObjectAtIndex:checkbox.tag withObject:str];
+            if (spaceIndex == 0) {
+                [modelUpdataAry replaceObjectAtIndex:checkbox.tag withObject:str];
+            }
+            else
+            {
+                int count=0;
+                for (int i = 0; i < spaceIndex; i++) {
+                  NSString *countStr = [spaceModelAllDataCount objectAtIndex:i];
+                    count += countStr.intValue;
+                }
+                [modelUpdataAry replaceObjectAtIndex:checkbox.tag+count withObject:str];
+            }
         }
         else
         {
@@ -339,14 +404,26 @@
             if ((str.length > 0)&&[[str substringWithRange:NSMakeRange(str.length-1, 1)] isEqualToString:@";"]) {
                 str = [str substringToIndex:str.length-1];
             }
-            
             [spaceModelData replaceObjectAtIndex:checkbox.tag withObject:str];
+            
+            if (spaceIndex == 0) {
+                [modelUpdataAry replaceObjectAtIndex:checkbox.tag withObject:str];
+            }
+            else
+            {
+                int count=0;
+                for (int i = 0; i < spaceIndex; i++) {
+                    NSString *countStr = [spaceModelAllDataCount objectAtIndex:i];
+                    count += countStr.intValue;
+                }
+                [modelUpdataAry replaceObjectAtIndex:checkbox.tag+count withObject:str];
+            }
         }
     }
 }
 
 
--(void)radioView:(NSArray *)radioAry groupID:(NSString*)groupID title:(NSString*)title
+-(void)radioView:(NSArray *)radioAry groupID:(NSString*)groupID title:(NSString*)title select:(NSString*)select
 {
     spaceRadioView = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
     spaceRadioView.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
@@ -381,8 +458,8 @@
         [_radio1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_radio1.titleLabel setFont:[UIFont systemFontOfSize:12.0f]];
         [radioView addSubview:_radio1];
-        if (i == 0) {
-            [_radio1 setChecked:YES];
+        if ([select isEqualToString:_radio1.titleLabel.text]) {
+            _radio1.checked = YES;
         }
     }
     float buttonH = fristH+15*(radioAry.count)-10;
@@ -403,6 +480,7 @@
 
 -(void)checkView:(NSArray *)checkAry tag:(int)tag
 {
+    NSArray *array = [self StringToArray:self.procutLab.text];
     spaceRadioView = [[UIView alloc]initWithFrame:CGRectMake(0, 65, self.view.frame.size.width, self.view.frame.size.height-65)];
     spaceRadioView.backgroundColor = [[UIColor groupTableViewBackgroundColor]colorWithAlphaComponent:0.5f];
     [self.view addSubview:spaceRadioView];
@@ -429,6 +507,12 @@
         [_check1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_check1.titleLabel setFont:[UIFont systemFontOfSize:13.0f]];
         [checkView addSubview:_check1];
+        
+        for (int i = 0; i < array.count; i++) {
+            if ([_check1.titleLabel.text isEqualToString:[array objectAtIndex:i]]) {
+                _check1.selected = YES;
+            }
+        }
     }
     float buttonH = fristH+30*(checkAry.count)-10;
     
@@ -494,13 +578,13 @@
         index = count;
         count += countStr.intValue;
     }
+    
     for (int i = index; i <  count; i++) {
-        
         [spaceModelFormat addObject:[spaceModelFormats objectAtIndex:i]];
         [spaceModelDatas addObject:[spaceModelAllData objectAtIndex:i]];
         [spaceModelID addObject:[spaceModelIDs objectAtIndex:i]];
-        
     }
+    
     if (spaceMutableAry.count <= 0) {
         for (int i = index; i <  count; i++) {
             [spaceMutableAry addObject:@""];
@@ -614,11 +698,18 @@
                     QRadioButton *_radio2 = [[QRadioButton alloc] initWithDelegate:self groupId:@"groupId1"];
                     _radio2.frame = CGRectMake(self.view.frame.size.width-120, 5, 50, 30);
                     _radio2.tag = 1001;
-                    [_radio2 setTitle:@"单尺" forState:UIControlStateNormal];
+                    [_radio2 setTitle:@"初尺" forState:UIControlStateNormal];
                     [_radio2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                     [_radio2.titleLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
                     [cell.contentView addSubview:_radio2];
-                    [_radio1 setChecked:YES];
+                    NSLog(@"%d",MeasureType);
+                    if (MeasureType == 0) {
+                        _radio2.checked = YES;
+                    }
+                    else
+                    {
+                        _radio1.checked = YES;
+                    }
                     
                 }
                 else if(indexPath.row == 1)
@@ -663,33 +754,47 @@
                 }
                 else if (indexPath.row == 1)
                 {
+                    self.houseLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
+                    self.houseLab.textAlignment = NSTextAlignmentRight;
+                    self.houseLab.font = [UIFont systemFontOfSize:14.0f];
+                    [cell.contentView addSubview:self.houseLab];
+                }
+                else if (indexPath.row ==2)
+                {
+                    self.budgetLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
+                    self.budgetLab.textAlignment = NSTextAlignmentRight;
+                    self.budgetLab.font = [UIFont systemFontOfSize:14.0f];
+                    [cell.contentView addSubview:self.budgetLab];
+                }
+                else if (indexPath.row == 3)
+                {
                     self.styleLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.styleLab.textAlignment = NSTextAlignmentRight;
                     self.styleLab.font = [UIFont systemFontOfSize:14.0f];
                     [cell.contentView addSubview:self.styleLab];
                 }
-                else if (indexPath.row == 2)
+                else if (indexPath.row == 4)
                 {
                     self.areaLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.areaLab.textAlignment = NSTextAlignmentRight;
                     self.areaLab.font = [UIFont systemFontOfSize:14.0f];
                     [cell.contentView addSubview:self.areaLab];
                 }
-                else if (indexPath.row == 3)
+                else if (indexPath.row == 5)
                 {
                     self.materialLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.materialLab.textAlignment = NSTextAlignmentRight;
                     self.materialLab.font = [UIFont systemFontOfSize:14.0f];
                     [cell.contentView addSubview:self.materialLab];
                 }
-                else if (indexPath.row == 4)
+                else if (indexPath.row == 6)
                 {
                     self.layoutLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.layoutLab.textAlignment = NSTextAlignmentRight;
                     self.layoutLab.font = [UIFont systemFontOfSize:14.0f];
                     [cell.contentView addSubview:self.layoutLab];
                 }
-                else if (indexPath.row == 5)
+                else if (indexPath.row == 7)
                 {
                     self.procutLab  = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 180, 20)];
                     self.procutLab.textAlignment = NSTextAlignmentRight;
@@ -735,10 +840,28 @@
                 }
                 
                 if (indexPath.row == i) {
+                    
+                    int count = 0;
+                    int index = 0;
+                    
+                    NSMutableArray *arr = [[NSMutableArray alloc]init];
+                    
+                    for (int i = 0; i <= spaceIndex; i++) {
+                        NSString *countStr= [spaceModelAllDataCount objectAtIndex:i];
+                        index = count;
+                        count += countStr.intValue;
+                    }
+                    
+                    for (int i = index; i <  count; i++) {
+                        [arr addObject:[modelUpdataAry objectAtIndex:i]];
+                    }
+                    
                     if ([[spaceModelDatas objectAtIndex:indexPath.row] isEqualToString:@"text;"]) {
                         UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(self.view.frame.size.width-210, 7.5, 145, 25)];
                         field.tag = indexPath.row;
                         field.delegate = self;
+                        field.font = [UIFont systemFontOfSize:12.0f];
+                        field.text = [arr objectAtIndex:indexPath.row];
                         field.borderStyle = UITextBorderStyleRoundedRect;
                         [cell.contentView addSubview:field];
                     }
@@ -769,6 +892,12 @@
                             [_check1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                             [_check1.titleLabel setFont:[UIFont boldSystemFontOfSize:10.0f]];
                             [cell.contentView addSubview:_check1];
+                            NSArray *arrayCheck = [self StringToArray:[arr objectAtIndex:indexPath.row]];
+                            for (int i = 0; i < arrayCheck.count; i++) {
+                                if ([_check1.titleLabel.text isEqualToString:[arrayCheck objectAtIndex:i]]) {
+                                    _check1.selected = YES;
+                                }
+                            }
                         }
                     }
                     else
@@ -846,25 +975,43 @@
             }
             else if (indexPath.row == 1)
             {
+                //户型
+                [self analyseHouseData];
+            }
+            else if (indexPath.row == 2)
+            {
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"客户预算" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+                alert.tag = 999;
+                [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+                UITextField * txt = [[UITextField alloc] init];
+                txt.backgroundColor = [UIColor whiteColor];
+                txt.keyboardType = UIKeyboardTypePhonePad;
+                txt.frame = CGRectMake(alert.center.x+65,alert.center.y+48, 150,23);
+                [alert addSubview:txt];
+                [alert show];
+            }
+            else if (indexPath.row == 3)
+            {
                 //风格
                 [self analyseRoomStyleData];
             }
-            else if (indexPath.row == 2)
+            else if (indexPath.row == 4)
             {
                 //面积
                 [self analyseRoomAreasData];
             }
-            else if (indexPath.row == 3)
+            else if (indexPath.row == 5)
             {
                 //材料
                 [self analyseRoomMaterialsData];
             }
-            else if (indexPath.row == 4)
+            else if (indexPath.row == 6)
             {
                 //布局
                 [self analyseRoomLayoutsData];
             }
-            else if (indexPath.row == 5)
+            else if (indexPath.row == 7)
             {
                 //预购产品线
                 [self analyseProductLineData];
@@ -889,6 +1036,25 @@
 }
 
 
+
+-(NSMutableArray*)StringToArray:(NSString*)string
+{
+    if (string == nil) {
+        return nil;
+    }
+    NSMutableArray *ary = [[NSMutableArray alloc]init];
+    NSInteger length = string.length;
+    int j = 0;
+    for (int i = 0; i < length; i++) {
+        NSString *str = [string substringWithRange:NSMakeRange(i, 1)];
+        if ([str isEqualToString:@";"]) {
+            [ary addObject:[string substringWithRange:NSMakeRange(j, i-j)]];
+            j = i+1;
+        }
+    }
+    [ary addObject:[string substringFromIndex:j]];
+    return ary;
+}
 #pragma mark 网络请求以及数据解析
 
 #pragma mark 获取空间模板列表
@@ -897,7 +1063,8 @@
  
  请求方式：GET和POST
  
- 入参描述：@authCode:授权码；
+ 入参描述：@authCode:授权码
+ 
  */
 //网络请求
 
@@ -957,7 +1124,7 @@
                  [radioAry addObject:CustomName];
                  [modelDic setObject:ModelId forKey:CustomName];
              }
-             [self radioView:radioAry groupID:@"CustomName" title:@"空间模板"];
+             [self radioView:radioAry groupID:@"CustomName" title:@"空间模板" select:self.spaceLab.text];
          }];
     });
 }
@@ -1067,6 +1234,7 @@
     spaceModelAllDataCount = [[NSMutableArray alloc]init];
     spaceModelIDs = [[NSMutableArray alloc]init];
     spaceModelFormats = [[NSMutableArray alloc]init];
+    modelUpdataAry = [[NSMutableArray alloc]init];
     
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -1078,12 +1246,17 @@
              NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
              
              str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+             if(str.length < 500)
+                 return ;
              
              NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
              NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
-             
+
              NSDictionary *JSON = [dic objectForKey:@"JSON"];
+
+             
              NSArray *ContrlInfos = [JSON objectForKey:@"ContrlInfos"];
+
              int count;
              for (id ContrlInfo in ContrlInfos) {
                  count = 0;
@@ -1098,6 +1271,7 @@
                      [spaceModelFormats addObject:Text];
                      [spaceModelIDs addObject:Id];
                      [spaceModelAllData addObject:[NSString stringWithFormat:@"%@;%@",ControlType,DefaultValue]];
+                     [modelUpdataAry addObject:@""];
                      count++;
                  }
                  [spaceModelAllDataCount addObject:[NSString stringWithFormat:@"%d",count]];
@@ -1162,11 +1336,34 @@
              NSDictionary *JSON = [dic objectForKey:@"JSON"];
              NSArray *Style = [JSON objectForKey:@"Style"];
              NSLog(@"%@",Style);
-             [self radioView:Style groupID:@"Style" title:@"风格"];
+             [self radioView:Style groupID:@"Style" title:@"风格" select:self.styleLab.text];
         }];
     });
 }
-
+#pragma mark 户型
+-(void)analyseHouseData
+{
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSMutableURLRequest *request = [self getRoomStyle];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+         {
+             NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+             
+             str = [str stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+             
+             NSData *newData = [[RequestDataParse newJsonStr:str] dataUsingEncoding:NSUTF8StringEncoding];
+             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:newData options:NSJSONReadingMutableContainers error:nil];
+             
+             NSDictionary *JSON = [dic objectForKey:@"JSON"];
+             NSArray *Style = [JSON objectForKey:@"HouseType"];
+             NSLog(@"%@",Style);
+             [self radioView:Style groupID:@"HouseType" title:@"户型" select:self.styleLab.text];
+         }];
+    });
+}
 #pragma mark 获取空间面积
 /*
  方法描述：获取空间面积
@@ -1224,7 +1421,7 @@
                  if ([[type objectForKey:@"RoomName"]isEqualToString:modelType]) {
                      NSArray *array = [type objectForKey:@"Areas"];
                      NSLog(@"%@",array);
-                     [self radioView:array groupID:@"array" title:@"面积"];
+                     [self radioView:array groupID:@"array" title:@"面积" select:self.areaLab.text];
                  }
              }
          }];
@@ -1287,7 +1484,7 @@
                  if ([[type objectForKey:@"RoomName"]isEqualToString:modelType]) {
                      NSArray *array = [type objectForKey:@"Materials"];
                      NSLog(@"%@",array);
-                     [self radioView:array groupID:@"Materials" title:@"材料"];
+                     [self radioView:array groupID:@"Materials" title:@"材料" select:self.materialLab.text];
                  }
              }
          }];
@@ -1351,7 +1548,7 @@
                  if ([[type objectForKey:@"RoomName"]isEqualToString:modelType]) {
                      NSArray *array = [type objectForKey:@"Layouts"];
                      NSLog(@"%@",array);
-                     [self radioView:array groupID:@"Layouts" title:@"布局"];
+                     [self radioView:array groupID:@"Layouts" title:@"布局" select:self.layoutLab.text];
                  }
              }
          }];
@@ -1412,6 +1609,7 @@
              if (JSON != nil) {
                  NSLog(@"上传成功");
                  if (_images.count<=0) {
+                     // rightButton = [[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(save)];
                      UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"上传成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                      [alert show];
                      [self dismissViewControllerAnimated:YES completion:nil];
@@ -1425,7 +1623,6 @@
          }];
     });
 }
-
 #pragma mark 上传图片
 /*
  方法描述：上传数据
@@ -1454,7 +1651,7 @@
         imageData = UIImagePNGRepresentation(img);
         mimeType = @"image/png";
     } else {
-        imageData = UIImageJPEGRepresentation(img, 1.0f);
+        imageData = UIImageJPEGRepresentation(img, 0.5f);
         mimeType = @"image/jpeg";
     }
     //return [NSString stringWithFormat:@"data:%@;base64,%@", mimeType,

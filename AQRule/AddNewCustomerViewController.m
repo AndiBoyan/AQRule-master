@@ -37,6 +37,9 @@
     self.locatePicker.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.customerAry1 = [[NSArray alloc]initWithObjects:@"姓名",@"手机号", nil];
     self.customerAry2 = [[NSArray alloc]initWithObjects:@"所在区域",@"详细地址", nil];
+    self.customerProvice = @"北京市";
+    self.customerCity = @"通州区";
+    self.customerArea = @"";
     [self initNavigation];
 }
 
@@ -71,7 +74,16 @@
     alert.tag = 1000;
     [alert show];
 }
-
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField == self.phoneField) {
+        if (![self isPhoneNumber:self.phoneField.text]) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您输入的手机号码格式不正确" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            self.phoneField.text = @"";
+        }
+    }
+}
 -(void)addNewCustomer
 {
     if ((self.nameField.text.length <= 0)||(self.phoneField.text.length <= 0)||(self.customerProvice.length <= 0)||
@@ -139,11 +151,12 @@
 
             }
             if (indexPath.row == 1) {
-                self.phoneField = [[UITextField alloc]initWithFrame:CGRectMake(80, 6, 120, 30)];
+                self.phoneField = [[UITextField alloc]initWithFrame:CGRectMake(80, 6, 240, 30)];
                 self.phoneField.borderStyle = UITextBorderStyleNone;
                 self.phoneField.tag = 1000+indexPath.row;
                 self.phoneField.font = [UIFont systemFontOfSize:14.0f];
-                self.phoneField.textAlignment = NSTextAlignmentRight;
+                self.phoneField.textAlignment = NSTextAlignmentCenter;
+                self.phoneField.keyboardType = UIKeyboardTypeNumberPad;
                 self.phoneField.returnKeyType = UIReturnKeyDone;
                 self.phoneField.delegate = self;
                 [cell.contentView addSubview:self.phoneField];
@@ -167,6 +180,7 @@
                 
                 self.areaLab = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width-200, 10, 200, 20)];
                 self.areaLab.font = [UIFont systemFontOfSize:12.0f];
+                self.areaLab.text = [NSString stringWithFormat:@"%@ %@ %@",self.customerProvice,self.customerCity,self.customerArea];
                 self.areaLab.textAlignment = NSTextAlignmentRight;
                 [cell.contentView addSubview:self.areaLab];
             }
@@ -257,7 +271,7 @@
     UIButton *button = (UIButton*)sender;
     if (button.tag == 1001) {
         [self cancelAreaView];
-        self.areaLab.text = @"";
+       // self.areaLab.text = @"";
     }
     else
     {
@@ -327,11 +341,22 @@
              }
              else
              {
-                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"添加客户失败" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"该用户已存在" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                  [alert show];
              }
          }];
     });
 }
 
+-(BOOL)isPhoneNumber:(NSString*)phoneNumber
+{
+    NSString * phoneRegex = @"^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$";
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", phoneRegex];
+    if ([regextestmobile evaluateWithObject:phoneNumber] == YES)
+    {
+        return YES;
+    }
+   
+    return NO;
+}
 @end

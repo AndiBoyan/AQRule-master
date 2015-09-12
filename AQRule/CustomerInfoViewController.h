@@ -20,6 +20,7 @@
 @property NSMutableArray *customerAry2;
 @property NSMutableArray *customerAry3;
 @property NSMutableArray *customerAry4;
+@property NSMutableArray *customerAry5;
 @property NSMutableArray *isUpdataAry;
 @property UITableView *customerTable;
 
