@@ -12,7 +12,7 @@
 
 +(NSString *)initURL
 {
-    return @"http://oppein.3weijia.com/oppein.axds";
+    return @"http://oppein.3vjia.cn/oppein.axds";
 }
 
 +(NSString*)initCode

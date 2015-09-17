@@ -174,7 +174,7 @@
     code = [RequestDataParse encodeToPercentEscapeString:code];
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\",\"serviceId\":\"%@\",\"CommunicateContext\":\"%@\",\"CommunicateType\":%d}&Command=Customer/AddCommunicateInfo",code,self.ServiceId,communicateTextView.text,CommunicateType];
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];

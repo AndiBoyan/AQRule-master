@@ -237,6 +237,8 @@
 -(void)sureSpaceInfo:(id)sender
 {
     upDatasSring = @"";
+    NSLog(@"%d",spaceIndex);
+    NSLog(@"%@",spaceMutableAry);
     for (int i = 0; i < spaceModelFormat.count; i++) {
         if ([[spaceModelDatas objectAtIndex:i]isEqualToString:@"text;"]) {
             upDatasSring = [NSString stringWithFormat:@"%@,\"txt_%@\":\"%@\"",upDatasSring,[spaceModelID objectAtIndex:i],[spaceModelData objectAtIndex:i]];
@@ -280,6 +282,12 @@
 - (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId {
     if([groupId isEqualToString:@"CustomName"])
     {
+        if ([modelType isEqualToString:radio.titleLabel.text])
+        {
+            isReflash = NO;
+        }
+        else
+            isReflash = YES;
         modelType = radio.titleLabel.text;
         self.spaceLab.text = modelType;
         return;
@@ -586,7 +594,7 @@
     }
     
     if (spaceMutableAry.count <= 0) {
-        for (int i = index; i <  count; i++) {
+        for (int i = 0; i <  count; i++) {
             [spaceMutableAry addObject:@""];
         }
     }
@@ -970,7 +978,7 @@
         {
             if (indexPath.row == 0) {
                 //空间
-                isReflash = YES;
+                //isReflash = YES;
                 [self analyseModelListData];
             }
             else if (indexPath.row == 1)
@@ -1083,7 +1091,7 @@
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetCustomModelList",code];
     
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
@@ -1120,9 +1128,12 @@
              for (id relist in JSON) {
                  NSString *CustomName = [relist objectForKey:@"CustomName"];
                  NSString *ModelId = [relist objectForKey:@"ModelId"];
+                 if(![CustomName isEqualToString:@"主卧"])
+                 {
+                     [radioAry addObject:CustomName];
+                     [modelDic setObject:ModelId forKey:CustomName];
+                 }
                  
-                 [radioAry addObject:CustomName];
-                 [modelDic setObject:ModelId forKey:CustomName];
              }
              [self radioView:radioAry groupID:@"CustomName" title:@"空间模板" select:self.spaceLab.text];
          }];
@@ -1154,7 +1165,7 @@
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetProductLine",code];
     
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
@@ -1216,7 +1227,7 @@
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\",\"ModelId\":\"%@\"}&Command=MeasureSpace/GetCustomModel",code,model];
     
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.com/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
@@ -1307,7 +1318,7 @@
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetRoomInfo",code];
     
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
@@ -1661,7 +1672,7 @@
 }
 -(NSMutableURLRequest*)initializtionRequest:(NSString*)imgstr
 {
-    NSURL *url = [NSURL URLWithString:@"http://oppein.3weijia.com/oppein.axds"];
+    NSURL *url = [NSURL URLWithString:@"http://oppein.3vjia.cn/oppein.axds"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
     request.HTTPMethod = @"POST";

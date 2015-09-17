@@ -179,7 +179,7 @@
     
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\",\"MeasureId\":\"%@\"}&Command=MeasureSpace/GetMeasureInfo",code,self.MeasureId];
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
@@ -239,7 +239,7 @@
              NSArray *FileList = [JSON objectForKey:@"FileList"];
              for (id filelist in FileList) {
                  NSString *FileFullPath = [filelist objectForKey:@"FileFullPath"];
-                 NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://oppein.3weijia.com%@",FileFullPath]];
+                 NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://oppein.3vjia.cn%@",FileFullPath]];
                  NSData *resultData = [NSData dataWithContentsOfURL:url];
                  
                  UIImage *img = [UIImage imageWithData:resultData];

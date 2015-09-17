@@ -273,6 +273,7 @@
     request.HTTPMethod = @"POST";
     
     NSString *loginStr = [NSString stringWithFormat:@"Params={\"authCode\":\"login\",\"username\":\"%@\",\"pwd\":\"%@\"}&Command=Login/Login",self.nameField.text,self.pwdField.text];
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?Params=%@",loginStr);
     
     NSData *loginData = [loginStr dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];

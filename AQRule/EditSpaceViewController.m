@@ -1068,7 +1068,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\",\"MeasureId\":\"%@\"}&Command=MeasureSpace/GetMeasureInfo",code,self.MeasureId];
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
@@ -1118,7 +1118,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
              NSArray *FileList = [JSON objectForKey:@"FileList"];
              for (id filelist in FileList) {
                  NSString *FileFullPath = [filelist objectForKey:@"FileFullPath"];
-                 NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://oppein.3weijia.com%@",FileFullPath]];
+                 NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://oppein.3vjia.cn%@",FileFullPath]];
                  NSData *resultData = [NSData dataWithContentsOfURL:url];
                  
                  UIImage *img = [UIImage imageWithData:resultData];
@@ -1226,7 +1226,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetCustomModelList",code];
     
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
@@ -1297,7 +1297,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetProductLine",code];
     
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
@@ -1359,7 +1359,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\",\"ModelId\":\"%@\"}&Command=MeasureSpace/GetCustomModel",code,model];
     
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.com/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
@@ -1444,7 +1444,7 @@ QRadioButtonDelegate,QCheckBoxDelegate,UITextFieldDelegate,UIActionSheetDelegate
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\"}&Command=MeasureSpace/GetRoomInfo",code];
     
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];

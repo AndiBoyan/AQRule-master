@@ -532,7 +532,7 @@
     
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\",\"pageIndex\":\"%d\",\"pageSize\":\"10\",\"keyWord\":\"%@\",\"CustomerSchedule\":\"%@\"}&Command=Customer/GetCustomerList",code,index,keyWord,customerOfType];
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
@@ -619,7 +619,7 @@
     
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\",\"customerId\":\"%@\"}&Command=Customer/DelteCustomer",code,customerId];
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];

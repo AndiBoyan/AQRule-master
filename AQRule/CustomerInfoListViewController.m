@@ -121,7 +121,7 @@
     
     NSString *string = [NSString stringWithFormat:
                         @"Params={\"authCode\":\"%@\",\"customerId\":\"%@\",\"serviceId\":\"%@\"}&Command=Customer/GetCustomerInfo",code,self.CustomerId,self.ServiceId];
-    NSLog(@"http://oppein.3weijia.com/oppein.axds?%@",string);
+    NSLog(@"http://oppein.3vjia.cn/oppein.axds?%@",string);
     
     NSData *loginData = [string dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:loginData];
